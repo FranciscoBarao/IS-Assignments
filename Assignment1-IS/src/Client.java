@@ -1,6 +1,8 @@
 // A Java program for a Client
+import java.lang.reflect.Array;
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Client
 {
@@ -10,14 +12,13 @@ public class Client
 
     public Client(String address, int port)
     {
+        //Connection
         try
         {
             socket = new Socket(address, port);
             System.out.println("Connected");
-
             // takes input from terminal
             input = new DataInputStream(System.in);
-
             // sends output to the socket
             out = new DataOutputStream(socket.getOutputStream());
         }
@@ -29,21 +30,34 @@ public class Client
             System.out.println(i);
         }
 
-        String line = "";
 
-        while (!line.equals("quit"))
-        {
+        String line = "";
+        //ArrayList<Integer> owners_id = new ArrayList<>();
+        String output = "";
+        while (!line.equals("stop")) {
+            try {
+                line = input.readLine();
+                //owners_id.add(Integer.parseInt(line));
+                output = output + "|";
+            } catch (IOException i) {
+                System.out.println(i);
+            }
+        }
             try
             {
-                line = input.readLine();
-                out.writeUTF(line);
+                out.writeUTF(output);
+            //out.writeUTF(owners_id);
             }
             catch(IOException i)
             {
                 System.out.println(i);
             }
-        }
 
+            //RemoteCallReceive with Shit
+            //XMLToObject.ToXml(Shit)
+
+
+        //Close Connection
         try
         {
             input.close();

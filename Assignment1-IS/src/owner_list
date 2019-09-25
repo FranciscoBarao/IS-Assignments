@@ -1,0 +1,10 @@
+1 Manuel 914023034 RuaNovaSoares
+
+private int id;
+    private String brand;
+    private String model;
+    private int engine_size;
+    private int power;
+    private int consumption;
+    private String plate;
+    private Owner owner;

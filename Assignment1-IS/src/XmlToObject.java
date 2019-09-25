@@ -1,19 +1,22 @@
-import java.io.File;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.util.ArrayList;
 
 public class XmlToObject {
-    public static void main(String[] args) {
-        try {
-            File file = new File("student.xml");
-            JAXBContext jaxbContext = JAXBContext.newInstance(Student.class);
+    private ArrayList<Owner> ToObject(){
+        try{
+            File file = new File("cars.xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(Owner.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            Student e=(Student) jaxbUnmarshaller.unmarshal(file);
-            System.out.println(e.getId()+" "+e.getName()+" "+e.getAge());
 
-        } catch (JAXBException e) {e.printStackTrace(); }
+            return (ArrayList<Owner>) jaxbUnmarshaller.unmarshal(file);
 
+        } catch (
+                JAXBException e) {e.printStackTrace();
+        }
+        return null;
     }
 }

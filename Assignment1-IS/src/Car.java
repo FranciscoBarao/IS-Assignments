@@ -1,3 +1,7 @@
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 public class Car {
     private int id;
     private String brand;
@@ -17,6 +21,12 @@ public class Car {
         this.power = power;
     }
 
+    public String toString(){
+        String l = "";
+        return l + id + brand + model + engine_size + power;
+    }
+
+    @XmlAttribute
     public int getId() {
         return id;
     }
@@ -25,6 +35,7 @@ public class Car {
         this.id = id;
     }
 
+    @XmlElement
     public String getBrand() {
         return brand;
     }
@@ -33,6 +44,7 @@ public class Car {
         this.brand = brand;
     }
 
+    @XmlElement
     public String getModel() {
         return model;
     }
@@ -41,6 +53,7 @@ public class Car {
         this.model = model;
     }
 
+    @XmlElement
     public int getEngine_size() {
         return engine_size;
     }
@@ -49,6 +62,7 @@ public class Car {
         this.engine_size = engine_size;
     }
 
+    @XmlElement
     public int getPower() {
         return power;
     }
@@ -57,6 +71,7 @@ public class Car {
         this.power = power;
     }
 
+    @XmlElement
     public int getConsumption() {
         return consumption;
     }
@@ -65,6 +80,7 @@ public class Car {
         this.consumption = consumption;
     }
 
+    @XmlElement
     public String getPlate() {
         return plate;
     }
@@ -73,6 +89,7 @@ public class Car {
         this.plate = plate;
     }
 
+    @XmlTransient
     public Owner getOwner() {
         return owner;
     }

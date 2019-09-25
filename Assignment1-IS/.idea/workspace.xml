@@ -20,9 +20,15 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/College/Mestrado/1º Ano/IS/Assignment1/IS-Assignment1" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$USER_HOME$/Desktop/College/Mestrado/1º Ano/IS/Assignment1/IS-Assignment1" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -45,7 +51,7 @@
       </method>
     </configuration>
     <configuration name="ObjectToXml" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="ObjectToXml" />
+      <option name="MAIN_CLASS_NAME" value="eObjectToXml" />
       <module name="Assignment1-IS" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -59,7 +65,7 @@
       </method>
     </configuration>
     <configuration name="XmlToObject" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="XmlToObject" />
+      <option name="MAIN_CLASS_NAME" value="eXmlToObject" />
       <module name="Assignment1-IS" />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
@@ -84,7 +90,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1569338545458</updated>
-      <workItem from="1569338549233" duration="4494000" />
+      <workItem from="1569338549233" duration="13988000" />
     </task>
     <servers />
   </component>
