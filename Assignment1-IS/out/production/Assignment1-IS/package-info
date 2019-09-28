@@ -1,4 +1,0 @@
-@XmlSchema(namespace = "http://www.dei.uc.pt/EAI", xmlns = {@XmlNs(prefix = "h", namespaceURI = "http://www.dei.uc.pt/EAI")})
-
-import javax.xml.bind.annotation.XmlNs;
-import javax.xml.bind.annotation.XmlSchema;
