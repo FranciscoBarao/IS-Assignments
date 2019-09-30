@@ -19,6 +19,8 @@ public class Car {
         this.model = model;
         this.engine_size = engine_size;
         this.power = power;
+        this.consumption = consumption;
+        this.plate = plate;
     }
 
     public String toString(){
