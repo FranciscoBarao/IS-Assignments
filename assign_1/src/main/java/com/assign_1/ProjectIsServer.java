@@ -139,14 +139,20 @@ public class ProjectIsServer {
 
         private Reply makeResponse(OwnersRequest id_list) {
             ArrayList<Integer> owners = (ArrayList<Integer>) id_list.getIdList();
-            ArrayList<Owner> reply_owners = new ArrayList<>();
+            ArrayList<O> reply_owners = new ArrayList<>();
+            Reply rep;
             for (int i : owners) {
                 Owner o = findOwner(i);
-                reply_owners.add(o);
+                reply_owners.add(O.newBuilder().setId(o.getId()).setName(o.getName()).setTelephone(o.getTelephone())
+                        .setAddress(o.getAddress())
+
+                        .build());
             }
             // Sera que funciona??
-            if (reply_owners.size() > 0)
-                return Reply.newBuilder().addAllOwners(reply_owners).build();
+            if (reply_owners.size() > 0) {
+
+                rep = Reply.newBuilder().addAllOwners(reply_owners).build();
+            }
 
             return Reply.newBuilder().build();
         }
