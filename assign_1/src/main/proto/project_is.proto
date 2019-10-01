@@ -6,7 +6,6 @@ option java_outer_classname = "ProjectIsProto";
 option objc_class_prefix = "PIS";
 
 package com.assign_1;
-;
 
 // Define Service
 service ProjectIs {
