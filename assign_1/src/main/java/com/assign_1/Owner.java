@@ -3,14 +3,19 @@ package com.assign_1;
 import java.io.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 
+@XmlRootElement(name = "owner")
 public class Owner implements Serializable {
     private static final long serialversionUID = 1L;
     private int id;
     private String name;
     private int telephone;
     private String address;
+
+    @XmlElement(name = "car")
     private ArrayList<Car> cars;
 
     Owner(int id, String name, int telephone, String address) {
