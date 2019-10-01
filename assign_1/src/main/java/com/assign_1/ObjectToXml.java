@@ -57,7 +57,7 @@ public class ObjectToXml {
     }
 
     public static String transform(ArrayList<Owner> pre_list) throws Exception{ 
-        OwnerList list = new OwnerList()
+        OwnerList list = new OwnerList();
         
         JAXBContext contextObj = JAXBContext.newInstance(list.getClass());  
 
