@@ -1,11 +1,11 @@
-package io.grpc.examples.projectis;
+package com.assign_1;
 
 import java.io.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 
-public class Owner implements Serializable{
+public class Owner implements Serializable {
     private static final long serialversionUID = 1L;
     private int id;
     private String name;
@@ -13,7 +13,7 @@ public class Owner implements Serializable{
     private String address;
     private ArrayList<Car> cars;
 
-    Owner(int id, String name, int telephone, String address){
+    Owner(int id, String name, int telephone, String address) {
         this.cars = new ArrayList<>();
         this.id = id;
         this.name = name;
@@ -21,17 +21,19 @@ public class Owner implements Serializable{
         this.address = address;
     }
 
-    public String getCarsStr(){
+    public String getCarsStr() {
         String ans = "";
-        for(Car c : cars){
+        for (Car c : cars) {
             ans += c.getId() + " ";
         }
-        return ans.substring(0,ans.length()-1);
+        return ans.substring(0, ans.length() - 1);
     }
-    public void addCars(Car car){
+
+    public void addCars(Car car) {
         cars.add(car);
     }
-    public ArrayList<Car> getCars(){
+
+    public ArrayList<Car> getCars() {
         return cars;
     }
 

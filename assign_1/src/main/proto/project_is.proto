@@ -1,11 +1,12 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "io.grpc.examples.projectis";
+option java_package = "com.assign_1";
 option java_outer_classname = "ProjectIsProto";
 option objc_class_prefix = "PIS";
 
-package projectis;
+package com.assign_1;
+;
 
 // Define Service
 service ProjectIs {
@@ -23,19 +24,19 @@ message Reply{
     repeated Owners owners = 1;
 }
 message Owners{
-    required int32 id = 1;
-    required string name = 2;
+    int32 id = 1;
+    string name = 2;
     int32 telephone = 3;
     string address = 4;
-    required Car cars  = 5;
+    Car cars  = 5;
 }
 
 message Car{
-    required int32 id = 1;
-    required string brand = 2;
-    required string model = 3;
+    int32 id = 1;
+    string brand = 2;
+    string model = 3;
     int32 engine_size = 4;
     int32 power = 5;
     int32 consumption = 6;
-    required string plate=7;
+    string plate=7;
 }

@@ -1,11 +1,11 @@
-package io.grpc.examples.projectis;
+package com.assign_1;
 
 import java.io.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-public class Car implements Serializable{
+public class Car implements Serializable {
     private static final long serialversionUID = 1L;
 
     private int id;
@@ -17,7 +17,7 @@ public class Car implements Serializable{
     private String plate;
     private Owner owner;
 
-    Car(Owner owner, int id, String brand, String model, int engine_size, int power, int consumption, String plate){
+    Car(Owner owner, int id, String brand, String model, int engine_size, int power, int consumption, String plate) {
         this.owner = owner;
         this.id = id;
         this.brand = brand;
@@ -28,7 +28,7 @@ public class Car implements Serializable{
         this.plate = plate;
     }
 
-    public String toString(){
+    public String toString() {
         String l = "";
         return l + id + brand + model + engine_size + power;
     }
