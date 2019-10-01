@@ -1,26 +1,30 @@
+package com.assign_1;
+
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
+import javax.xml.bind.Marshaller;  
 
-public class ObjectToXml {
-    private void ToXml(ArrayList<Owner> owners) throws Exception {
-        /*
-        <User id=..>
-            <Car1 ..> </Car>
-            <Car2 ..> </Car>
-        </User>
-        <User id=..>
-            <Car1 ..> </Car>
-        </User>
-        */
+public class ObjectToXml {  
+    public static void main(String[] args) throws Exception{  
+        JAXBContext contextObj = JAXBContext.newInstance(Turma.class);  
 
-        JAXBContext contextObj = JAXBContext.newInstance(Owner.class);
+        Marshaller marshallerObj = contextObj.createMarshaller();  
+        marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);  
 
-        Marshaller marshallerObj = contextObj.createMarshaller();
-        marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        ArrayList<Student> list = new ArrayList<Student>();
+        Student emp1=new Student(20112,"Alberto",21);  
+        Student emp2=new Student(20113,"Patricia",22);  
+        Student emp3=new Student(20114,"Luis",21); 
 
-        FileOutputStream obj = new FileOutputStream("cars.xml");
-        marshallerObj.marshal(owners, obj);
-    }
-}
+        list.add(emp1);
+        list.add(emp2);
+        list.add(emp3);
+
+        Turma t = new Turma(list); 
+        FileOutputStream obj = new FileOutputStream("student.xml");
+
+        marshallerObj.marshal(t, obj);
+
+    }  
+}  

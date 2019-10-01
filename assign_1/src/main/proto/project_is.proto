@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.assign_1";
+option java_outer_classname = "Assign1Proto";
+option objc_class_prefix = "PIS";
+
+package com.assign_1;
+
+// Define Service
+service ProjectIs {
+  // Request - Reply service
+  rpc getCars (OwnersRequest) returns (CarsReply) {}
+}
+
+// The request message containing the user's name.
+message OwnersRequest {
+    int32 id = 4; 
+}
+
+// The response message containing the greetings
+message CarsReply {
+    int32 number = 4; 
+}
