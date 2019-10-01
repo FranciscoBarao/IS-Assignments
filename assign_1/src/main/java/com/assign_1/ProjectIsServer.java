@@ -1,5 +1,8 @@
 package com.assign_1;
 
+// To run:
+// mvn exec:java -Dexec.mainClass=com.assign_1.ProjectIsServer
+
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;

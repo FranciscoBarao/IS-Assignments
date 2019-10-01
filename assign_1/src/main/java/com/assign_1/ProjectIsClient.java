@@ -1,5 +1,8 @@
 package com.assign_1;
 
+// To run:
+// mvn exec:java -Dexec.mainClass=com.assign_1.ProjectIsClient
+
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
