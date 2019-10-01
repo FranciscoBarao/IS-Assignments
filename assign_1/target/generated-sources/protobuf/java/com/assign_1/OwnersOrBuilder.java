@@ -38,15 +38,26 @@ public interface OwnersOrBuilder extends
       getAddressBytes();
 
   /**
-   * <code>.com.assign_1.Car cars = 5;</code>
+   * <code>repeated .com.assign_1.Car cars = 5;</code>
    */
-  boolean hasCars();
+  java.util.List<com.assign_1.Car> 
+      getCarsList();
   /**
-   * <code>.com.assign_1.Car cars = 5;</code>
+   * <code>repeated .com.assign_1.Car cars = 5;</code>
    */
-  com.assign_1.Car getCars();
+  com.assign_1.Car getCars(int index);
   /**
-   * <code>.com.assign_1.Car cars = 5;</code>
+   * <code>repeated .com.assign_1.Car cars = 5;</code>
    */
-  com.assign_1.CarOrBuilder getCarsOrBuilder();
+  int getCarsCount();
+  /**
+   * <code>repeated .com.assign_1.Car cars = 5;</code>
+   */
+  java.util.List<? extends com.assign_1.CarOrBuilder> 
+      getCarsOrBuilderList();
+  /**
+   * <code>repeated .com.assign_1.Car cars = 5;</code>
+   */
+  com.assign_1.CarOrBuilder getCarsOrBuilder(
+      int index);
 }

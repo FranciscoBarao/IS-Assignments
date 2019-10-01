@@ -3,9 +3,14 @@ package com.assign_1;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.netty.shaded.io.netty.util.internal.SocketUtils;
+
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectIsClient {
     private static final Logger logger = Logger.getLogger(ProjectIsClient.class.getName());
@@ -26,13 +31,9 @@ public class ProjectIsClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public void sendIDs(int[] ids) {
+    public void sendIDs(ArrayList<Integer> arr_id) {
 
-        /*
-         * OwnersRequest.Builder b = OwnersRequest.newBuilder(); for(int i : ids){
-         * b.addId(i); } OwnersRequest request = b.build();
-         */
-        OwnersRequest request = OwnersRequest.newBuilder().addAllId(ids).build();
+        OwnersRequest request = OwnersRequest.newBuilder().addAllId(arr_id).build();
 
         Reply response;
         try {
@@ -43,26 +44,22 @@ public class ProjectIsClient {
         }
 
         System.out.println("Response Arrived");
-        String own[] = response.getNumber().split("\\|");
-        for (String o : own) {
-            System.out.println("<--------------->");
-            String c[] = o.split(" ");
-            for (String s : c) {
-                System.out.println(s);
-            }
+        ArrayList<Owner> owner_list = (ArrayList<Owner>) response.getOwnersList();
+
+        for (Owner o : owner_list) {
+            System.out.println(o.toString());
         }
     }
 
     public static void main(String[] args) throws Exception {
         ProjectIsClient client = new ProjectIsClient("localhost", 5682);
         try {
-            String ids = "";
+            ArrayList<Integer> arr = new ArrayList<>();
             if (args.length > 0) {
                 for (int i = 0; i < args.length; i++)
-                    ids += args[i] + "|"; // Get ids here
-                ids = ids.substring(0, ids.length() - 1); // remove last "|"
+                    arr.add(Integer.parseInt(args[i]));
             }
-            client.sendIDs(ids);
+            client.sendIDs(arr);
         } finally {
             client.shutdown();
         }

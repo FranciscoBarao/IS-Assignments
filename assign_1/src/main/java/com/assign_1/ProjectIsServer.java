@@ -133,36 +133,33 @@ public class ProjectIsServer {
 
         @Override
         public void getCars(OwnersRequest request, StreamObserver<Reply> responseObserver) {
-            responseObserver.onNext(checkCars(request));
+            responseObserver.onNext(makeResponse(request));
             responseObserver.onCompleted();
         }
 
-    private Reply checkCars(OwnersRequest id_list) {
-      // Divide "1|3|5" -> "1" "3" "5"
-      // User x and y -> 1 4 6|2 3
-      /*String parts[] = id_list.getId().split("\\|");
-      String ans = "";
-      for(String s : parts){
-        String cars = findCars(s);
-        ans += cars + "|";
-      }
-      ans = ans.substring(0,ans.length()-1);
-      return CarsReply.newBuilder().setNumber(ans).build(); 
-    */
-        ArrayList<int> owners = id_list.getIdList();
-        for(int i : id_list.id.length()) 
+        private Reply makeResponse(OwnersRequest id_list) {
+            ArrayList<Integer> owners = (ArrayList<Integer>) id_list.getIdList();
+            ArrayList<Owner> reply_owners = new ArrayList<>();
+            Reply rep;
+            for (int i : owners) {
+                Owner o = findOwner(i);
+                reply_owners.add(o);
+            }
+            // Sera que funciona??
+            if (reply_owners.size() > 0)
+                return Reply.newBuilder().addAllOwners(reply_owners).build();
+
+            return Reply.newBuilder().build();
         }
 
-        private String findCars(String own) {
-            String ans = "";
+        private Owner findOwner(int id) {
             for (Owner o : owners) {
-                if (!own.equals("") && o.getId() == Integer.parseInt(own)) { // Owner Found
-                    // Cars of x -> 1 4 6
-                    // Cars of y -> 2 3
-                    return o.getCarsStr();
+                if (o.getId() == id) {
+                    return o;
                 }
             }
-            return "-1"; // No Person Found
+            return null;
         }
+
     }
 }

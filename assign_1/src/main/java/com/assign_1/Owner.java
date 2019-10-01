@@ -21,12 +21,17 @@ public class Owner implements Serializable {
         this.address = address;
     }
 
-    public String getCarsStr() {
-        String ans = "";
+    public String toString() {
+        return "Person: " + this.id + " " + this.name + " " + this.telephone + " " + this.address + "\n"
+                + carsToString();
+    }
+
+    public String carsToString() {
+        String ans = "Cars: ";
         for (Car c : cars) {
-            ans += c.getId() + " ";
+            ans += c.toString() + "\n";
         }
-        return ans.substring(0, ans.length() - 1);
+        return ans;
     }
 
     public void addCars(Car car) {

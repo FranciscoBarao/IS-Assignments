@@ -28,7 +28,7 @@ message Owners{
     string name = 2;
     int32 telephone = 3;
     string address = 4;
-    Car cars  = 5;
+    repeated Car cars  = 5;
 }
 
 message Car{

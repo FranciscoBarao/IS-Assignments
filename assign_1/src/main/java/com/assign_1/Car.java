@@ -29,8 +29,7 @@ public class Car implements Serializable {
     }
 
     public String toString() {
-        String l = "";
-        return l + id + brand + model + engine_size + power;
+        return id + " " + brand + " " + model + " " + engine_size + " " + power + " " + consumption + " " + plate;
     }
 
     @XmlAttribute
