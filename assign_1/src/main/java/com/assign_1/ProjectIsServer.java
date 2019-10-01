@@ -140,7 +140,6 @@ public class ProjectIsServer {
         private Reply makeResponse(OwnersRequest id_list) {
             ArrayList<Integer> owners = (ArrayList<Integer>) id_list.getIdList();
             ArrayList<Owner> reply_owners = new ArrayList<>();
-            Reply rep;
             for (int i : owners) {
                 Owner o = findOwner(i);
                 reply_owners.add(o);

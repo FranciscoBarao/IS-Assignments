@@ -12,6 +12,8 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.assign_1.*;
+
 public class ProjectIsClient {
     private static final Logger logger = Logger.getLogger(ProjectIsClient.class.getName());
 

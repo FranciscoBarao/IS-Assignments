@@ -12,7 +12,7 @@ public class OwnerList implements Serializable {
     @XmlElement(name = "owner")
     private ArrayList<Owner> owners;
 
-    OwnerList(){
+    OwnerList() {
         this.owners = new ArrayList<>();
     }
 
@@ -23,7 +23,7 @@ public class OwnerList implements Serializable {
     public String getOwnersStr() {
         String ans = "";
         for (Owner o : owners) {
-            ans += o.getCarsStr() + " ";
+            ans += o.toString() + " ";
         }
         return ans.substring(0, ans.length() - 1);
     }
