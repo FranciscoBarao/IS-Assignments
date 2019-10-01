@@ -1,7 +1,4 @@
-package com.assign_1;
-
-// TO RUN: 
-// mvn exec:java -Dexec.mainClass=com.assign_1.ProjectIsClient
+package io.grpc.examples.projectis;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -11,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProjectIsClient {
-    //Not sure bout this "getName()"
   private static final Logger logger = Logger.getLogger(ProjectIsClient.class.getName());
 
   private final ManagedChannel channel;
@@ -34,32 +30,46 @@ public class ProjectIsClient {
 
 
 
-  public void sendIDs(String ids) {
-    logger.info("Sending IDs "+ ids);
-    //!!!!!!!!!OLHAR PARA AQUI!!!!!!!!!
-    /*Esta merda dos Ids e dos Arrays nao esta bem caralho*/
-    OwnersRequest request = OwnersRequest.newBuilder().setId(Integer.parseInt(ids)).build();
-    CarsReply response;
+  public void sendIDs(int[] ids) {
+    
+    /*OwnersRequest.Builder b  = OwnersRequest.newBuilder();
+    for(int i : ids){
+        b.addId(i);
+    }
+    OwnersRequest request = b.build();
+    */
+    OwnersRequest request = OwnersRequest.newBuilder()
+        .addAllId(ids)
+        .build();
+
+    Reply response;
     try {
       response = blockingStub.getCars(request);
     } catch (StatusRuntimeException e) {
       logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
       return;
     }
-    logger.info("Response Arrived");
-     /*Aqui ja contem o numero de carros por pessoa em responde
-    logger.info("Greeting: " + response.getMessage());
-    */
-    logger.info("Answer: " + response.getNumber());    
-}
+
+    System.out.println("Response Arrived");    
+    String own[] = response.getNumber().split("\\|");
+    for(String o : own){
+        System.out.println("<--------------->");
+      String c[] = o.split(" ");
+      for(String s : c){
+        System.out.println(s);
+      }
+    }
+  }
 
 
   public static void main(String[] args) throws Exception {
-    ProjectIsClient client = new ProjectIsClient("localhost", 50051);
+    ProjectIsClient client = new ProjectIsClient("localhost", 5682);
     try {
-        String ids = "5";
+      String ids = "";
       if (args.length > 0) {
-        ids = args[0]; //Get ids here
+        for(int i=0;i< args.length;i++)   
+          ids += args[i] + "|"; //Get ids here
+        ids = ids.substring(0, ids.length() - 1); //remove last "|"
       }
       client.sendIDs(ids);
     } finally {
