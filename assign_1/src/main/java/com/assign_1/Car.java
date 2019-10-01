@@ -17,6 +17,17 @@ public class Car implements Serializable {
     private String plate;
     private Owner owner;
 
+    Car(){
+        this.owner = null;
+        this.id = 0;
+        this.brand = "brand";
+        this.model = "model";
+        this.engine_size = 0;
+        this.power = 0;
+        this.consumption = 0;
+        this.plate = "plate";
+    }
+
     Car(Owner owner, int id, String brand, String model, int engine_size, int power, int consumption, String plate) {
         this.owner = owner;
         this.id = id;

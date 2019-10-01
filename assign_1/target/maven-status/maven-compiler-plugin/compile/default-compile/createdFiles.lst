@@ -1,4 +1,5 @@
 com/assign_1/OwnersRequest.class
+<<<<<<< HEAD
 com/assign_1/Reply$Builder.class
 com/assign_1/ProjectIsProto.class
 com/assign_1/OwnersRequest$1.class
@@ -22,3 +23,14 @@ com/assign_1/ProjectIsGrpc$MethodHandlers.class
 com/assign_1/OwnersRequestOrBuilder.class
 com/assign_1/OwnersOrBuilder.class
 com/assign_1/Reply.class
+=======
+com/assign_1/Owners$Builder.class
+com/assign_1/Owners.class
+com/assign_1/ProjectIsProto.class
+com/assign_1/OwnersRequest$1.class
+com/assign_1/Owners$1.class
+com/assign_1/CarOrBuilder.class
+com/assign_1/OwnersRequestOrBuilder.class
+com/assign_1/OwnersOrBuilder.class
+com/assign_1/OwnersRequest$Builder.class
+>>>>>>> 43ad8785627ea89c7a7f70f1bea61e656115625b
