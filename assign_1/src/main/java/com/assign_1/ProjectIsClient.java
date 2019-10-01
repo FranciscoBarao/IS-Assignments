@@ -46,10 +46,10 @@ public class ProjectIsClient {
         }
 
         System.out.println("Response Arrived");
-        ArrayList<Owner> owner_list = (ArrayList<Owner>) response.getOwnersList();
+        List<O> owner_list = response.getOwnersList();
 
-        for (Owner o : owner_list) {
-            System.out.println(o.toString());
+        for (O o : owner_list) {
+            System.out.println(o.getName());
         }
     }
 
