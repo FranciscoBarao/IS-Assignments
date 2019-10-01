@@ -18,6 +18,14 @@ public class Owner implements Serializable {
     @XmlElement(name = "car")
     private ArrayList<Car> cars;
 
+    Owner(){
+        this.cars = new ArrayList<>();
+        this.id = 0;
+        this.name = "Default";
+        this.telephone = 0;
+        this.address = "Default";
+    }
+
     Owner(int id, String name, int telephone, String address) {
         this.cars = new ArrayList<>();
         this.id = id;
