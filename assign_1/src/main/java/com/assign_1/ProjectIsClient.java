@@ -3,12 +3,10 @@ package com.assign_1;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
-import io.grpc.netty.shaded.io.netty.util.internal.SocketUtils;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -143,6 +143,11 @@ public class ProjectIsServer {
             Reply rep;
             for (int i : owners) {
                 Owner o = findOwner(i);
+                ArrayList<C> cs = new ArrayList<>();
+                o.getCars()
+                        .forEach((car) -> cs.add(C.newBuilder().setId(car.getId()).setBrand(car.getBrand())
+                                .setModel(car.getModel()).setEngineSize(car.getEngine_size()).setPower(car.getPower())
+                                .setConsumption(car.getConsumption()).setPlate(car.getPlate()).build()));
                 reply_owners.add(O.newBuilder().setId(o.getId()).setName(o.getName()).setTelephone(o.getTelephone())
                         .setAddress(o.getAddress())
 
