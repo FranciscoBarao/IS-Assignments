@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,10 +89,11 @@ public class ProjectIsClient {
 
     public static void timeToFile(long endTime) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out/endTime.txt")));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("out/endTime.txt", true));
+            PrintWriter out = new PrintWriter(writer);
             // long convert = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
-            writer.write("" + endTime);
-            writer.close();
+            out.print("" + endTime );
+            out.close();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -99,10 +101,11 @@ public class ProjectIsClient {
 
     public static void sizeToFile(int size) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out/size.txt")));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("out/size.txt", true));
+            PrintWriter out = new PrintWriter(writer);
             // long convert = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
-            writer.write("" + size);
-            writer.close();
+            out.println("" + size + "\n");
+            out.close();
         } catch (Exception e) {
             System.out.println(e);
         }
