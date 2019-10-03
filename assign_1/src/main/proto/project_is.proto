@@ -13,15 +13,17 @@ service ProjectIs {
   rpc getCars (OwnersRequest) returns (Reply) {}
 }
 
-// The request message containing the user's name.
+// The request message containing the user's ids.
 message OwnersRequest {
     repeated int32 id = 4; 
 }
 
-// The response message containing the greetings
+// The response message containing Owners
 message Reply{
     repeated O owners = 1;
 }
+
+// Message containing each of Reply's owners
 message O{
     int32 id = 1;
     string name = 2;
@@ -30,6 +32,7 @@ message O{
     repeated C cars  = 5;
 }
 
+//Message containing each car of each Owner
 message C{
     int32 id = 1;
     string brand = 2;

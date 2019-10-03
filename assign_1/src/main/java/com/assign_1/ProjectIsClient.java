@@ -10,8 +10,12 @@ import io.grpc.StatusRuntimeException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.assign_1.*;
 
@@ -50,7 +54,26 @@ public class ProjectIsClient {
         List<O> owner_list = response.getOwnersList();
 
         for (O o : owner_list) {
-            System.out.println(o.getName());
+            System.out.println(o.getId() + " " + o.getName() + " " + o.getTelephone() + " " + o.getAddress());
+            System.out.println("Cars:\n");
+            System.out.println("-> " + o.getCarsCount());
+            for (C c : o.getCarsList()) {
+                System.out.println(c.getId() + " " + c.getBrand() + " " + c.getModel() + " " + c.getEngineSize() + " "
+                        + c.getConsumption() + " " + c.getPlate());
+            }
+        }
+        long endTime = System.currentTimeMillis();
+        timeToFile(endTime);
+    }
+
+    public static void timeToFile(long endTime) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out/endTime.txt")));
+            // long convert = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
+            writer.write("" + endTime);
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
@@ -58,9 +81,11 @@ public class ProjectIsClient {
         ProjectIsClient client = new ProjectIsClient("localhost", 5682);
         try {
             ArrayList<Integer> arr = new ArrayList<>();
-            if (args.length > 0) {
-                for (int i = 0; i < args.length; i++)
-                    arr.add(Integer.parseInt(args[i]));
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Number of Requests: ");
+            int n = Integer.parseInt(sc.nextLine());
+            for (int i = 0; i < n; i++) {
+                arr.add(i);
             }
             client.sendIDs(arr);
         } finally {

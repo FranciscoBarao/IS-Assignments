@@ -3,24 +3,21 @@ package com.assign_1;
 // To run:
 // mvn exec:java -Dexec.mainClass=com.assign_1.ProjectIsServer
 
+import java.util.Random;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.logging.Level;
+import java.util.Set;
 import java.util.logging.Logger;
-
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -28,6 +25,11 @@ import com.assign_1.*;
 
 public class ProjectIsServer {
     private static final Logger logger = Logger.getLogger(ProjectIsServer.class.getName());
+
+    // Random Name generator info
+    final static String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+    final static java.util.Random rand = new java.util.Random();
+    final static Set<String> identifiers = new HashSet<String>();
 
     private Server server;
     public static ArrayList<Owner> owners;
@@ -60,7 +62,7 @@ public class ProjectIsServer {
         }
     }
 
-    public void inDB() {
+    public static void inDB() {
         try {
             FileInputStream fis = new FileInputStream("database.ser");
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -73,7 +75,7 @@ public class ProjectIsServer {
         }
     }
 
-    public void outDB() {
+    public static void outDB() {
         try {
             FileOutputStream fos = new FileOutputStream("database.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -85,44 +87,51 @@ public class ProjectIsServer {
         }
     }
 
-    public static void createList() {
-        Owner o = new Owner(1, "Pedro", 123, "Rua Dos Buracos");
-        Car c = new Car(o, 8, "bmw", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        c = new Car(o, 7, "bmw", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
+    public static String randomIdentifier() {
+        StringBuilder builder = new StringBuilder();
+        while (builder.toString().length() == 0) {
+            int length = rand.nextInt(5) + 5;
+            for (int i = 0; i < length; i++) {
+                builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+            }
+            if (identifiers.contains(builder.toString())) {
+                builder = new StringBuilder();
+            }
+        }
+        return builder.toString();
+    }
 
-        o = new Owner(2, "Hobbit", 153, "Shire");
-        c = new Car(o, 6, "mini", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
+    public static void generateList(int nOwners, int numberCars) {
+        int nCars = 1;
+        for (int i = 0; i < nOwners; i++) {
+            String name = randomIdentifier();
+            Owner o = new Owner(i, name, 1, "Street");
 
-        o = new Owner(3, "Gonzaga", 197, "Rua Sésamo");
-        c = new Car(o, 5, "ola", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        c = new Car(o, 4, "ola", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        c = new Car(o, 3, "nocar", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
+            for (int j = 0; j < numberCars; j++) {
+                Car c = new Car(o, nCars, "brand", "model", 1, 1, 1, "10-UC-10");
+                nCars++;
+                o.addCars(c);
+            }
+            owners.add(o);
+        }
+    }
 
-        o = new Owner(4, "Duarte", 169, "FlagTown");
-        c = new Car(o, 2, "lalala", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
-
-        o = new Owner(5, "Lucas", 188, "Madeira");
-        c = new Car(o, 1, "Micra", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
+    public static void timeToFile(long startTime) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out/startTime.txt")));
+            // long convert = TimeUnit.SECONDS.convert(startTime, TimeUnit.NANOSECONDS);
+            writer.write("" + startTime);
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static void main(String[] args) throws Exception {
         ProjectIsServer server = new ProjectIsServer();
         owners = new ArrayList<Owner>();
-        createList();
-        // outDB();
+        generateList(10, 5);
+        outDB();
         try {
             // inDB();
             server.start();
@@ -141,9 +150,13 @@ public class ProjectIsServer {
         }
 
         private Reply makeResponse(OwnersRequest id_list) {
-            ArrayList<Integer> owners = (ArrayList<Integer>) id_list.getIdList();
+            List<Integer> owners = id_list.getIdList();
             ArrayList<O> reply_owners = new ArrayList<>();
             Reply rep;
+
+            long startTime = System.currentTimeMillis();
+            timeToFile(startTime);
+
             for (int i : owners) {
                 Owner o = findOwner(i);
                 ArrayList<C> cs = new ArrayList<>();
@@ -152,17 +165,15 @@ public class ProjectIsServer {
                                 .setModel(car.getModel()).setEngineSize(car.getEngine_size()).setPower(car.getPower())
                                 .setConsumption(car.getConsumption()).setPlate(car.getPlate()).build()));
                 reply_owners.add(O.newBuilder().setId(o.getId()).setName(o.getName()).setTelephone(o.getTelephone())
-                        .setAddress(o.getAddress())
-
-                        .build());
+                        .setAddress(o.getAddress()).addAllCars(cs).build());
             }
-            // Sera que funciona??
-            if (reply_owners.size() > 0) {
 
+            if (reply_owners.size() > 0)
                 rep = Reply.newBuilder().addAllOwners(reply_owners).build();
-            }
+            else
+                rep = Reply.newBuilder().build();
 
-            return Reply.newBuilder().build();
+            return rep;
         }
 
         private Owner findOwner(int id) {
