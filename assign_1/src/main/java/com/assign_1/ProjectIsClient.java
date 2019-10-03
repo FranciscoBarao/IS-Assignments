@@ -22,6 +22,8 @@ import com.assign_1.*;
 public class ProjectIsClient {
     private static final Logger logger = Logger.getLogger(ProjectIsClient.class.getName());
 
+    private static int numberRequest = 5;
+
     private final ManagedChannel channel;
     private final ProjectIsGrpc.ProjectIsBlockingStub blockingStub;
 
@@ -82,9 +84,7 @@ public class ProjectIsClient {
         try {
             ArrayList<Integer> arr = new ArrayList<>();
             Scanner sc = new Scanner(System.in);
-            System.out.println("Number of Requests: ");
-            int n = Integer.parseInt(sc.nextLine());
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < numberRequest; i++) {
                 arr.add(i);
             }
             client.sendIDs(arr);
