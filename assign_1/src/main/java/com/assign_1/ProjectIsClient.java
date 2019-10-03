@@ -82,6 +82,8 @@ public class ProjectIsClient {
         }
         long endTime = System.currentTimeMillis();
         timeToFile(endTime);
+        // Returns size of message
+        sizeToFile(response.getSerializedSize());
     }
 
     public static void timeToFile(long endTime) {
@@ -89,6 +91,17 @@ public class ProjectIsClient {
             BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out/endTime.txt")));
             // long convert = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
             writer.write("" + endTime);
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void sizeToFile(int size) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out/size.txt")));
+            // long convert = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
+            writer.write("" + size);
             writer.close();
         } catch (Exception e) {
             System.out.println(e);
