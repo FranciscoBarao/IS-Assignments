@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
 import com.assign_1.*;
 
@@ -27,8 +28,8 @@ public class ProjectIsServer {
     private static final Logger logger = Logger.getLogger(ProjectIsServer.class.getName());
 
     // Parameters
-    private static int numberOwners = 5;
-    private static int numberCars = 10;
+    private static int numberOwners = 1000;
+    private static int numberCars = 50;
     private static int port = 5682;
 
     // Random Name generator info
@@ -122,10 +123,23 @@ public class ProjectIsServer {
 
     public static void timeToFile(long startTime) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("out/startTime.txt")));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("out/startTime.txt", true));
+            PrintWriter out = new PrintWriter(writer);
             // long convert = TimeUnit.SECONDS.convert(startTime, TimeUnit.NANOSECONDS);
-            writer.write("" + startTime);
-            writer.close();
+            out.println("" + startTime);
+            out.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void infoToFile(int numberOwners, int numberCars) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("out/info.txt", true));
+            PrintWriter out = new PrintWriter(writer);
+            // long convert = TimeUnit.SECONDS.convert(startTime, TimeUnit.NANOSECONDS);
+            out.println("" + numberOwners + " " + numberCars);
+            out.close();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -160,6 +174,7 @@ public class ProjectIsServer {
 
             long startTime = System.currentTimeMillis();
             timeToFile(startTime);
+            infoToFile(numberOwners, numberCars);
 
             for (int i : owners) {
                 Owner o = findOwner(i);
