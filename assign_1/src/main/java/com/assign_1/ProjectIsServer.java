@@ -148,6 +148,33 @@ public class ProjectIsServer {
     public class ProjectIsImpl extends ProjectIsGrpc.ProjectIsImplBase {
 
         @Override
+        public void getCarsXml(OwnersRequest request, StreamObserver<XML> responseObserver) {
+            responseObserver.onNext(makeResponseXml(request));
+            responseObserver.onCompleted();
+        }
+
+        private XML makeResponseXml(OwnersRequest id_list) {
+            List<Integer> owners = id_list.getIdList();
+            ArrayList<Owner> own = new ArrayList<>();
+
+            long startTime = System.currentTimeMillis();
+            timeToFile(startTime);
+
+            for (int i : owners) {
+                Owner o = findOwner(i);
+                if (o != null)
+                    own.add(o);
+            }
+            String s = "";
+            try {
+                s = ObjectToXml.transform(own);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            return XML.newBuilder().setXmlString(s).build();
+        }
+
+        @Override
         public void getCars(OwnersRequest request, StreamObserver<Reply> responseObserver) {
             responseObserver.onNext(makeResponse(request));
             responseObserver.onCompleted();
