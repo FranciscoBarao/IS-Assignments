@@ -12,7 +12,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 
 public class ObjectToXml {
-
     public static void main(String[] args) {
         ArrayList<Owner> owners = new ArrayList<>();
         Owner o = new Owner(1, "Pedro", 123, "Rua Dos Buracos");
@@ -56,34 +55,36 @@ public class ObjectToXml {
         // System.out.println(xml);
     }
 
-    public static String transform(ArrayList<Owner> pre_list) throws Exception{ 
-        OwnerList list = new OwnerList();
-        
-        JAXBContext contextObj = JAXBContext.newInstance(list.getClass());  
+    public static String transform(ArrayList<Owner> pre_list) throws Exception {
+        OwnerList list = new OwnerList(pre_list);
+
+        JAXBContext contextObj = JAXBContext.newInstance(list.getClass());
 
         java.io.StringWriter sw = new StringWriter();
 
-        Marshaller marshallerObj = contextObj.createMarshaller();  
+        Marshaller marshallerObj = contextObj.createMarshaller();
         marshallerObj.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
         // FileOutputStream obj = new FileOutputStream("student.xml");
-    
+
         marshallerObj.marshal(list, sw);
 
         return sw.toString();
-    }  
+    }
 
-    public static void reverse(String xml) {  
-        try {      
+    public static void reverse(String xml) {
+        try {
             OwnerList list = new OwnerList();
-            JAXBContext jaxbContext = JAXBContext.newInstance(OwnerList.class);    
+            JAXBContext jaxbContext = JAXBContext.newInstance(OwnerList.class);
 
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();    
-            list = (OwnerList)jaxbUnmarshaller.unmarshal(new StringReader(xml));    
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            list = (OwnerList) jaxbUnmarshaller.unmarshal(new StringReader(xml));
 
             System.out.println(list.getOwnersStr());
 
-            } catch (JAXBException e) {e.printStackTrace(); }    
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
 
-    }  
-}  
+    }
+}

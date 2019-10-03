@@ -25,7 +25,7 @@ public class OwnerList implements Serializable {
         for (Owner o : owners) {
             ans += o.toString() + " ";
         }
-        return ans.substring(0, ans.length() - 1);
+        return ans;
     }
 
     public void addOwner(Owner owner) {

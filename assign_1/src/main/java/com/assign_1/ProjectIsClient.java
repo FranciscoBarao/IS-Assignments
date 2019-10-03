@@ -16,7 +16,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import com.assign_1.*;
 
@@ -24,6 +23,7 @@ public class ProjectIsClient {
     private static final Logger logger = Logger.getLogger(ProjectIsClient.class.getName());
 
     private static int numberRequest = 5;
+    private static boolean isXML = true;
 
     private final ManagedChannel channel;
     private final ProjectIsGrpc.ProjectIsBlockingStub blockingStub;
@@ -43,26 +43,42 @@ public class ProjectIsClient {
 
     public void sendIDs(ArrayList<Integer> arr_id) {
 
-        OwnersRequest request = OwnersRequest.newBuilder().addAllId(arr_id).build();
+        if (isXML) {
+            OwnersRequest request = OwnersRequest.newBuilder().addAllId(arr_id).build();
+            XML response = null;
 
-        Reply response;
-        try {
-            response = blockingStub.getCars(request);
-        } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-            return;
-        }
+            try {
+                response = blockingStub.getCarsXml(request);
+            } catch (StatusRuntimeException e) {
+                logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            }
+            System.out.println("Response Arrived");
+            String sXml = response.getXmlString();
 
-        System.out.println("Response Arrived");
-        List<O> owner_list = response.getOwnersList();
+            ObjectToXml.reverse(sXml);
 
-        for (O o : owner_list) {
-            System.out.println(o.getId() + " " + o.getName() + " " + o.getTelephone() + " " + o.getAddress());
-            System.out.println("Cars:\n");
-            System.out.println("-> " + o.getCarsCount());
-            for (C c : o.getCarsList()) {
-                System.out.println(c.getId() + " " + c.getBrand() + " " + c.getModel() + " " + c.getEngineSize() + " "
-                        + c.getConsumption() + " " + c.getPlate());
+        } else {
+            OwnersRequest request = OwnersRequest.newBuilder().addAllId(arr_id).build();
+            Reply response;
+
+            try {
+                response = blockingStub.getCars(request);
+            } catch (StatusRuntimeException e) {
+                logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+                return;
+            }
+
+            System.out.println("Response Arrived");
+            List<O> owner_list = response.getOwnersList();
+
+            for (O o : owner_list) {
+                System.out.println(o.getId() + " " + o.getName() + " " + o.getTelephone() + " " + o.getAddress());
+                System.out.println("Cars:\n");
+                System.out.println("-> " + o.getCarsCount());
+                for (C c : o.getCarsList()) {
+                    System.out.println(c.getId() + " " + c.getBrand() + " " + c.getModel() + " " + c.getEngineSize()
+                            + " " + c.getConsumption() + " " + c.getPlate());
+                }
             }
         }
         long endTime = System.currentTimeMillis();
@@ -99,7 +115,6 @@ public class ProjectIsClient {
         ProjectIsClient client = new ProjectIsClient("localhost", 5682);
         try {
             ArrayList<Integer> arr = new ArrayList<>();
-            Scanner sc = new Scanner(System.in);
             for (int i = 0; i < numberRequest; i++) {
                 arr.add(i);
             }

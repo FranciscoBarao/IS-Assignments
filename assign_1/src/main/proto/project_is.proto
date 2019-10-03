@@ -11,6 +11,13 @@ package com.assign_1;
 service ProjectIs {
   // Request - Reply service
   rpc getCars (OwnersRequest) returns (Reply) {}
+
+  rpc getCarsXml (OwnersRequest) returns (XML);
+}
+
+//String XML
+message XML {
+    string xmlString = 1;
 }
 
 // The request message containing the user's ids.
