@@ -26,6 +26,11 @@ import com.assign_1.*;
 public class ProjectIsServer {
     private static final Logger logger = Logger.getLogger(ProjectIsServer.class.getName());
 
+    // Parameters
+    private static int numberOwners = 5;
+    private static int numberCars = 10;
+    private static int port = 5682;
+
     // Random Name generator info
     final static String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
     final static java.util.Random rand = new java.util.Random();
@@ -36,7 +41,6 @@ public class ProjectIsServer {
 
     public void start() throws IOException {
         System.out.println("start");
-        int port = 5682;
         server = ServerBuilder.forPort(port).addService(new ProjectIsImpl()).build().start();
 
         logger.info("Server started, listening on " + port);
@@ -130,7 +134,7 @@ public class ProjectIsServer {
     public static void main(String[] args) throws Exception {
         ProjectIsServer server = new ProjectIsServer();
         owners = new ArrayList<Owner>();
-        generateList(10, 5);
+        generateList(numberOwners, numberCars);
         outDB();
         try {
             // inDB();
