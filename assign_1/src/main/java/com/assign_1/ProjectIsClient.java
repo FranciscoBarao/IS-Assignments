@@ -83,7 +83,7 @@ public class ProjectIsClient {
         }
         long endTime = System.currentTimeMillis();
         timeToFile(endTime);
-        // Returns size of message
+        // Function end
     }
 
     public static void timeToFile(long endTime) {
