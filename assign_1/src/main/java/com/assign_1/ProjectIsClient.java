@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -22,14 +21,13 @@ import com.assign_1.*;
 public class ProjectIsClient {
     private static final Logger logger = Logger.getLogger(ProjectIsClient.class.getName());
 
-    private static int numberRequest = 5;
     private static boolean isXML = true;
 
     private final ManagedChannel channel;
     private final ProjectIsGrpc.ProjectIsBlockingStub blockingStub;
 
     public ProjectIsClient(String host, int port) {
-        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext().build());
+        this(ManagedChannelBuilder.forAddress(host, port).usePlaintext().maxInboundMessageSize(1000000000).build());
     }
 
     ProjectIsClient(ManagedChannel channel) {
@@ -56,6 +54,7 @@ public class ProjectIsClient {
             String sXml = response.getXmlString();
 
             ObjectToXml.reverse(sXml);
+            sizeToFile(response.getSerializedSize());
 
         } else {
             OwnersRequest request = OwnersRequest.newBuilder().addAllId(arr_id).build();
@@ -80,11 +79,11 @@ public class ProjectIsClient {
                             + " " + c.getConsumption() + " " + c.getPlate());
                 }
             }
+            sizeToFile(response.getSerializedSize());
         }
         long endTime = System.currentTimeMillis();
         timeToFile(endTime);
         // Returns size of message
-        sizeToFile(response.getSerializedSize());
     }
 
     public static void timeToFile(long endTime) {
@@ -92,7 +91,7 @@ public class ProjectIsClient {
             BufferedWriter writer = new BufferedWriter(new FileWriter("out/endTime.txt", true));
             PrintWriter out = new PrintWriter(writer);
             // long convert = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
-            out.print("" + endTime );
+            out.println("" + endTime);
             out.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -104,7 +103,7 @@ public class ProjectIsClient {
             BufferedWriter writer = new BufferedWriter(new FileWriter("out/size.txt", true));
             PrintWriter out = new PrintWriter(writer);
             // long convert = TimeUnit.SECONDS.convert(endTime, TimeUnit.NANOSECONDS);
-            out.println("" + size + "\n");
+            out.println("" + size);
             out.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -112,15 +111,31 @@ public class ProjectIsClient {
     }
 
     public static void main(String[] args) throws Exception {
-        ProjectIsClient client = new ProjectIsClient("localhost", 5682);
+        // int[] ar = { 50, 150, 300, 500, 1000, 3000, 5000, 7500, 10000 };
+        int[] ar = { 10000 };
+        for (int j = 0; j < ar.length; j++) {
+            for (int z = 0; z < 3; z++) {
+                runScript(ar[j]);
+            }
+        }
+    }
+
+    public static void runScript(int length) {
+        ProjectIsClient client = new ProjectIsClient("localhost", 7000);
+
         try {
             ArrayList<Integer> arr = new ArrayList<>();
-            for (int i = 0; i < numberRequest; i++) {
+            for (int i = 0; i < length; i++) {
                 arr.add(i);
             }
             client.sendIDs(arr);
         } finally {
-            client.shutdown();
+            try {
+                client.shutdown();
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
         }
     }
+
 }

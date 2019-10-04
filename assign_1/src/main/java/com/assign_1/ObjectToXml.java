@@ -10,50 +10,9 @@ import javax.xml.bind.Marshaller;
 // import java.io.FileOutputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import com.assign_1.*;
 
 public class ObjectToXml {
-    public static void main(String[] args) {
-        ArrayList<Owner> owners = new ArrayList<>();
-        Owner o = new Owner(1, "Pedro", 123, "Rua Dos Buracos");
-        Car c = new Car(o, 8, "bmw", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        c = new Car(o, 7, "bmw", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
-
-        o = new Owner(2, "Hobbit", 153, "Shire");
-        c = new Car(o, 6, "mini", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
-
-        o = new Owner(3, "Gonzaga", 197, "Rua Sésamo");
-        c = new Car(o, 5, "ola", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        c = new Car(o, 4, "ola", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        c = new Car(o, 3, "nocar", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
-
-        o = new Owner(4, "Duarte", 169, "FlagTown");
-        c = new Car(o, 2, "lalala", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
-
-        o = new Owner(5, "Lucas", 188, "Madeira");
-        c = new Car(o, 1, "Micra", "a1", 1, 1, 1, "AZ-8-TE");
-        o.addCars(c);
-        owners.add(o);
-
-        String xml = "";
-        try {
-            xml = ObjectToXml.transform(owners);
-            ObjectToXml.reverse(xml);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // System.out.println(xml);
-    }
 
     public static String transform(ArrayList<Owner> pre_list) throws Exception {
         OwnerList list = new OwnerList(pre_list);

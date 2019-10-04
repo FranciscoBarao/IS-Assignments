@@ -3,7 +3,6 @@ package com.assign_1;
 // To run:
 // mvn exec:java -Dexec.mainClass=com.assign_1.ProjectIsServer
 
-import java.util.Random;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -28,9 +26,9 @@ public class ProjectIsServer {
     private static final Logger logger = Logger.getLogger(ProjectIsServer.class.getName());
 
     // Parameters
-    private static int numberOwners = 1000;
-    private static int numberCars = 50;
-    private static int port = 5682;
+    private static int numberOwners = 100000;
+    private static int numberCars = 10;
+    private static int port = 7000;
 
     // Random Name generator info
     final static String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
@@ -202,7 +200,6 @@ public class ProjectIsServer {
             long startTime = System.currentTimeMillis();
             timeToFile(startTime);
             infoToFile(numberOwners, numberCars);
-
             for (int i : owners) {
                 Owner o = findOwner(i);
                 ArrayList<C> cs = new ArrayList<>();
@@ -223,6 +220,7 @@ public class ProjectIsServer {
         }
 
         private Owner findOwner(int id) {
+
             for (Owner o : owners) {
                 if (o.getId() == id) {
                     return o;
