@@ -112,9 +112,9 @@ public class ProjectIsClient {
 
     public static void main(String[] args) throws Exception {
         // int[] ar = { 50, 150, 300, 500, 1000, 3000, 5000, 7500, 10000 };
-        int[] ar = { 10000 };
+        int[] ar = { 7500 };
         for (int j = 0; j < ar.length; j++) {
-            for (int z = 0; z < 3; z++) {
+            for (int z = 0; z < 5; z++) {
                 runScript(ar[j]);
             }
         }
