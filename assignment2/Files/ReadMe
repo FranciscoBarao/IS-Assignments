@@ -1,0 +1,8 @@
+Start Wildfly
+sudo systemctl start wildfly
+
+Status Wildfly
+sudo systemctl status wildfly
+
+Restart Wildfly
+sudo systemctl restart wildfly
