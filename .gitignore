@@ -26,9 +26,16 @@ pom.xml
 .settings/
 .vscode/
 
-assign_1/target
-assign_1/out
-assign_1/database.ser
+# Code for assignment 1
+assignment1/target
+assignment1/out
+assignment1/database.ser
+database.ser
+
+# Code for assignamet 2
+assignment2/target
+assignment2/out
+assignment2/database.ser
 database.ser
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
