@@ -1,5 +1,7 @@
 package com.projectis.assign_2;
 
+// mvn exec:java -Dexec.mainClass=com.projectis.assign_2.App
+
 import java.util.List;
 
 import com.projectis.assign_2.*;
