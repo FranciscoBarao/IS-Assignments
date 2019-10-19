@@ -1,27 +1,37 @@
 package com.projectis.assign_2;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "footballPlayer")
-public class footballPlayer implements Serializable {
-    private static final long serialVersionUID = 7526472295622776147L;
+public class footballPlayer {
 
     @Id
     @GeneratedValue
-    @Column(name = "studentid", nullable = false)
+    @Column(name = "player_id", nullable = false)
     int id;
     private String name;
     private String dateBirth;
     private String position;
     private float height;
 
+    public footballPlayer() {
+
+    }
+
     public footballPlayer(String name, String dateBString, String position, float height) {
         this.name = name;
         this.dateBirth = dateBString;
         this.position = position;
         this.height = height;
+    }
+
+    public String toString() {
+        return this.name + " " + this.dateBirth + " " + this.position + " " + this.height;
     }
 
     public String getName() {
