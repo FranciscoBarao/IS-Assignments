@@ -1,6 +1,7 @@
 package com.projectis.assign_2;
 
-import java.util.ArrayList;
+// mvn exec:java -Dexec.mainClass=com.projectis.assign_2.App
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
