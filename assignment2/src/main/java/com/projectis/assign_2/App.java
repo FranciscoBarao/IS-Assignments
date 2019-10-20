@@ -29,11 +29,6 @@ public class App {
         // query create
         TypedQuery<footballPlayer> query = em.createQuery(q);
 
-        // WHAT DOES THIS STEP DO?
-        // ParameterExpression<String> p = builder.parameter(String.class);
-        // WHat does setParameter do? -- Reusable queries?
-        // query.setParameter(p, "query?");
-
         List<footballPlayer> results = query.getResultList();
 
         for (footballPlayer f : results) {
@@ -75,6 +70,56 @@ public class App {
             em.persist(fp);
         }
         tx.commit();
+    }
+
+    public void AddTeamsPlayers(EntityManager em) {
+        // Add things to table
+
+        EntityTransaction tx = em.getTransaction();
+        ArrayList<footballPlayer> mylist = new ArrayList<>();
+
+        List<footballPlayer> formerPlayersT1 = new ArrayList<>();
+        List<footballPlayer> formerPlayersT2 = new ArrayList<>();
+
+        Team t1 = new Team("Team1", "adress1", "president1");
+
+        footballPlayer f = new footballPlayer("a1", "1-1-2000", "Keeper", 200);
+        f.setTeam(t1);
+        mylist.add(f);
+        formerPlayersT2.add(f);
+
+        f = new footballPlayer("a2", "1-1-2000", "Quarterback", 180);
+        f.setTeam(t1);
+        mylist.add(f);
+        formerPlayersT2.add(f);
+
+        f = new footballPlayer("a3", "1-1-2000", "asd", 190);
+        f.setTeam(t1);
+        mylist.add(f);
+
+        Team t2 = new Team("team2", "address2", "president2");
+
+        f = new footballPlayer("a4", "1-1-2000", "asd", 190);
+        f.setTeam(t2);
+        mylist.add(f);
+        formerPlayersT1.add(f);
+
+        f = new footballPlayer("a5", "1-1-2000", "asd", 190);
+        f.setTeam(t2);
+        mylist.add(f);
+        formerPlayersT1.add(f);
+
+        t1.setFormerPlayers(formerPlayersT1);
+        t2.setFormerPlayers(formerPlayersT2);
+
+        em.persist(t1);
+        em.persist(t2);
+
+        tx.begin();
+        for (footballPlayer fp : mylist) {
+            em.persist(fp);
+        }
+        tx.commit();
 
     }
 
@@ -86,12 +131,13 @@ public class App {
         /*
          * Entity manager implements API and encapsulates all of them within single
          * interface User to read,delete and write entities referenced objects are
-         * managed by the entity manager
+         * managed by the entity manager(
          */
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectPersistence");
         EntityManager em = emf.createEntityManager();
-        addFootballPlayers(em);
+        // addFootballPlayers(em);
         // getFootballPlayersGivenPosition(em, "Quarterback");
-        getFootballPlayersTallerHeight(em, 170);
+        // getFootballPlayersTallerHeight(em, 170);
+        AddTeamsPlayers(em);
     }
 }

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,12 +20,14 @@ public class footballPlayer {
     private String position;
     private float height;
 
+    @ManyToOne
+    private Team team;
+
     public footballPlayer() {
         super();
     }
 
     public footballPlayer(String name, String dateBString, String position, float height) {
-        super();
         this.name = name;
         this.dateBirth = dateBString;
         this.position = position;
@@ -66,4 +69,13 @@ public class footballPlayer {
     public void setHeight(float height) {
         this.height = height;
     }
+
+    public Team getTeam() {
+        return this.team;
+    }
+
+    public void setTeam(Team t) {
+        this.team = t;
+    }
+
 }

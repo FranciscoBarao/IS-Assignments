@@ -18,12 +18,14 @@
         </description>
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>common.footballPlayer</class>
+        <class>common.Team</class>
+
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/assign_2" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/IS_Assignment_DB" />
             <property name="javax.persistence.jdbc.user" value="user" />
             <property name="javax.persistence.jdbc.password" value="password" />
 
