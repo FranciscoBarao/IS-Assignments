@@ -20,10 +20,11 @@ public class footballPlayer {
     private float height;
 
     public footballPlayer() {
-
+        super();
     }
 
     public footballPlayer(String name, String dateBString, String position, float height) {
+        super();
         this.name = name;
         this.dateBirth = dateBString;
         this.position = position;

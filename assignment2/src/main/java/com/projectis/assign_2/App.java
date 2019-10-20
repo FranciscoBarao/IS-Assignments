@@ -1,5 +1,7 @@
 package com.projectis.assign_2;
 
+import java.util.ArrayList;
+
 // mvn exec:java -Dexec.mainClass=com.projectis.assign_2.App
 
 import java.util.List;
@@ -11,7 +13,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 public class App {
@@ -44,7 +46,9 @@ public class App {
         CriteriaQuery<footballPlayer> q = builder.createQuery(footballPlayer.class);
         Root<footballPlayer> root = q.from(footballPlayer.class);
 
-        q.select(root).where(builder.gt(root.get("height"), height));
+        Path<Integer> x = root.get("height");
+
+        q.select(root).where(builder.gt(x, height));
 
         TypedQuery<footballPlayer> query = em.createQuery(q);
         List<footballPlayer> results = query.getResultList();
