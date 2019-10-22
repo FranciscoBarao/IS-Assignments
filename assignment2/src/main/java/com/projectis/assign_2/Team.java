@@ -2,7 +2,6 @@ package com.projectis.assign_2;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,7 +12,6 @@ public class Team {
 
     @Id
     @GeneratedValue
-    @Column(name = "team_id", nullable = false)
     int id;
     private String name;
     private String address;

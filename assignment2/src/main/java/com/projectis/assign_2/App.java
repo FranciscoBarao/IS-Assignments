@@ -13,6 +13,8 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
@@ -123,6 +125,24 @@ public class App {
 
     }
 
+    public void getTeamPlayers(EntityManager em) {
+        String givenTeam = "Team1";
+
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<footballPlayer> criteria = builder.createQuery(footballPlayer.class);
+        Root<Team> root = criteria.from(Team.class);
+
+        Join<Team, footballPlayer> fplayers = root.join("footballPlayers");
+        criteria.select(fplayers).where(builder.equal(root.get("name"), givenTeam));
+
+        TypedQuery<footballPlayer> query = em.createQuery(criteria);
+        List<footballPlayer> results = query.getResultList();
+
+        for (footballPlayer f : results) {
+            System.out.println(f.toString());
+        }
+    }
+
     public static void main(String[] args) {
         new App();
     }
@@ -139,5 +159,6 @@ public class App {
         // getFootballPlayersGivenPosition(em, "Quarterback");
         // getFootballPlayersTallerHeight(em, 170);
         AddTeamsPlayers(em);
+        getTeamPlayers(em);
     }
 }

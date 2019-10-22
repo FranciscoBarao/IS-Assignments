@@ -21,7 +21,7 @@ public class footballPlayer {
     private float height;
 
     @ManyToOne
-    private Team team;
+    private Team Team;
 
     public footballPlayer() {
         super();
@@ -71,11 +71,11 @@ public class footballPlayer {
     }
 
     public Team getTeam() {
-        return this.team;
+        return this.Team;
     }
 
     public void setTeam(Team t) {
-        this.team = t;
+        this.Team = t;
     }
 
 }
