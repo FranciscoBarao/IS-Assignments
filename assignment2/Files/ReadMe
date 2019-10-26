@@ -8,3 +8,8 @@ Restart Wildfly
 sudo systemctl restart wildfly
 
 FranciscoBarao - usual pass
+
+
+
+-Still ned to do "manytoone, onetomany"
+
