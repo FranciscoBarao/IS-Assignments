@@ -7,14 +7,14 @@ public class statelessEJB implements sessionBeanRemote {
 
     int x;
 
-    public statelessEJB() {
-    }
-
-    public void xplus(int x) {
-        this.x += x;
-    }
-
-    public int getX() {
-        return x;
+    /*
+     * public statelessEJB() { }
+     * 
+     * public void xplus(int x) { this.x += x; }
+     * 
+     * public int getX() { return x; }
+     */
+    public String getHelloWorld() {
+        return "Hello World";
     }
 }

@@ -152,12 +152,14 @@ public class App {
          * interface User to read,delete and write entities referenced objects are
          * managed by the entity manager(
          */
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectPersistence");
-        EntityManager em = emf.createEntityManager();
+        // EntityManagerFactory emf =
+        // Persistence.createEntityManagerFactory("ProjectPersistence");
+        // EntityManager em = emf.createEntityManager();
         // addFootballPlayers(em);
         // getFootballPlayersGivenPosition(em, "Quarterback");
         // getFootballPlayersTallerHeight(em, 170);
-        AddTeamsPlayers(em);
-        getTeamPlayers(em);
+        // AddTeamsPlayers(em);
+        // getTeamPlayers(em);
+
     }
 }
