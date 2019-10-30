@@ -19,8 +19,6 @@
 *.tar.gz
 *.rar
 
-pom.xml
-
 .classpath
 .project
 .settings/
