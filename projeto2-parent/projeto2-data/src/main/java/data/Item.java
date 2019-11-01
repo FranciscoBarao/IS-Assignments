@@ -11,8 +11,8 @@ public class Item implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
     private String name;
-    private String Category;
-    private String Country;
+    private String category;
+    private String country;
     // private String photo;
 
     @ManyToOne
@@ -22,11 +22,20 @@ public class Item implements Serializable {
         super();
     }
 
-    public Item(int id, String name, String Category, String Country, User user) {
+    public Item(String name, String category, String country, User user) {
+        super();
+        this.name = name;
+        this.category = category;
+        this.country = country;
+        this.user = user;
+    }
+
+    public Item(int id, String name, String category, String country, User user) {
+        super();
         this.id = id;
         this.name = name;
-        this.Category = Category;
-        this.Country = Country;
+        this.category = category;
+        this.country = country;
         this.user = user;
     }
 
@@ -47,19 +56,19 @@ public class Item implements Serializable {
     }
 
     public String getCategory() {
-        return this.Category;
+        return this.category;
     }
 
-    public void setCategory(String Category) {
-        this.Category = Category;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getCountry() {
-        return this.Country;
+        return this.country;
     }
 
-    public void setCountry(String Country) {
-        this.Country = Country;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public User getUser() {
@@ -68,31 +77,6 @@ public class Item implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Item id(int id) {
-        this.id = id;
-        return this;
-    }
-
-    public Item name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public Item Category(String Category) {
-        this.Category = Category;
-        return this;
-    }
-
-    public Item Country(String Country) {
-        this.Country = Country;
-        return this;
-    }
-
-    public Item user(User user) {
-        this.user = user;
-        return this;
     }
 
     @Override
