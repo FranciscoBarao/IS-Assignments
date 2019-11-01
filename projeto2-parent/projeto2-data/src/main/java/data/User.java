@@ -9,8 +9,11 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String email;
+    @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "country", nullable = false)
     private String country;
 
     @OneToMany

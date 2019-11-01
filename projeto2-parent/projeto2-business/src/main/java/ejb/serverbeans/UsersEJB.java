@@ -43,4 +43,24 @@ public class UsersEJB implements UsersEJBLocal {
         }
         return false;
     }
+
+    public boolean edit(String email, String password, String name, String country) {
+        User user = new User(email, password, name, country);
+        try {
+            em.getTransaction().begin();
+
+            User u = em.find(User.class, email);
+            u.setPassword(password);
+            u.setName(name);
+            u.setCountry(country);
+            // log.info("Before commit");
+            em.getTransaction().commit();
+            em.close();
+
+            return true;
+        } catch (EntityExistsException e) {
+        }
+        return false;
+    }
+
 }
