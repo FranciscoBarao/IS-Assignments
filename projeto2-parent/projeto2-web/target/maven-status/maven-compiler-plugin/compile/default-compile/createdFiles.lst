@@ -1,1 +1,4 @@
+servlet/login.class
+servlet/register.class
 servlet/PlayersTallerThan.class
+servlet/index.class

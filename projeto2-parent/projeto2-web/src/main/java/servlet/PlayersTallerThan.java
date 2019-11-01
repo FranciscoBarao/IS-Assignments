@@ -26,38 +26,30 @@ public class PlayersTallerThan extends HttpServlet {
     @EJB
     PlayersEJBLocal ejblocal;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public PlayersTallerThan() {
         super();
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
 
         if (request.getParameter("fill") != null) {
-        ejblocal.populate();
-        out.println("<h1>Populate: OK!</h1>");
-        }
-        else {
-        float tall = Float.parseFloat(request.getParameter("height"));
-        List<Player> lp = ejblocal.playersTallerThan(tall);
+            ejblocal.populate();
+            out.println("<h1>Populate: OK!</h1>");
+        } else {
+            float tall = Float.parseFloat(request.getParameter("height"));
+            List<Player> lp = ejblocal.playersTallerThan(tall);
 
-        out.println("<h1> Players </h1>");
-        for (Player p : lp)
-            out.println(p + "<br/>");
+            out.println("<h1> Players </h1>");
+            for (Player p : lp)
+                out.println(p + "<br/>");
         }
     }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
 }
