@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,45 +11,48 @@ import javax.servlet.http.HttpServletResponse;
 
 import ejb.serverbeans.UsersEJBLocal;
 
-@WebServlet("/login")
-public class login extends HttpServlet {
+@WebServlet("/editUser")
+public class editUser extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @EJB
     UsersEJBLocal userEJB;
 
-    public void loginForm(HttpServletResponse response, boolean withErrorMessage) throws ServletException, IOException {
+    public void editUserForm(HttpServletResponse response, boolean withErrorMessage)
+            throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println("<TITLE>Login</TITLE>");
+        out.println("<TITLE>Edit User</TITLE>");
 
-        if (withErrorMessage)
-            out.println("Login failed. Please try again.<BR>");
-
-        out.println("<BR>Login Form");
+        out.println("<BR>User Form");
         out.println("<BR><form method=post>");
-        out.println("<BR>Email: <Input TYPE=TEXT NAME=email>");
-        out.println("<BR>Password: <INPUT TYPE=PASSWORD NAME=password>");
+        out.println("<BR>Password: <INPUT TYPE=PASSWORD required NAME=password>");
+        out.println("<BR>Name: <Input TYPE=TEXT required NAME=name>");
+        out.println("<BR>Country: <Input TYPE=TEXT required NAME=country>");
+
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        loginForm(response, false);
+        editUserForm(response, false);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html");
-        String email = request.getParameter("email");
+        // Get Email from Session!!
+        String email = "asd";
         String pass = request.getParameter("password");
+        String name = request.getParameter("name");
+        String country = request.getParameter("country");
 
-        if (userEJB.login(email, pass))
+        if (userEJB.edit(email, pass, name, country))
             response.sendRedirect(request.getContextPath() + "/someway");
         else
-            loginForm(response, true);
+            editUserForm(response, true);
 
     }
 }
