@@ -8,8 +8,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
 
-import ejb.serverbeans.*;
 import data.User;
 import data.Item;
 
@@ -22,23 +24,32 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     // Delete an item
-    public boolean delete(String id){
-        Query query = em.createQuery(
-            "DELETE FROM Items c WHERE c.id = '" + id "'");
-        int deletedCount = query.executeUpdate();
+    public boolean delete(String id) {
+        Query query = em.createQuery("DELETE FROM Items c WHERE c.id = '" + id + "'");
+        try {
+            int deletedCount = query.executeUpdate();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     // Delete all Items of an User
-    public boolean delete_all(String userId){
-        Query query = em.createQuery(
-            "DELETE FROM Items c WHERE c.user_id = '" + userId "'");
-        int deletedCount = query.executeUpdate();
+    public boolean delete_all(String userId) {
+        Query query = em.createQuery("DELETE FROM Items c WHERE c.user_id = '" + userId + "'");
+        try {
+            int deletedCount = query.executeUpdate();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     public Item read(String id) {
         TypedQuery<Item> query = em.createQuery("SELECT i FROM Item i WHERE id= '" + id + "'", Item.class);
+        Item result = null;
         try {
-            Item result = query.getSingleResult();
+            result = query.getSingleResult();
         } catch (NoResultException ne) {
             return null;
         }
@@ -56,18 +67,17 @@ public class ItemsEJB implements ItemsEJBLocal {
         return false;
     }
 
-    public boolean update(Hashmap<String, String> updateParams) {
+    public boolean update(String id, HashMap<String, String> updateParams) {
         try {
-            String sqlString = "UPDATE Items SET "; population = population * 11 / 10  +
-            "WHERE population < :p")
+            String sqlString = "UPDATE Items SET ";
             em.getTransaction().begin();
-            User u = em.find(Item.class, id);
             Iterator it = updateParams.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
+                Map.Entry pair = (Map.Entry) it.next();
                 sqlString += pair.getKey() + " = " + pair.getValue() + " ";
                 it.remove(); // avoids a ConcurrentModificationException
             }
+            sqlString += "WHERE id  = '" + id + "'";
             em.createQuery(sqlString).executeUpdate();
 
             return true;

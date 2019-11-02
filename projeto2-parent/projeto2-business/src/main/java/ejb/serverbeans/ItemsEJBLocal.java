@@ -3,6 +3,7 @@ package ejb.serverbeans;
 import java.util.HashMap;
 
 import javax.ejb.Local;
+
 import data.Item;
 import data.User;
 
@@ -16,5 +17,5 @@ public interface ItemsEJBLocal {
 
     public boolean create(String name, String category, String country, User user);
 
-    public boolean update(HashMap<String, String> updateParams);
+    public boolean update(String id, HashMap<String, String> updateParams);
 }
