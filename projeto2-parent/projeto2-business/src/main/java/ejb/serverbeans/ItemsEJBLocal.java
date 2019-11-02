@@ -1,9 +1,13 @@
 package ejb.serverbeans;
 
+import java.util.HashMap;
+
 import javax.ejb.Local;
+import data.Item;
+import data.User;
 
 @Local
-public interface UsersEJBLocal {
+public interface ItemsEJBLocal {
     public boolean delete(String id);
 
     public boolean delete_all(String userId);
@@ -12,5 +16,5 @@ public interface UsersEJBLocal {
 
     public boolean create(String name, String category, String country, User user);
 
-    public boolean update(Hashmap<String, String> updateParams);
+    public boolean update(HashMap<String, String> updateParams);
 }

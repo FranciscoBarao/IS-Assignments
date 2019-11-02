@@ -2,6 +2,9 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ejb.serverbeans.ItemsEJBLocal;
 import ejb.serverbeans.UsersEJBLocal;
 
 @WebServlet("/search")
@@ -16,12 +20,16 @@ public class search extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    UsersEJBLocal userEJB;
+    ItemsEJBLocal itemsEJBLocal;
 
     public void searchForm(HttpServletResponse response, boolean withErrorMessage)
             throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+
+        if (withErrorMessage)
+            out.println("<BR> Something wrong happened, try again");
+
         out.println("<TITLE>Search Items</TITLE>");
 
         out.println("<BR>Search");
@@ -32,7 +40,7 @@ public class search extends HttpServlet {
         out.println("<BR>Category: <INPUT TYPE=TEXT NAME=category>");
 
         out.println(
-                "<BR>Price Range:  min <INPUT TYPE=NUMBER min=0 NAME=minPriceRange>  max <INPUT TYPE=NUMBER min=0 NAME=maxPriceRange>");
+                "<BR>Price Range:  min <INPUT TYPE=NUMBER MIN=0 VALUE=0 NAME=minPriceRange>  max <INPUT TYPE=NUMBER MIN=0 VALUE=0 NAME=maxPriceRange>");
 
         out.println("<BR><Input TYPE=CHECKBOX value=In Country NAME=inCountry>");
 
@@ -46,21 +54,27 @@ public class search extends HttpServlet {
             throws ServletException, IOException {
 
         response.setContentType("text/html");
-        // Get Email from Session!!
         String name = request.getParameter("name");
         String Category = request.getParameter("category");
+
         int minPrice = Integer.parseInt(request.getParameter("minPriceRange"));
         int maxPrice = Integer.parseInt(request.getParameter("maxPriceRange"));
+        if (minPrice > maxPrice)
+            searchForm(response, true);
+            
+        String inCountry = request.getParameter("inCountry");
+        if(!inCountry.equals("") || inCountry != null ){
+            //Value is true
+            //inCountry == session.getCountry()
+        }
 
-        /*
-         * String startDateStr = request.getParameter("startDate"); SimpleDateFormat sdf
-         * = new SimpleDateFormat("yyyy-MM-dd"); //surround below line with try catch
-         * block as below code throws checked exception Date startDate =
-         * sdf.parse(startDateStr); //do further processing with Date object
-         * 
-         * out.println(sdf.format(startDate)); //this is what you want yyyy-MM-dd
-         */
-        if (userEJB.edit(email, pass, name, country))
+        String startDateStr = request.getParameter("startDate");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = sdf.parse(startDateStr);
+        // sdf.format(startDate)
+
+      
+        if (itemsEJBLocal.)
             response.sendRedirect(request.getContextPath() + "/someway");
         else
             searchForm(response, true);

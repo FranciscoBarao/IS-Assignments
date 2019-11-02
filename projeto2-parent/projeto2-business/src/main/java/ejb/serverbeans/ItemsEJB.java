@@ -6,6 +6,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import ejb.serverbeans.*;
@@ -35,8 +36,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     public Item read(String id) {
-        TypedQuery<Item> query = em.createQuery(
-                "SELECT i FROM Item i WHERE id= '" + id + "'", Item.class);
+        TypedQuery<Item> query = em.createQuery("SELECT i FROM Item i WHERE id= '" + id + "'", Item.class);
         try {
             Item result = query.getSingleResult();
         } catch (NoResultException ne) {
