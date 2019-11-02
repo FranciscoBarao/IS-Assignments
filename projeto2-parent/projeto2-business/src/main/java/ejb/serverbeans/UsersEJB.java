@@ -20,17 +20,18 @@ public class UsersEJB implements UsersEJBLocal {
     public UsersEJB() {
     }
 
-    public boolean login(String email, String password) {
+    public User login(String email, String password) {
         TypedQuery<User> query = em.createQuery(
                 "SELECT u FROM User u WHERE email= '" + email + "' AND password = '" + password + "'", User.class);
 
+        User result = null;
         try {
-            User result = query.getSingleResult();
+            result = query.getSingleResult();
         } catch (NoResultException ne) {
-            return false;
+            return null;
         }
 
-        return true;
+        return result;
     }
 
     public boolean register(String email, String password, String name, String country) {
