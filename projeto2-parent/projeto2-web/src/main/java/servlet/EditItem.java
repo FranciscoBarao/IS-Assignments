@@ -15,13 +15,16 @@ import java.util.HashMap;
 import data.Item;
 
 import ejb.serverbeans.ItemsEJBLocal;
+import ejb.serverbeans.UsersEJBLocal;
 
 @WebServlet("/edit/Item")
-public class EditItem extends HttpServlet {
+public class EditItem extends Application {
     private static final long serialVersionUID = 1L;
 
     @EJB
     ItemsEJBLocal itemEJB;
+    @EJB
+    UsersEJBLocal userEJB;
 
     public void itemForm(String itemID, HttpServletResponse response, boolean withErrorMessage)
             throws ServletException, IOException {
@@ -55,13 +58,14 @@ public class EditItem extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        super.header(request, response);
         String itemID = request.getParameter("id");
         itemForm(itemID, response, false);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        super.header(request, response);
         response.setContentType("text/html");
         HashMap<String, String> params = new HashMap();
         // Can be better, this way we update everything, even if things stay the same
