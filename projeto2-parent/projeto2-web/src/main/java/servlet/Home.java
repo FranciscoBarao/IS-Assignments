@@ -10,23 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/")
-public class Index extends Application {
-    private static final long serialVersionUID = 1L;
+import data.*;
 
-    public Index() {
-        super();
-    }
+@WebServlet("/home")
+public class Home extends Application {
+    private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         super.header(request, response);
-        HttpSession session = request.getSession(false);
-        if(session!=null){
-            response.sendRedirect(request.getContextPath() + "/home");
-        }else{
-            response.sendRedirect(request.getContextPath() + "/login");
-        }
+        HttpSession session = request.getSession(false);  
+        User user = (User)session.getAttribute("user");
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/html");
+        out.println("<HEAD><TITLE>Index</TITLE></HEAD><BODY>");
+        out.println("Welcome " + user.getName() + "!");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

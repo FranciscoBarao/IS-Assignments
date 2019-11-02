@@ -23,9 +23,7 @@ public class Application extends HttpServlet {
         if(session!=null){  
             User user = (User)session.getAttribute("user");
             out.println("<a href=/projeto2-web/profile>Profile</a> |  <a href=/projeto2-web/logout>Logout</a>");
-            out.println("<hr>");
-            out.println("Welcome " + user.getName() + "!");
-            
+            out.println("<hr>");            
         }else{
             out.println("<a href=/projeto2-web/login>Login</a> |  <a href=/projeto2-web/register>Register</a>");
             out.println("<hr>");
