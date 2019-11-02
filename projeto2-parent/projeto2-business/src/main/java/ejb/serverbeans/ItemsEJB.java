@@ -6,13 +6,12 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 
-import ejb.serverbeans.*;
 import data.User;
 import data.Item;
 
@@ -25,32 +24,29 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     // Delete an item
-    public boolean delete(String id){
-        Query query = em.createQuery(
-            "DELETE FROM Items c WHERE c.id = '" + id + "'");
-        try{
+    public boolean delete(String id) {
+        Query query = em.createQuery("DELETE FROM Items c WHERE c.id = '" + id + "'");
+        try {
             int deletedCount = query.executeUpdate();
-        } catch ( Exception e) {
+        } catch (Exception e) {
             return false;
         }
         return true;
     }
 
     // Delete all Items of an User
-    public boolean delete_all(String userId){
-        Query query = em.createQuery(
-            "DELETE FROM Items c WHERE c.user_id = '" + userId + "'");
-        try{
+    public boolean delete_all(String userId) {
+        Query query = em.createQuery("DELETE FROM Items c WHERE c.user_id = '" + userId + "'");
+        try {
             int deletedCount = query.executeUpdate();
-        } catch ( Exception e) {
+        } catch (Exception e) {
             return false;
         }
         return true;
     }
 
     public Item read(String id) {
-        TypedQuery<Item> query = em.createQuery(
-                "SELECT i FROM Item i WHERE id= '" + id + "'", Item.class);
+        TypedQuery<Item> query = em.createQuery("SELECT i FROM Item i WHERE id= '" + id + "'", Item.class);
         Item result = null;
         try {
             result = query.getSingleResult();
@@ -77,7 +73,7 @@ public class ItemsEJB implements ItemsEJBLocal {
             em.getTransaction().begin();
             Iterator it = updateParams.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
+                Map.Entry pair = (Map.Entry) it.next();
                 sqlString += pair.getKey() + " = " + pair.getValue() + " ";
                 it.remove(); // avoids a ConcurrentModificationException
             }

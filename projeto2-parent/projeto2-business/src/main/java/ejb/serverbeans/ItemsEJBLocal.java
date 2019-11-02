@@ -1,13 +1,11 @@
 package ejb.serverbeans;
 
-import javax.ejb.Local;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
 
-import ejb.serverbeans.*;
-import data.User;
+import javax.ejb.Local;
+
 import data.Item;
+import data.User;
 
 @Local
 public interface ItemsEJBLocal {
