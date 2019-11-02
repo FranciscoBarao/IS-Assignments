@@ -10,6 +10,8 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+target/
+
 # Package Files #
 *.jar
 *.war
@@ -36,7 +38,6 @@ assignment2/out
 assignment2/database.ser
 database.ser
 **/persistance.xml
-target/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
