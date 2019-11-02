@@ -9,6 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import data.*;
 
 import ejb.serverbeans.UsersEJBLocal;
 
@@ -47,8 +50,12 @@ public class login extends HttpServlet {
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
 
-        if (userEJB.login(email, pass))
-            response.sendRedirect(request.getContextPath() + "/home");
+        User user = userEJB.login(email, pass);
+        if (user != null){
+            HttpSession session = request.getSession();  
+            session.setAttribute("user", user);  
+            response.sendRedirect(request.getContextPath() + "/");
+        }
         else
             loginForm(response, true);
 
