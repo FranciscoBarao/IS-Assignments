@@ -38,6 +38,11 @@ public class EditItem extends HttpServlet {
 
         Item item = itemEJB.read(itemID);
 
+        if (item==null){
+            out.println("You can't access that item. Please try with another id.<BR>");
+            return;
+        }
+
         out.println("<BR>Update Item Form");
         out.println("<BR><form method=post><BR>");
         out.println("<input name=itemID type=hidden value=" + itemID + ">");
