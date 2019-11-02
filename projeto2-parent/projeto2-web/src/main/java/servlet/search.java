@@ -89,11 +89,8 @@ public class search extends HttpServlet {
             if (items.isEmpty())
                 searchForm(response, false, true);
             else {
-                PrintWriter out = response.getWriter();
-
-                for (Item i : items) {
-                    out.println(i.toString());
-                }
+                // Store list on array
+                response.sendRedirect(request.getContextPath() + "/result");
             }
         }
     }
