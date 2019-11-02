@@ -23,8 +23,8 @@ public class index extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<HEAD><TITLE>Index</TITLE></HEAD><BODY>");
 
-        out.println("<BR><FORM ACTION=login METHOD=get> <INPUT TYPE=submit VALUE=Login></FORM>");
-        out.println("<BR><FORM ACTION=register METHOD=get> <INPUT TYPE=submit VALUE=Register></FORM></BODY>");
+        out.println("<BR> <a href=/projeto2-web/login>Login</a>");
+        out.println("<BR> <a href=/projeto2-web/register>Register</a>");
 
     }
 

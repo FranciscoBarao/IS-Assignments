@@ -48,7 +48,7 @@ public class login extends HttpServlet {
         String pass = request.getParameter("password");
 
         if (userEJB.login(email, pass))
-            response.sendRedirect(request.getContextPath() + "/someway");
+            response.sendRedirect(request.getContextPath() + "/home");
         else
             loginForm(response, true);
 

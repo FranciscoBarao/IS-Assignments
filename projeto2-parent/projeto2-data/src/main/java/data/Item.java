@@ -1,6 +1,8 @@
 package data;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,8 @@ public class Item implements Serializable {
     private String name;
     private String category;
     private String country;
+    private int price;
+    private Date date;
     // private String photo;
 
     @ManyToOne
@@ -22,21 +26,14 @@ public class Item implements Serializable {
         super();
     }
 
-    public Item(String name, String category, String country, User user) {
-        super();
+    public Item(String name, String category, String country, int price, Date date, User user) {
         this.name = name;
         this.category = category;
         this.country = country;
+        this.price = price;
+        this.date = date;
         this.user = user;
-    }
 
-    public Item(int id, String name, String category, String country, User user) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.category = category;
-        this.country = country;
-        this.user = user;
     }
 
     public int getId() {
@@ -71,6 +68,22 @@ public class Item implements Serializable {
         this.country = country;
     }
 
+    public int getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public Date getDate() {
+        return this.date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public User getUser() {
         return this.user;
     }
@@ -79,10 +92,7 @@ public class Item implements Serializable {
         this.user = user;
     }
 
-    @Override
     public String toString() {
-        return "{" + " id='" + getId() + "'" + ", name='" + getName() + "'" + ", Category='" + getCategory() + "'"
-                + ", Country='" + getCountry() + "'" + ", user='" + getUser() + "'" + "}";
+        return this.name + " " + this.category + " " + this.country + " " + this.price;
     }
-
 }

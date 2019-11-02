@@ -2,8 +2,10 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -12,8 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.Item;
 import ejb.serverbeans.ItemsEJBLocal;
-import ejb.serverbeans.UsersEJBLocal;
 
 @WebServlet("/search")
 public class search extends HttpServlet {
@@ -22,10 +24,13 @@ public class search extends HttpServlet {
     @EJB
     ItemsEJBLocal itemsEJBLocal;
 
-    public void searchForm(HttpServletResponse response, boolean withErrorMessage)
+    public void searchForm(HttpServletResponse response, boolean withErrorMessage, boolean isEmpty)
             throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+
+        if (isEmpty)
+            out.println("<BR>Empty Search");
 
         if (withErrorMessage)
             out.println("<BR> Something wrong happened, try again");
@@ -55,33 +60,46 @@ public class search extends HttpServlet {
 
         response.setContentType("text/html");
         String name = request.getParameter("name");
-        String Category = request.getParameter("category");
+        String category = request.getParameter("category");
 
         int minPrice = Integer.parseInt(request.getParameter("minPriceRange"));
         int maxPrice = Integer.parseInt(request.getParameter("maxPriceRange"));
         if (minPrice > maxPrice)
-            searchForm(response, true);
-            
+            searchForm(response, true, false);
+
         String inCountry = request.getParameter("inCountry");
-        if(!inCountry.equals("") || inCountry != null ){
-            //Value is true
-            //inCountry == session.getCountry()
+        if (!inCountry.equals("") || inCountry != null) {
+            // Value is true
+            // inCountry == session.getCountry()
         }
 
-        String startDateStr = request.getParameter("startDate");
+        String date = request.getParameter("afterDate");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = sdf.parse(startDateStr);
-        // sdf.format(startDate)
+        Date afterDate = null;
+        try {
+            afterDate = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-      
-        if (itemsEJBLocal.)
-            response.sendRedirect(request.getContextPath() + "/someway");
-        else
-            searchForm(response, true);
+        List<Item> items = itemsEJBLocal.search(name, category, minPrice, maxPrice, inCountry, afterDate);
+        if (items == null)
+            searchForm(response, true, false);
+        else {
+            if (items.isEmpty())
+                searchForm(response, false, true);
+            else {
+                PrintWriter out = response.getWriter();
+
+                for (Item i : items) {
+                    out.println(i.toString());
+                }
+            }
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        searchForm(response, false);
+        searchForm(response, false, false);
     }
 }

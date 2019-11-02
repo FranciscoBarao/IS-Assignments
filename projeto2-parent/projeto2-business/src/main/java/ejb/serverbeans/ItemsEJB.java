@@ -8,9 +8,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 import data.User;
 import data.Item;
@@ -56,8 +56,47 @@ public class ItemsEJB implements ItemsEJBLocal {
         return result;
     }
 
-    public boolean create(String name, String category, String country, User user) {
-        Item item = new Item(name, category, country, user);
+    public List<Item> search(String name, String category, int minPrice, int maxPrice, String inCountry,
+            Date afterDate) {
+
+        String query = "FROM Item i WHERE ";
+
+        if (!name.equals("") && name != null)
+            query += "AND name LIKE ''%" + name + "%' ";
+
+        if (!category.equals("") && name != null)
+            query += "AND category LIKE '% " + category + "%' ";
+
+        if (minPrice != 0)
+            query += "AND price > " + minPrice + " ";
+
+        if (maxPrice != 0)
+            query += "AND price < " + maxPrice + " ";
+
+        if (!inCountry.equals("") && inCountry != null)
+            query += "AND country = '" + inCountry + "' ";
+
+        if (afterDate != null)
+            query += "AND date > '" + afterDate + "' ";
+
+        query += ";";
+
+        String s = query.replaceFirst(Pattern.quote("AND"), "");
+        System.out.println(s);
+
+        Query q = em.createQuery(s, Item.class);
+
+        try {
+            List<Item> results = q.getResultList();
+            return results;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public boolean create(String name, String category, String country, int price, Date date, User user) {
+        Item item = new Item(name, category, country, price, date, user);
         try {
             em.persist(item);
             return true;
