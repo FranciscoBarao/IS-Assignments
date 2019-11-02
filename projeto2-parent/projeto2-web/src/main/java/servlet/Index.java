@@ -10,15 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/")
-public class index extends HttpServlet {
+public class Index extends Application {
     private static final long serialVersionUID = 1L;
 
-    public index() {
+    public Index() {
         super();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        super.header(request, response);
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<HEAD><TITLE>Index</TITLE></HEAD><BODY>");
