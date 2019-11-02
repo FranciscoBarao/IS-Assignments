@@ -17,14 +17,12 @@ import data.Item;
 import ejb.serverbeans.ItemsEJBLocal;
 import ejb.serverbeans.UsersEJBLocal;
 
-@WebServlet("/edit/Item")
+@WebServlet("/edit/item")
 public class EditItem extends Application {
     private static final long serialVersionUID = 1L;
 
     @EJB
     ItemsEJBLocal itemEJB;
-    @EJB
-    UsersEJBLocal userEJB;
 
     public void itemForm(String itemID, HttpServletResponse response, boolean withErrorMessage)
             throws ServletException, IOException {
