@@ -50,6 +50,7 @@ public class EditItem extends Application {
         out.println("<BR>Name: <Input TYPE=TEXT VALUE=" + item.getName() + " NAME=name>");
         out.println("<BR>Category: <INPUT TYPE=TEXT VALUE=" + item.getCategory() + " NAME=category>");
         out.println("<BR>Country: <INPUT TYPE=TEXT VALUE=" + item.getCountry() + " NAME=country>");
+        out.println("<BR>Price: <input type=number VALUE=" + item.getPrice() + " step=any name=price>");
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
 
     }
@@ -70,6 +71,7 @@ public class EditItem extends Application {
         params.put("name", request.getParameter("name"));
         params.put("category", request.getParameter("category"));
         params.put("country", request.getParameter("country"));
+        params.put("price", request.getParameter("price"));
 
         String itemID = request.getParameter("id");
         if (itemEJB.update(itemID, params))

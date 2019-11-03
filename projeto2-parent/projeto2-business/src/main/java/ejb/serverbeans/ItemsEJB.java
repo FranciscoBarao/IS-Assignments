@@ -108,15 +108,19 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     public boolean update(String id, HashMap<String, String> updateParams) {
         try {
-            String sqlString = "UPDATE Items SET ";
-            em.getTransaction().begin();
+            String sqlString = "UPDATE Item SET ";
             Iterator it = updateParams.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-                sqlString += pair.getKey() + " = " + pair.getValue() + " ";
+                if(pair.getKey().equals("price")){
+                    sqlString += pair.getKey() + " = " + pair.getValue() + ", ";
+                }else{
+                    sqlString += pair.getKey() + " = '" + pair.getValue() + "', ";
+                }
                 it.remove(); // avoids a ConcurrentModificationException
             }
-            sqlString += "WHERE id  = '" + id + "'";
+            sqlString = sqlString.substring(0, sqlString.length() - 2);
+            sqlString += " WHERE id  = '" + id + "'";
             em.createQuery(sqlString).executeUpdate();
 
             return true;
