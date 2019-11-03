@@ -19,12 +19,13 @@ public class Application extends HttpServlet {
     protected void header(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession(false);  
-        if(session!=null){  
-            User user = (User)session.getAttribute("user");
-            out.println("<a href=/projeto2-web/profile>Profile</a> |  <a href=/projeto2-web/logout>Logout</a>");
-            out.println("<hr>");            
-        }else{
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            User user = (User) session.getAttribute("user");
+            out.println(
+                    "<a href=/projeto2-web/home>Home</a> | <a href=/projeto2-web/profile/user>Profile</a>  |  <a href=/projeto2-web/logout>Logout</a>");
+            out.println("<hr>");
+        } else {
             out.println("<a href=/projeto2-web/login>Login</a> |  <a href=/projeto2-web/register>Register</a>");
             out.println("<hr>");
         }
@@ -33,9 +34,9 @@ public class Application extends HttpServlet {
     protected void checkLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession(false);  
-        if(session==null){  
-            response.sendRedirect(request.getContextPath() + "/login");           
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
         }
     }
 }

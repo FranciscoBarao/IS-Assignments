@@ -41,7 +41,7 @@ public class result extends Application {
         HttpSession session = request.getSession(false);
         List<Item> items = (List<Item>) session.getAttribute("items");
         for (Item i : items) {
-            out.println("<BR> " + i.toString());
+            out.println("<BR> <a  href=/projeto2-web/profile/item?id=" + i.getId() + "> " + i.toString() + "</a>");
         }
     }
 

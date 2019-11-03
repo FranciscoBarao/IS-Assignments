@@ -32,7 +32,7 @@ public class EditUser extends Application {
             out.println("Update failed. Please try again.<BR>");
 
         HttpSession session = request.getSession(false);
-        User user = (User)session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
         out.println("<BR>User Form");
         out.println("<BR><form method=post>");
@@ -54,7 +54,9 @@ public class EditUser extends Application {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        super.header(request, response);
         super.checkLogin(request, response);
+
         response.setContentType("text/html");
         HashMap<String, String> params = new HashMap();
         // Can be better, this way we update everything, even if things stay the same
@@ -64,15 +66,15 @@ public class EditUser extends Application {
         params.put("country", request.getParameter("country"));
 
         HttpSession session = request.getSession(false);
-        User user = (User)session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
-        if (userEJB.edit(user.getEmail(), params)){
+        if (userEJB.edit(user.getEmail(), params)) {
             user = userEJB.select(request.getParameter("email"));
-            if(user != null){
+            if (user != null) {
                 session.setAttribute("user", user);
             }
-            response.sendRedirect(request.getContextPath() + "/home");
-        }else
+            response.sendRedirect(request.getContextPath() + "/profile");
+        } else
             editUserForm(request, response, true);
     }
 }

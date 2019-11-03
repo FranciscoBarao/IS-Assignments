@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.HashMap;
 import data.Item;
 
 import ejb.serverbeans.ItemsEJBLocal;
-import ejb.serverbeans.UsersEJBLocal;
 
 @WebServlet("/edit/item")
 public class EditItem extends Application {
@@ -30,7 +28,7 @@ public class EditItem extends Application {
         PrintWriter out = response.getWriter();
         out.println("<TITLE>Update Item</TITLE>");
 
-        if(itemID == null){
+        if (itemID == null) {
             out.println("Wrong path. Needs an ID as parameter. Please try again.<BR>");
             return;
         }
@@ -39,7 +37,7 @@ public class EditItem extends Application {
 
         Item item = itemEJB.read(itemID);
 
-        if (item==null){
+        if (item == null) {
             out.println("You can't access that item. Please try with another id.<BR>");
             return;
         }
