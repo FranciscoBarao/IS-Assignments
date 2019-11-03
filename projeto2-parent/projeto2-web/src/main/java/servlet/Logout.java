@@ -1,8 +1,9 @@
-
 package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,20 +13,17 @@ import javax.servlet.http.HttpSession;
 
 import data.*;
 
-@WebServlet("/home")
-public class Home extends Application {
+import ejb.serverbeans.UsersEJBLocal;
+
+@WebServlet("/logout")
+public class Logout extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        super.header(request, response);
-        super.checkLogin(request, response);
-        HttpSession session = request.getSession(false);  
-        User user = (User)session.getAttribute("user");
-        PrintWriter out = response.getWriter();
-        response.setContentType("text/html");
-        out.println("<HEAD><TITLE>Index</TITLE></HEAD><BODY>");
-        out.println("Welcome " + user.getName() + "!");
+        HttpSession session=request.getSession();  
+        session.invalidate();
+        response.sendRedirect(request.getContextPath() + "/");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

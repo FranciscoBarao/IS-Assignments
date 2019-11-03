@@ -35,22 +35,23 @@ public class CreateItem extends Application {
 
         out.println("<BR>Create Item Form");
         out.println("<BR><form method=post><BR>");
-        out.println("<BR>Name: <Input TYPE=TEXT NAME=name>");
-        out.println("<BR>Category: <INPUT TYPE=TEXT NAME=category>");
-        out.println("<BR>Country: <INPUT TYPE=TEXT NAME=country>");
-        out.println("<BR>Price: <input type=number step=any name=price>");
+        out.println("<BR>Name: <Input TYPE=TEXT required NAME=name>");
+        out.println("<BR>Category: <INPUT TYPE=TEXT required NAME=category>");
+        out.println("<BR>Country: <INPUT TYPE=TEXT required NAME=country>");
+        out.println("<BR>Price: <input type=number step=any required name=price>");
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         super.header(request, response);
+        super.checkLogin(request, response);
         itemForm(response, false);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        super.header(request, response);
+        super.checkLogin(request, response);
         response.setContentType("text/html");
         HttpSession session = request.getSession(false);
 

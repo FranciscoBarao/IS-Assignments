@@ -29,4 +29,13 @@ public class Application extends HttpServlet {
             out.println("<hr>");
         }
     }
+
+    protected void checkLogin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession(false);  
+        if(session==null){  
+            response.sendRedirect(request.getContextPath() + "/login");           
+        }
+    }
 }

@@ -58,6 +58,5 @@ public class Login extends HttpServlet {
         }
         else
             loginForm(response, true);
-
     }
 }

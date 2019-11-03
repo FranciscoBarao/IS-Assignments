@@ -47,10 +47,10 @@ public class EditItem extends Application {
         out.println("<BR>Update Item Form");
         out.println("<BR><form method=post><BR>");
         out.println("<input name=itemID type=hidden value=" + itemID + ">");
-        out.println("<BR>Name: <Input TYPE=TEXT VALUE=" + item.getName() + " NAME=name>");
-        out.println("<BR>Category: <INPUT TYPE=TEXT VALUE=" + item.getCategory() + " NAME=category>");
-        out.println("<BR>Country: <INPUT TYPE=TEXT VALUE=" + item.getCountry() + " NAME=country>");
-        out.println("<BR>Price: <input type=number VALUE=" + item.getPrice() + " step=any name=price>");
+        out.println("<BR>Name: <Input TYPE=TEXT VALUE='" + item.getName() + "' required NAME=name>");
+        out.println("<BR>Category: <INPUT TYPE=TEXT VALUE='" + item.getCategory() + "' required NAME=category>");
+        out.println("<BR>Country: <INPUT TYPE=TEXT VALUE='" + item.getCountry() + "' required NAME=country>");
+        out.println("<BR>Price: <input type=number VALUE='" + item.getPrice() + "' step=any required name=price>");
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
 
     }
@@ -58,13 +58,14 @@ public class EditItem extends Application {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         super.header(request, response);
+        super.checkLogin(request, response);
         String itemID = request.getParameter("id");
         itemForm(itemID, response, false);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        super.header(request, response);
+        super.checkLogin(request, response);
         response.setContentType("text/html");
         HashMap<String, String> params = new HashMap();
         // Can be better, this way we update everything, even if things stay the same
