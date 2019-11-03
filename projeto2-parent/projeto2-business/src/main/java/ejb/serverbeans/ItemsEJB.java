@@ -59,30 +59,32 @@ public class ItemsEJB implements ItemsEJBLocal {
     public List<Item> search(String name, String category, int minPrice, int maxPrice, String inCountry,
             Date afterDate) {
 
-        String query = "FROM Item i WHERE ";
+        String query = "FROM Item i WHERE";
 
         if (!name.equals("") && name != null)
-            query += "AND name LIKE ''%" + name + "%' ";
+            query += " AND name LIKE '%" + name + "%' ";
 
         if (!category.equals("") && name != null)
-            query += "AND category LIKE '% " + category + "%' ";
+            query += " AND category LIKE '%" + category + "%' ";
 
         if (minPrice != 0)
-            query += "AND price > " + minPrice + " ";
+            query += " AND price >= " + minPrice + " ";
 
         if (maxPrice != 0)
-            query += "AND price < " + maxPrice + " ";
+            query += " AND price <= " + maxPrice + " ";
 
         if (!inCountry.equals("") && inCountry != null)
-            query += "AND country = '" + inCountry + "' ";
+            query += " AND country = '" + inCountry + "' ";
 
         if (afterDate != null)
-            query += "AND date > '" + afterDate + "' ";
+            query += " AND date > '" + afterDate + "' ";
 
-        query += ";";
-
-        String s = query.replaceFirst(Pattern.quote("AND"), "");
-        System.out.println(s);
+        String lastWord = query.substring(query.lastIndexOf(" ") + 1);
+        String s = "";
+        if (lastWord.equals("WHERE"))
+            s = query.replaceFirst(Pattern.quote("WHERE"), "");
+        else
+            s = query.replaceFirst(Pattern.quote("AND"), "");
 
         Query q = em.createQuery(s, Item.class);
 
@@ -93,6 +95,34 @@ public class ItemsEJB implements ItemsEJBLocal {
             System.out.println(e);
         }
         return null;
+    }
+
+    public List<Item> sort(List<Item> items, String method, boolean isAscending) {
+        switch (method) {
+        case "nameSort":
+            if (isAscending)
+                Collections.sort(items, new sortName());
+            else
+                Collections.sort(items, new sortName().reversed());
+            break;
+        case "priceSort":
+            if (isAscending)
+                Collections.sort(items, new sortPrice());
+            else
+                Collections.sort(items, new sortPrice().reversed());
+            break;
+        case "dateSort":
+            if (isAscending)
+                Collections.sort(items, new sortDate());
+            else
+                Collections.sort(items, new sortDate().reversed());
+            break;
+        default:
+            if (isAscending)
+                Collections.sort(items, new sortName());
+            break;
+        }
+        return items;
     }
 
     public boolean create(String name, String category, String country, int price, Date date, User user) {
@@ -112,9 +142,9 @@ public class ItemsEJB implements ItemsEJBLocal {
             Iterator it = updateParams.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-                if(pair.getKey().equals("price")){
+                if (pair.getKey().equals("price")) {
                     sqlString += pair.getKey() + " = " + pair.getValue() + ", ";
-                }else{
+                } else {
                     sqlString += pair.getKey() + " = '" + pair.getValue() + "', ";
                 }
                 it.remove(); // avoids a ConcurrentModificationException

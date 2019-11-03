@@ -13,9 +13,13 @@ public class Item implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
     private String name;
+    @Column(name = "category", nullable = false)
     private String category;
+    @Column(name = "country", nullable = false)
     private String country;
+    @Column(name = "price", nullable = false)
     private int price;
+    @Column(name = "date", nullable = false)
     private Date date;
     // private String photo;
 
@@ -93,6 +97,6 @@ public class Item implements Serializable {
     }
 
     public String toString() {
-        return this.name + " " + this.category + " " + this.country + " " + this.price;
+        return this.name + " " + this.category + " " + this.country + " " + this.price + " " + this.date;
     }
 }

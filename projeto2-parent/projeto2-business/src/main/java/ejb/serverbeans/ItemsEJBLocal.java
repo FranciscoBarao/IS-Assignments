@@ -20,4 +20,6 @@ public interface ItemsEJBLocal {
 
     public List<Item> search(String name, String category, int minPrice, int maxPrice, String inCountry,
             Date afterDate);
+
+    public List<Item> sort(List<Item> items, String method, boolean isAscending);
 }

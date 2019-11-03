@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,12 +19,14 @@ public class Home extends Application {
             throws ServletException, IOException {
         super.header(request, response);
         super.checkLogin(request, response);
-        HttpSession session = request.getSession(false);  
-        User user = (User)session.getAttribute("user");
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         out.println("<HEAD><TITLE>Index</TITLE></HEAD><BODY>");
         out.println("Welcome " + user.getName() + "!");
+
+        out.println("<BR> <a href=/projeto2-web/search>Search</a> ");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
