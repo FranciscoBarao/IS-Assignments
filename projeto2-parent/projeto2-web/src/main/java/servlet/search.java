@@ -78,11 +78,6 @@ public class search extends Application {
         if (category == null || category.equals(""))
             category = "";
 
-        int minPrice = Integer.parseInt(request.getParameter("minPriceRange"));
-        int maxPrice = Integer.parseInt(request.getParameter("maxPriceRange"));
-        if (minPrice > maxPrice)
-            searchForm(response, true, false);
-
         String inCountry = request.getParameter("inCountry");
         if (inCountry != null && !inCountry.equals("")) {
             // Value is true
@@ -98,6 +93,13 @@ public class search extends Application {
             afterDate = sdf.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        int minPrice = Integer.parseInt(request.getParameter("minPriceRange"));
+        int maxPrice = Integer.parseInt(request.getParameter("maxPriceRange"));
+        if (minPrice > maxPrice) {
+            searchForm(response, true, false);
+            return;
         }
 
         List<Item> items = itemsEJBLocal.search(name, category, minPrice, maxPrice, inCountry, afterDate);
