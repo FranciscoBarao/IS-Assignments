@@ -7,9 +7,24 @@ sudo systemctl status wildfly
 Restart Wildfly
 sudo systemctl restart wildfly
 
-FranciscoBarao - usual pass
+Deploy:
+mvn clean install wildfly:deploy -Pwildfly-runtime
 
 
+Tasks:
 
--Still ned to do "manytoone, onetomany"
+Not working:
+-Profile View not working
+-Search - afterDate not working
 
+Not Done:
+-Delete an Item
+-Delete user and all items 
+-List items on profile is not sorted by date
+-Item photo
+-Systematic email
+-(edit item)
+
+Test:
+-quando profile funcionar, verificar se a list items dele tem "edit" button para serem editados e se funciona.. (Not even tested)
+-Overall for finding errors
