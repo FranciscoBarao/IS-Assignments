@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import ejb.serverbeans.UsersEJBLocal;
 
 @WebServlet("/register")
-public class register extends HttpServlet {
+public class Register extends Application {
     private static final long serialVersionUID = 1L;
 
     @EJB
@@ -41,6 +41,7 @@ public class register extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        super.header(request, response);
         registerForm(response, false);
     }
 
@@ -54,7 +55,7 @@ public class register extends HttpServlet {
         String country = request.getParameter("country");
 
         if (userEJB.register(email, pass, name, country))
-            response.sendRedirect(request.getContextPath() + "/someway");
+            response.sendRedirect(request.getContextPath() + "/");
         else
             registerForm(response, true);
 
