@@ -12,6 +12,7 @@ public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
+    @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "category", nullable = false)
     private String category;

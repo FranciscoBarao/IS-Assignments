@@ -8,6 +8,9 @@ import javax.persistence.*;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    int id;
+    @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
@@ -16,7 +19,7 @@ public class User implements Serializable {
     @Column(name = "country", nullable = false)
     private String country;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
     public User() {

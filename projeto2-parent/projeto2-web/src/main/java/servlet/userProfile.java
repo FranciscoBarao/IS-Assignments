@@ -28,10 +28,12 @@ public class userProfile extends Application {
         out.println("<BR> Email: " + user.getEmail());
         out.println("<BR> Country: " + user.getCountry());
 
-        out.println("Items");
+        out.println("<BR> Items");
+        if (items.isEmpty())
+            out.println("EMPTYYYYYYY");
         for (Item i : items) {
-            out.println("<BR> " + i.toString() + " <a href = projeto2-web/edit/item?id=" + i.getId() + "> edit </a");
-
+            out.println("\nYellow Submarine");
+            out.println("<BR> " + i.getName() + " <a href = projeto2-web/edit/item?id=" + i.getId() + "> edit </a");
         }
         out.println("<BR> <a href=/projeto2-web/edit/user>Edit User</a> ");
     }
@@ -45,6 +47,7 @@ public class userProfile extends Application {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         List<Item> items = user.getItems();
+
         userDisplay(user, items, request, response);
     }
 
