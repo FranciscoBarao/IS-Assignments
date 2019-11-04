@@ -25,7 +25,7 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     // Delete an item
     public boolean delete(String id) {
-        Query query = em.createQuery("DELETE FROM Items c WHERE c.id = '" + id + "'");
+        Query query = em.createQuery("DELETE FROM Item c WHERE c.id = '" + id + "'");
         try {
             int deletedCount = query.executeUpdate();
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     // Delete all Items of an User
     public boolean delete_all(String userId) {
-        Query query = em.createQuery("DELETE FROM Items c WHERE c.user_id = '" + userId + "'");
+        Query query = em.createQuery("DELETE FROM Item c WHERE c.user_id = '" + userId + "'");
         try {
             int deletedCount = query.executeUpdate();
         } catch (Exception e) {
