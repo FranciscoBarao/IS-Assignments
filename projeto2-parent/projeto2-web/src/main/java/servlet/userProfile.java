@@ -35,7 +35,7 @@ public class userProfile extends Application {
         if(items.size() > 0){
             for (Item i : items) {
                 out.println("<BR> " + i.toString() + " <a href = '/projeto2-web/edit/item?id=" + i.getId() + "'> edit </a>");
-                out.println("<a href = '/projeto2-web/delete/item?id=" + i.getId() + "'> edit </a>")
+                out.println("<a href = '/projeto2-web/delete/item?id=" + i.getId() + "'> delete </a>")
 
             }
         }else{
