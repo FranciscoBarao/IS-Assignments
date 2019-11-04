@@ -30,7 +30,7 @@ public class Register extends Application {
 
         out.println("<BR>Register Form");
         out.println("<BR><form method=post>");
-        out.println("<BR>Email: <Input TYPE=TEXT NAME=email>");
+        out.println("<BR>Email: <Input TYPE=EMAIL NAME=email>");
         out.println("<BR>Password: <INPUT TYPE=PASSWORD NAME=password>");
         out.println("<BR>Name: <INPUT TYPE=TEXT NAME=name>");
         out.println("<BR>Country: <INPUT TYPE=TEXT NAME=country>");

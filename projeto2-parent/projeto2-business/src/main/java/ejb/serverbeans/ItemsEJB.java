@@ -25,7 +25,7 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     // Delete an item
     public boolean delete(String id) {
-        Query query = em.createQuery("DELETE FROM Item c WHERE c.id = '" + id + "'");
+        Query query = em.createQuery("DELETE FROM Item c WHERE c.id = " + id);
         try {
             int deletedCount = query.executeUpdate();
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     // Delete all Items of an User
     public boolean delete_all(String userId) {
-        Query query = em.createQuery("DELETE FROM Item c WHERE c.user_id = '" + userId + "'");
+        Query query = em.createQuery("DELETE FROM Item WHERE user_id = " + userId);
         try {
             int deletedCount = query.executeUpdate();
         } catch (Exception e) {
@@ -87,6 +87,20 @@ public class ItemsEJB implements ItemsEJBLocal {
             s = query.replaceFirst(Pattern.quote("AND"), "");
 
         Query q = em.createQuery(s, Item.class);
+
+        try {
+            List<Item> results = q.getResultList();
+            return results;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public List<Item> searchByUser(String userId) {
+
+        String query = "FROM Item i WHERE user_id=" + userId;
+        Query q = em.createQuery(query, Item.class);
 
         try {
             List<Item> results = q.getResultList();

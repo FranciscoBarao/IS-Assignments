@@ -36,7 +36,7 @@ public class EditUser extends Application {
 
         out.println("<BR>User Form");
         out.println("<BR><form method=post>");
-        out.println("<BR>Name: <Input TYPE=TEXT VALUE='" + user.getEmail() + "' required NAME=email>");
+        out.println("<BR>Email: <Input TYPE=EMAIL VALUE='" + user.getEmail() + "' required NAME=email>");
         out.println("<BR>Password: <INPUT TYPE=PASSWORD VALUE='" + user.getPassword() + "' required NAME=password>");
         out.println("<BR>Name: <Input TYPE=TEXT VALUE='" + user.getName() + "' required NAME=name>");
         out.println("<BR>Country: <Input TYPE=TEXT VALUE='" + user.getCountry() + "' required NAME=country>");

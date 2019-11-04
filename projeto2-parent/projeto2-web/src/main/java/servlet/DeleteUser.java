@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 import data.*;
 
-import ejb.serverbeans.ItemsEJBLocal;
+import ejb.serverbeans.*;
 
 @WebServlet("/delete/user")
 public class DeleteUser extends Application {
@@ -36,15 +36,15 @@ public class DeleteUser extends Application {
             return;
         }
 
-        if(itemEJB.delete_all(userID)){
-            if(userEJB.delete(userID)){
+        if (itemEJB.delete_all(userID)) {
+            if (userEJB.delete(userID)) {
                 HttpSession session = request.getSession();
                 session.invalidate();
                 response.sendRedirect(request.getContextPath() + "/projecto2-web/");
             }
             out.println("Couldn't delete User. Please try again.<BR>");
             out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
-        }else{
+        } else {
             out.println("Couldn't delete all your items. Please try again.<BR>");
             out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
         }
@@ -57,8 +57,8 @@ public class DeleteUser extends Application {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         // Needs to me changed to getId();
-        String userID = user.getEmail();
-        itemDelete(userID, request, response);
+        String userID = "" + user.getId();
+        userDelete(userID, request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

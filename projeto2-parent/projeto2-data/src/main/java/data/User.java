@@ -32,6 +32,10 @@ public class User implements Serializable {
         this.country = country;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     public String getEmail() {
         return this.email;
     }
