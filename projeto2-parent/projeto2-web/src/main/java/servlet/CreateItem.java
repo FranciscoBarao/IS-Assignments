@@ -24,8 +24,7 @@ public class CreateItem extends Application {
     @EJB
     ItemsEJBLocal itemEJB;
 
-    public void itemForm(HttpServletResponse response, boolean withErrorMessage)
-            throws ServletException, IOException {
+    public void itemForm(HttpServletResponse response, boolean withErrorMessage) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<TITLE>Create Item</TITLE>");
@@ -58,9 +57,15 @@ public class CreateItem extends Application {
         String name = request.getParameter("name");
         String category = request.getParameter("category");
         String country = request.getParameter("country");
-        int price = Integer.parseInt(request.getParameter("price"));
+        String p = request.getParameter("price");
+        if (p.contains(".")) {
+            itemForm(response, true);
+            return;
+        }
+        int price = Integer.parseInt(p);
+
         Date date = new Date();
-        User user = (User)session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
         if (itemEJB.create(name, category, country, price, date, user))
             response.sendRedirect(request.getContextPath() + "/home");

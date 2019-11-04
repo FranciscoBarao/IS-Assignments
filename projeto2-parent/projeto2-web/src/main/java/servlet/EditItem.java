@@ -65,18 +65,23 @@ public class EditItem extends Application {
             throws ServletException, IOException {
         super.checkLogin(request, response);
         response.setContentType("text/html");
+        String itemId = request.getParameter("id");
+
         HashMap<String, String> params = new HashMap();
-        // Can be better, this way we update everything, even if things stay the same
         params.put("name", request.getParameter("name"));
         params.put("category", request.getParameter("category"));
         params.put("country", request.getParameter("country"));
-        params.put("price", request.getParameter("price"));
+        String p = request.getParameter("price");
+        if (p.contains(".")) {
+            itemForm(itemId, response, true);
+            return;
+        }
+        params.put("price", p);
 
-        String itemID = request.getParameter("id");
-        if (itemEJB.update(itemID, params))
+        if (itemEJB.update(itemId, params))
             response.sendRedirect(request.getContextPath() + "/");
         else
-            itemForm(itemID, response, true);
+            itemForm(itemId, response, true);
 
     }
 }

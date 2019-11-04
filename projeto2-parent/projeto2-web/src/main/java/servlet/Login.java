@@ -16,7 +16,7 @@ import data.*;
 import ejb.serverbeans.UsersEJBLocal;
 
 @WebServlet("/login")
-public class Login extends HttpServlet {
+public class Login extends Application {
     private static final long serialVersionUID = 1L;
 
     @EJB
@@ -40,23 +40,24 @@ public class Login extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        loginForm(response, false);
+        doPost(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        super.header(request, response);
 
         response.setContentType("text/html");
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
 
         User user = userEJB.login(email, pass);
-        if (user != null){
-            HttpSession session = request.getSession();  
-            session.setAttribute("user", user);  
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
             response.sendRedirect(request.getContextPath() + "/");
-        }
-        else
+        } else
             loginForm(response, true);
     }
 }
