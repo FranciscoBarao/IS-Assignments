@@ -78,4 +78,14 @@ public class UsersEJB implements UsersEJBLocal {
         }
         return false;
     }
+
+    public boolean delete(String id){
+        Query query = em.createQuery("DELETE FROM User c WHERE c.id = '" + id + "'");
+        try {
+            int deletedCount = query.executeUpdate();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 }

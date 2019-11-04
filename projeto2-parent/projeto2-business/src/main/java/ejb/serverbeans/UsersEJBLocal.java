@@ -14,4 +14,6 @@ public interface UsersEJBLocal {
     public boolean register(String email, String password, String name, String country);
 
     public boolean edit(String id, HashMap<String, String> updateParams);
+
+    public boolean delete(String id);
 }
