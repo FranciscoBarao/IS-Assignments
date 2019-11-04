@@ -6,6 +6,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.*;
 
@@ -36,8 +37,7 @@ public class UsersEJB implements UsersEJBLocal {
     }
 
     public User select(String email) {
-        TypedQuery<User> query = em.createQuery(
-                "SELECT u FROM User u WHERE email= '" + email + "'", User.class);
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE email= '" + email + "'", User.class);
 
         User result = null;
         try {
@@ -60,7 +60,7 @@ public class UsersEJB implements UsersEJBLocal {
         return false;
     }
 
-    public boolean edit(String email, HashMap<String, String> updateParams){
+    public boolean edit(String email, HashMap<String, String> updateParams) {
         try {
             String sqlString = "UPDATE User SET ";
             Iterator it = updateParams.entrySet().iterator();
@@ -79,7 +79,7 @@ public class UsersEJB implements UsersEJBLocal {
         return false;
     }
 
-    public boolean delete(String id){
+    public boolean delete(String id) {
         Query query = em.createQuery("DELETE FROM User c WHERE c.id = '" + id + "'");
         try {
             int deletedCount = query.executeUpdate();
