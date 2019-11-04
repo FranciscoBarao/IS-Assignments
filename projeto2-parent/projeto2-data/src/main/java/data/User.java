@@ -16,7 +16,7 @@ public class User implements Serializable {
     @Column(name = "country", nullable = false)
     private String country;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Item> items;
 
     public User() {
