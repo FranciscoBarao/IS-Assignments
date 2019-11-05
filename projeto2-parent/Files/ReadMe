@@ -15,16 +15,14 @@ Tasks:
 
 Not working:
 -Search - afterDate not working
+- Editing user returns javax.persistence.NonUniqueResultException
 
 Not Done:
 -List items on profile is not sorted by date
 -Item photo
 -Systematic email
--(edit item)
 -Hashing password
 -Logging
 -Report + ER
 
 Test:
--quando profile funcionar, verificar se a list items dele tem "edit" button para serem editados e se funciona.. (Not even tested)
--Overall for finding errors
