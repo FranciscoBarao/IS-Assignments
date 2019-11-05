@@ -18,6 +18,7 @@ import data.*;
 import ejb.serverbeans.ItemsEJBLocal;
 
 @WebServlet("/create/item")
+@MultipartConfig
 public class CreateItem extends Application {
     private static final long serialVersionUID = 1L;
 
@@ -33,11 +34,12 @@ public class CreateItem extends Application {
             out.println("Create failed. Please try again.<BR>");
 
         out.println("<BR>Create Item Form");
-        out.println("<BR><form method=post><BR>");
+        out.println("<BR><form method=post enctype='multipart/form-data'><BR>");
         out.println("<BR>Name: <Input TYPE=TEXT required NAME=name>");
         out.println("<BR>Category: <INPUT TYPE=TEXT required NAME=category>");
         out.println("<BR>Country: <INPUT TYPE=TEXT required NAME=country>");
         out.println("<BR>Price: <input type=number step=any required name=price>");
+        out.println("<br>File: <input type=\"file\" name=\"file\"/>");
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
     }
 
@@ -52,6 +54,15 @@ public class CreateItem extends Application {
             throws ServletException, IOException {
         super.checkLogin(request, response);
         response.setContentType("text/html");
+        // Upload file Multi config code
+        Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+        InputStream fileContent = filePart.getInputStream();
+        byte[] buffer = new byte[fileContent.available()];
+        fileContent.read(buffer);
+        File targetFile = new File("src/main/resources/" + fileName);
+        OutputStream outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);
         HttpSession session = request.getSession(false);
 
         String name = request.getParameter("name");
