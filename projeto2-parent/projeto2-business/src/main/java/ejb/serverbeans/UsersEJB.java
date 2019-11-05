@@ -2,7 +2,6 @@
 package ejb.serverbeans;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -29,7 +28,7 @@ public class UsersEJB implements UsersEJBLocal {
         User result = null;
         try {
             result = query.getSingleResult();
-        } catch (NoResultException ne) {
+        } catch (Exception e) {
             return null;
         }
 
@@ -54,8 +53,7 @@ public class UsersEJB implements UsersEJBLocal {
         try {
             em.persist(user);
             return true;
-        } catch (EntityExistsException e) {
-            // Already exists, need to reintroduce stuff
+        } catch (Exception e) {
         }
         return false;
     }
@@ -74,7 +72,7 @@ public class UsersEJB implements UsersEJBLocal {
             em.createQuery(sqlString).executeUpdate();
 
             return true;
-        } catch (EntityExistsException e) {
+        } catch (Exception e) {
         }
         return false;
     }

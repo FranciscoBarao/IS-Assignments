@@ -62,7 +62,7 @@ public class userProfile extends Application {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
         List<Item> items = itemsEJB.searchByUser("" + user.getId());
-
+        items = itemsEJB.sort(items, "dateSort", true);
         userDisplay(user, items, request, response);
     }
 
