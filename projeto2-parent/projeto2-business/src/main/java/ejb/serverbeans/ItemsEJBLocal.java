@@ -19,7 +19,7 @@ public interface ItemsEJBLocal {
     public boolean update(String id, HashMap<String, String> updateParams);
 
     public List<Item> search(String name, String category, int minPrice, int maxPrice, String inCountry,
-            Date afterDate);
+            String afterDate);
 
     public List<Item> searchByUser(String userId);
 

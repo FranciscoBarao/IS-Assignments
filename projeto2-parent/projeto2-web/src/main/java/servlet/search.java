@@ -50,7 +50,7 @@ public class search extends Application {
 
         out.println("<BR>In Country: <Input TYPE=CHECKBOX NAME=inCountry>");
 
-        out.println("<BR>After Date: <Input TYPE=DATE value=YYYY-MM-DD min=2018-01-01 max=2019-12-31 NAME=afterDate>");
+        out.println("<BR>After Date: <Input TYPE=DATE min=2018-01-01 max=2019-12-31 NAME=afterDate>");
 
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
     }
@@ -86,14 +86,7 @@ public class search extends Application {
         } else
             inCountry = "";
 
-        String date = request.getParameter("afterDate");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date afterDate = null;
-        try {
-            afterDate = sdf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String afterDate = request.getParameter("afterDate");
 
         int minPrice = Integer.parseInt(request.getParameter("minPriceRange"));
         int maxPrice = Integer.parseInt(request.getParameter("maxPriceRange"));
