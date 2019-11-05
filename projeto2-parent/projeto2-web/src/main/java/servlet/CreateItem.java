@@ -1,16 +1,23 @@
 
 package servlet;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+
 import java.util.Date;
 
 import data.*;
@@ -60,9 +67,12 @@ public class CreateItem extends Application {
         InputStream fileContent = filePart.getInputStream();
         byte[] buffer = new byte[fileContent.available()];
         fileContent.read(buffer);
-        File targetFile = new File("src/main/resources/" + fileName);
+        File targetFile = new File(fileName);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(targetFile.getAbsolutePath());
         OutputStream outStream = new FileOutputStream(targetFile);
         outStream.write(buffer);
+        outStream.close();
         HttpSession session = request.getSession(false);
 
         String name = request.getParameter("name");
