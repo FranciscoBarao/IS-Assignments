@@ -3,6 +3,8 @@ package ejb.serverbeans;
 
 import javax.ejb.Local;
 import java.util.HashMap;
+import java.util.List;
+
 import data.User;
 
 @Local
@@ -10,6 +12,8 @@ public interface UsersEJBLocal {
     public User login(String email, String password);
 
     public User select(String email);
+
+    public List<User> selectAllUsers();
 
     public boolean register(String email, String password, String name, String country);
 

@@ -48,6 +48,19 @@ public class UsersEJB implements UsersEJBLocal {
         return result;
     }
 
+    public List<User> selectAllUsers() {
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+
+        List<User> result = null;
+        try {
+            result = query.getResultList();
+        } catch (NoResultException ne) {
+            return null;
+        }
+
+        return result;
+    }
+
     public boolean register(String email, String password, String name, String country) {
         User user = new User(email, password, name, country);
         try {
