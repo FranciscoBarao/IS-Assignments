@@ -20,10 +20,12 @@ Not working:
 
 
 Not Done:
+-Delete Item needs protection (If item is of sessionUser)
 -Hashing password
--Logging
 -Report + ER
--All paths to create Item
+-Shortcuts to all Web
+
 
 Test:
 -List items on profile sorted by date
+-Logging(Done on EJB.. dunno if needed on web)

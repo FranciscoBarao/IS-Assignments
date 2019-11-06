@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import data.*;
-import ejb.serverbeans.ItemsEJB;
 import ejb.serverbeans.ItemsEJBLocal;
 
 @WebServlet("/profile/user")

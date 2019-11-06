@@ -67,7 +67,7 @@ public class EditItem extends Application {
         response.setContentType("text/html");
         String itemId = request.getParameter("id");
 
-        HashMap<String, String> params = new HashMap();
+        HashMap<String, String> params = new HashMap<String, String>();
         params.put("name", request.getParameter("name"));
         params.put("category", request.getParameter("category"));
         params.put("country", request.getParameter("country"));

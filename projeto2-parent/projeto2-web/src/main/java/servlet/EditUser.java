@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -58,7 +57,7 @@ public class EditUser extends Application {
         super.checkLogin(request, response);
 
         response.setContentType("text/html");
-        HashMap<String, String> params = new HashMap();
+        HashMap<String, String> params = new HashMap<String, String>();
         // Can be better, this way we update everything, even if things stay the same
         params.put("email", request.getParameter("email"));
         params.put("password", request.getParameter("password"));
