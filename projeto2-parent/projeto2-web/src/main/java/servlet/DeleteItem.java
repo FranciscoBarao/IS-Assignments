@@ -46,14 +46,14 @@ public class DeleteItem extends Application {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        super.header(request, response);
-        super.checkLogin(request, response);
-        String itemID = request.getParameter("id");
-        itemDelete(itemID, request, response);
+        response.sendRedirect(request.getContextPath() + "/projecto2-web/home");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        super.header(request, response);
+        super.checkLogin(request, response);
+        String itemID = request.getParameter("id");
+        itemDelete(itemID, request, response);
     }
 }

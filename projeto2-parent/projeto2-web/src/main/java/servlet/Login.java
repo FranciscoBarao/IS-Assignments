@@ -39,6 +39,8 @@ public class Login extends Application {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        super.header(request, response);
+
         loginForm(response, false);
     }
 
