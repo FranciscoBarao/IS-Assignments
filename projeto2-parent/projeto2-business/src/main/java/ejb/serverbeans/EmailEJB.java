@@ -36,7 +36,7 @@ public class EmailEJB{
 
     }
 
-    @Schedule(minute = "*/2", hour = "*", persistent = false)
+    @Schedule(second="0", minute = "*/5", hour = "*", persistent = false)
     public void sendMail() { 
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", "smtp.googlemail.com");
@@ -64,7 +64,7 @@ public class EmailEJB{
             i++; 
         } 
         try { 
-            Session session = Session.getDefaultInstance(properties, new
+            Session session = Session.getInstance(properties, new
                     javax.mail.Authenticator() { protected PasswordAuthentication
                         getPasswordAuthentication() { return new
                             PasswordAuthentication("info.projecto.2.mail@gmail.com", "ohobbiteumbanana");
