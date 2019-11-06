@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import data.Item;
 import data.User;
 import ejb.serverbeans.ItemsEJBLocal;
+import ejb.serverbeans.EmailEJBLocal;
 
 @WebServlet("/search")
 public class search extends Application {
@@ -21,6 +22,9 @@ public class search extends Application {
 
     @EJB
     ItemsEJBLocal itemsEJBLocal;
+
+    @EJB
+    EmailEJBLocal emailEJBLocal;
 
     public void searchForm(HttpServletResponse response, boolean withErrorMessage, boolean isEmpty)
             throws ServletException, IOException {
@@ -64,6 +68,7 @@ public class search extends Application {
 
         super.header(request, response);
         super.checkLogin(request, response);
+        emailEJBLocal.sendMail();
         HttpSession session = request.getSession(false);
 
         response.setContentType("text/html");
