@@ -49,7 +49,8 @@ public class Register extends Application {
 
         response.setContentType("text/html");
         String email = request.getParameter("email");
-        String pass = request.getParameter("password");
+        byte[] salt = new byte[16];
+        String pass = super.hash(request.getParameter("password"), salt);
         String name = request.getParameter("name");
         String country = request.getParameter("country");
 
