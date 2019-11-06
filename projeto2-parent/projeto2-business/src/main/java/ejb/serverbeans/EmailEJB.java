@@ -26,7 +26,8 @@ import javax.mail.internet.MimeMessage;
 import data.User;
 
 @Stateless
-public class EmailEJB implements EmailEJBLocal {
+@Startup
+public class EmailEJB{
 
     @EJB
     UsersEJBLocal userEJB;
@@ -34,6 +35,8 @@ public class EmailEJB implements EmailEJBLocal {
     public EmailEJB() {
 
     }
+
+    @Schedule(minute = "*/2", hour = "*", persistent = false)
     public void sendMail() { 
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", "smtp.googlemail.com");
