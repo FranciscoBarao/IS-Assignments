@@ -9,9 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-
-import data.Item;
 
 import ejb.serverbeans.ItemsEJBLocal;
 
@@ -39,9 +36,9 @@ public class DeleteItem extends Application {
             return;
         }
 
-        if(itemEJB.delete(itemID)){
+        if (itemEJB.delete(itemID)) {
             response.sendRedirect(request.getContextPath() + "/projecto2-web/profile/user");
-        }else{
+        } else {
             out.println("Delete failed. Please try again.<BR>");
             out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
         }
