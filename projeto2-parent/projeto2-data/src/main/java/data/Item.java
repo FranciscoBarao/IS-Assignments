@@ -22,7 +22,8 @@ public class Item implements Serializable {
     private int price;
     @Column(name = "date", nullable = false)
     private Date date;
-    // private String photo;
+    @Column(name = "filepath", nullable = false)
+    private String filepath;
 
     @ManyToOne
     private User user;
@@ -31,12 +32,13 @@ public class Item implements Serializable {
         super();
     }
 
-    public Item(String name, String category, String country, int price, Date date, User user) {
+    public Item(String name, String category, String country, int price, Date date, String filepath, User user) {
         this.name = name;
         this.category = category;
         this.country = country;
         this.price = price;
         this.date = date;
+        this.filepath = filepath;
         this.user = user;
 
     }
@@ -87,6 +89,14 @@ public class Item implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getFilepath() {
+        return this.filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
     }
 
     public User getUser() {

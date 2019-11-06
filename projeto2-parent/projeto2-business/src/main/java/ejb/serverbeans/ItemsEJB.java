@@ -139,8 +139,8 @@ public class ItemsEJB implements ItemsEJBLocal {
         return items;
     }
 
-    public boolean create(String name, String category, String country, int price, Date date, User user) {
-        Item item = new Item(name, category, country, price, date, user);
+    public boolean create(String name, String category, String country, int price, Date date, String filepath, User user) {
+        Item item = new Item(name, category, country, price, date, filepath, user);
         try {
             em.persist(item);
             return true;

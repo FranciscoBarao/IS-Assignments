@@ -68,8 +68,6 @@ public class CreateItem extends Application {
         byte[] buffer = new byte[fileContent.available()];
         fileContent.read(buffer);
         File targetFile = new File(fileName);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(targetFile.getAbsolutePath());
         OutputStream outStream = new FileOutputStream(targetFile);
         outStream.write(buffer);
         outStream.close();
@@ -88,7 +86,7 @@ public class CreateItem extends Application {
         Date date = new Date();
         User user = (User) session.getAttribute("user");
 
-        if (itemEJB.create(name, category, country, price, date, user))
+        if (itemEJB.create(name, category, country, price, date, targetFile.getPath(), user))
             response.sendRedirect(request.getContextPath() + "/home");
         else
             itemForm(response, true);
