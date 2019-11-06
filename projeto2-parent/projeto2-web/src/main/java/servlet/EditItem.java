@@ -64,6 +64,7 @@ public class EditItem extends Application {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         super.checkLogin(request, response);
+        super.header(request, response);
         response.setContentType("text/html");
         String itemId = request.getParameter("id");
 

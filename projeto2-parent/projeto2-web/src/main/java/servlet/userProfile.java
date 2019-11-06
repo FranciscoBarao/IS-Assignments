@@ -41,7 +41,7 @@ public class userProfile extends Application {
                 out.println("<a href = /projeto2-web/edit/item?id=" + i.getId() + "> edit </a>");
                 out.println("<form method=\"POST\" action=\"/projeto2-web/delete/item\">");
                 out.println("<input name=id type=hidden value=" + i.getId() + ">");
-                out.println("<input type=\"submit\" value=\"delete\" onclick=\"return confirm('Are you sure?')\"/>");
+                out.println("<input class=\"btn btn-link\" type=\"submit\" value=\"delete\" onclick=\"return confirm('Are you sure?')\"/>");
                 out.println("</form>");
             }
         } else {
@@ -53,7 +53,7 @@ public class userProfile extends Application {
         // Delete use button
         out.println("<BR>");
         out.println("<form method=\"POST\" action=\"/projeto2-web/delete/user\">");
-        out.println("<input type=\"submit\" value=\"delete user\" onclick=\"return confirm('Are you sure?')\"/>");
+        out.println("<input class=\"btn btn-link\" type=\"submit\" value=\"delete user\" onclick=\"return confirm('Are you sure?')\"/>");
         out.println("</form>");
     }
 

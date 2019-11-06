@@ -60,6 +60,7 @@ public class CreateItem extends Application {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         super.checkLogin(request, response);
+        super.header(request, response);
         response.setContentType("text/html");
         // Upload file Multi config code
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
