@@ -6,8 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Paths;
+import javax.sql.rowset.serial.SerialBlob;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -66,12 +67,19 @@ public class CreateItem extends Application {
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
         String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
         InputStream fileContent = filePart.getInputStream();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        byte[] buffer = new byte[10240];
+        for (int length = 0; (length = fileContent.read(buffer)) > 0;) output.write(buffer, 0, length);
+        byte[] image = output.toByteArray();
+        /*
+        // Write to file
         byte[] buffer = new byte[fileContent.available()];
         fileContent.read(buffer);
         File targetFile = new File(fileName);
         OutputStream outStream = new FileOutputStream(targetFile);
         outStream.write(buffer);
         outStream.close();
+        */
         HttpSession session = request.getSession(false);
 
         String name = request.getParameter("name");
@@ -86,10 +94,14 @@ public class CreateItem extends Application {
 
         Date date = new Date();
         User user = (User) session.getAttribute("user");
-
-        if (itemEJB.create(name, category, country, price, date, targetFile.getPath(), user))
-            response.sendRedirect(request.getContextPath() + "/home");
-        else
+        try{
+            if (itemEJB.create(name, category, country, price, date, new SerialBlob(image), user))
+                response.sendRedirect(request.getContextPath() + "/home");
+            else
+                itemForm(response, true);
+        }catch (Exception e){
+            e.printStackTrace();
             itemForm(response, true);
+        }
     }
 }

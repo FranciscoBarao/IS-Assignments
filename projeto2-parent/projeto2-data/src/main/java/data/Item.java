@@ -2,6 +2,7 @@ package data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.sql.Blob;
 
 import javax.persistence.*;
 
@@ -22,8 +23,9 @@ public class Item implements Serializable {
     private int price;
     @Column(name = "date", nullable = false)
     private Date date;
-    @Column(name = "filepath", nullable = false)
-    private String filepath;
+
+    @Column(name = "photo", nullable = true)
+    private Blob photo;
 
     @ManyToOne
     private User user;
@@ -32,13 +34,13 @@ public class Item implements Serializable {
         super();
     }
 
-    public Item(String name, String category, String country, int price, Date date, String filepath, User user) {
+    public Item(String name, String category, String country, int price, Date date, Blob photo, User user) {
         this.name = name;
         this.category = category;
         this.country = country;
         this.price = price;
         this.date = date;
-        this.filepath = filepath;
+        this.photo = photo;
         this.user = user;
 
     }
@@ -91,12 +93,12 @@ public class Item implements Serializable {
         this.date = date;
     }
 
-    public String getFilepath() {
-        return this.filepath;
+    public Blob getPhoto() {
+        return this.photo;
     }
 
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
+    public void setFilepath(Blob photo) {
+        this.photo = photo;
     }
 
     public User getUser() {

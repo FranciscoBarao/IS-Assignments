@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.sql.Blob;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,11 +59,10 @@ public class ItemsEJB implements ItemsEJBLocal {
         return true;
     }
 
-    public boolean create(String name, String category, String country, int price, Date date, String filepath,
-            User user) {
-        LOGGER.info("Creating Item");
+    public boolean create(String name, String category, String country, int price, Date date, Blob photo, User user) {
+        LOGGER.debug("Creating Item");
 
-        Item item = new Item(name, category, country, price, date, filepath, user);
+        Item item = new Item(name, category, country, price, date, photo, user);
         try {
             LOGGER.debug("Persisting Item  = {}", item);
             em.persist(item);
