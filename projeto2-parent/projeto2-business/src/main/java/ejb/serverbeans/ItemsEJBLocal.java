@@ -17,6 +17,8 @@ public interface ItemsEJBLocal {
     public boolean create(String name, String category, String country, int price, Date date, String filepath,
             User user);
 
+    public List<Item> searchRecentItems();
+
     public boolean checkUserItem(String itemId, int userId);
 
     public boolean update(String id, HashMap<String, String> updateParams);

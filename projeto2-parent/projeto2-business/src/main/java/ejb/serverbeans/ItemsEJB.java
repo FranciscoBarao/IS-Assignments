@@ -30,7 +30,7 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     // Delete an item
     public boolean delete(String id) {
-        LOGGER.debug("Deleting Item");
+        LOGGER.info("Deleting Item");
         Query query = em.createQuery("DELETE FROM Item c WHERE c.id = " + id);
         try {
             LOGGER.debug("Deleting Item from database with id={}", id);
@@ -44,7 +44,7 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     // Delete all Items of an User
     public boolean delete_all(String userId) {
-        LOGGER.debug("Deleting all Items from userId");
+        LOGGER.info("Deleting all Items from userId");
 
         Query query = em.createQuery("DELETE FROM Item WHERE user_id = " + userId);
         try {
@@ -60,7 +60,7 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     public boolean create(String name, String category, String country, int price, Date date, String filepath,
             User user) {
-        LOGGER.debug("Creating Item");
+        LOGGER.info("Creating Item");
 
         Item item = new Item(name, category, country, price, date, filepath, user);
         try {
@@ -74,7 +74,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     public Item read(String id) {
-        LOGGER.debug("Reading Item");
+        LOGGER.info("Reading Item");
 
         TypedQuery<Item> query = em.createQuery("SELECT i FROM Item i WHERE id= '" + id + "'", Item.class);
         Item result = null;
@@ -90,7 +90,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     public List<Item> search(String name, String category, int minPrice, int maxPrice, String inCountry,
             String afterDate) {
 
-        LOGGER.debug("Searching Items");
+        LOGGER.info("Searching Items");
 
         String query = "FROM Item i WHERE";
 
@@ -133,7 +133,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     public List<Item> searchByUser(String userId) {
-        LOGGER.debug("Searching Items By User");
+        LOGGER.info("Searching Items By User");
 
         String query = "FROM Item i WHERE user_id=" + userId;
         Query q = em.createQuery(query, Item.class);
@@ -148,20 +148,34 @@ public class ItemsEJB implements ItemsEJBLocal {
         return null;
     }
 
-    public boolean checkUserItem(String itemId, int userId) {
-        LOGGER.debug("Searching Items By User");
+    public List<Item> searchRecentItems() {
+        LOGGER.info("Searching 3 most recent items");
 
-        String query = "FROM Item i WHERE user_id=" + userId;
+        String query = "FROM Item i ORDER BY id DESC";
+        Query q = em.createQuery(query, Item.class);
+        q.setMaxResults(3);
+
+        try {
+            LOGGER.debug("Getting items list result from Database");
+            List<Item> results = q.getResultList();
+            return results;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public boolean checkUserItem(String itemId, int userId) {
+        LOGGER.info("Checking ownership of item");
+
+        String query = "FROM Item i WHERE user_id=" + userId + " AND itemId=" + itemId;
         Query q = em.createQuery(query, Item.class);
 
         try {
-            LOGGER.debug("Getting items list result from Database with userId = {}", userId);
-            List<Item> results = q.getResultList();
-            for (Item i : results)
-                if (i.getId() == Integer.parseInt(itemId))
-                    return true;
-        } catch (NumberFormatException ne) {
-            LOGGER.error(ne.getMessage(), ne);
+            LOGGER.debug("Getting item result from Database with userId = {} and itemId = {}", userId, itemId);
+            q.getSingleResult();
+            return true;
+        } catch (NoResultException ne) {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -169,7 +183,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     public boolean update(String id, HashMap<String, String> updateParams) {
-        LOGGER.debug("Updating Item");
+        LOGGER.info("Updating Item");
 
         try {
             String sqlString = "UPDATE Item SET ";
@@ -197,7 +211,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     public List<Item> sort(List<Item> items, String method, boolean isAscending) {
-        LOGGER.debug("Sorting Item list");
+        LOGGER.info("Sorting Item list");
 
         LOGGER.debug("Sorting by {}", method);
         switch (method) {
