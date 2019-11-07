@@ -1,4 +1,3 @@
-
 package servlet;
 
 import java.io.IOException;
@@ -36,10 +35,14 @@ public class userProfile extends Application {
         out.println("<BR> Item List");
         if (!items.isEmpty()) {
             for (Item i : items) {
+                out.println("<br>");
+                out.println(i.getName());
                 out.println("<a href = /projeto2-web/profile/item?id=" + i.getId() + "> View </a>");
-                out.println(
-                        "<BR> " + i.getName() + " <a href = /projeto2-web/edit/item?id=" + i.getId() + "> edit </a>");
-                out.println("<a href = /projeto2-web/delete/item?id=" + i.getId() + "> delete </a>");
+                out.println("<a href = /projeto2-web/edit/item?id=" + i.getId() + "> edit </a>");
+                out.println("<form method=\"POST\" action=\"/projeto2-web/delete/item\">");
+                out.println("<input name=id type=hidden value=" + i.getId() + ">");
+                out.println("<input class=\"btn btn-link\" type=\"submit\" value=\"delete\" onclick=\"return confirm('Are you sure?')\"/>");
+                out.println("</form>");
             }
         } else {
             out.println("You don't have any items, click here to create one.");
@@ -48,8 +51,10 @@ public class userProfile extends Application {
         // Edit user button
         out.println("<BR> <a href=/projeto2-web/edit/user>Edit User</a> ");
         // Delete use button
-        out.println(
-                "<BR> <a href=/projeto2-web/delete/user onclick=\"return confirm('Are you sure?')\"> Delete User </a>");
+        out.println("<BR>");
+        out.println("<form method=\"POST\" action=\"/projeto2-web/delete/user\">");
+        out.println("<input class=\"btn btn-link\" type=\"submit\" value=\"delete user\" onclick=\"return confirm('Are you sure?')\"/>");
+        out.println("</form>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

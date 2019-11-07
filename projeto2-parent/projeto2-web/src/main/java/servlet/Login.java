@@ -39,7 +39,9 @@ public class Login extends Application {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request, response);
+        super.header(request, response);
+
+        loginForm(response, false);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -49,8 +51,7 @@ public class Login extends Application {
 
         response.setContentType("text/html");
         String email = request.getParameter("email");
-        byte[] salt = new byte[16];
-        String pass = super.hash(request.getParameter("password"), salt);
+        String pass = request.getParameter("password");
 
         User user = userEJB.login(email, pass);
         if (user != null) {

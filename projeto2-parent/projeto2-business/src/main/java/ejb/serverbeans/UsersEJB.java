@@ -9,6 +9,8 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import data.Item;
@@ -27,8 +29,12 @@ public class UsersEJB implements UsersEJBLocal {
     public User login(String email, String password) {
         LOGGER.debug("Logging an User");
 
+        LOGGER.debug("Check for hashed password");
+        byte[] salt = new byte[16];
+        String pass = hash(password, salt);
+
         TypedQuery<User> query = em.createQuery(
-                "SELECT u FROM User u WHERE email= '" + email + "' AND password = '" + password + "'", User.class);
+                "SELECT u FROM User u WHERE email= '" + email + "' AND password = '" + pass + "'", User.class);
 
         User result = null;
         try {
@@ -80,7 +86,12 @@ public class UsersEJB implements UsersEJBLocal {
     public boolean register(String email, String password, String name, String country) {
         LOGGER.debug("Registering an user");
 
-        User user = new User(email, password, name, country);
+        LOGGER.debug("Hashing password");
+        byte[] salt = new byte[16];
+        String pass = hash(password, salt);
+        LOGGER.debug("Password hashed");
+
+        User user = new User(email, pass, name, country);
         try {
             LOGGER.debug("Persisting User = {}", user);
 
@@ -128,5 +139,23 @@ public class UsersEJB implements UsersEJBLocal {
             return false;
         }
         return true;
+    }
+
+    protected String hash(String passwordToHash, byte[] salt){
+        String generatedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(salt);
+            byte[] bytes = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++){
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            generatedPassword = sb.toString();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return generatedPassword;
     }
 }

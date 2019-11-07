@@ -60,6 +60,9 @@ public class DeleteItem extends Application {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        super.header(request, response);
+        super.checkLogin(request, response);
+        String itemID = request.getParameter("id");
+        itemDelete(itemID, request, response, false);
     }
 }

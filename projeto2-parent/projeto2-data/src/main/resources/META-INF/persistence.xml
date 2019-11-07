@@ -7,8 +7,6 @@
 		<jta-data-source>java:/MySqlDS</jta-data-source>
 		<class>data.User</class>
 		<class>data.Item</class>
-        <class>data.Player</class>
-		<class>data.Team</class>
 		<properties>
              <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>

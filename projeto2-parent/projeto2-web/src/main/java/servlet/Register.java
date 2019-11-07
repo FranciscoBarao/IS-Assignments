@@ -46,11 +46,10 @@ public class Register extends Application {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        super.header(request, response);
         response.setContentType("text/html");
         String email = request.getParameter("email");
-        byte[] salt = new byte[16];
-        String pass = super.hash(request.getParameter("password"), salt);
+        String pass = request.getParameter("password");
         String name = request.getParameter("name");
         String country = request.getParameter("country");
 
