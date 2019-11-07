@@ -25,7 +25,7 @@ public class UsersEJB implements UsersEJBLocal {
     }
 
     public User login(String email, String password) {
-        LOGGER.debug("Logging an User");
+        LOGGER.info("Logging an User");
 
         LOGGER.debug("Check for hashed password");
         byte[] salt = new byte[16];
@@ -47,7 +47,7 @@ public class UsersEJB implements UsersEJBLocal {
     }
 
     public User select(String email) {
-        LOGGER.debug("Selecting a User");
+        LOGGER.info("Selecting a User");
 
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE email= '" + email + "'", User.class);
 
@@ -64,7 +64,7 @@ public class UsersEJB implements UsersEJBLocal {
     }
 
     public List<User> selectAllUsers() {
-        LOGGER.debug("Selecting all users");
+        LOGGER.info("Selecting all users");
 
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
 
@@ -82,7 +82,7 @@ public class UsersEJB implements UsersEJBLocal {
     }
 
     public boolean register(String email, String password, String name, String country) {
-        LOGGER.debug("Registering an user");
+        LOGGER.info("Registering an user");
 
         LOGGER.debug("Hashing password");
         byte[] salt = new byte[16];
@@ -102,7 +102,7 @@ public class UsersEJB implements UsersEJBLocal {
     }
 
     public boolean edit(String email, HashMap<String, String> updateParams) {
-        LOGGER.debug("Editing an user");
+        LOGGER.info("Editing an user");
 
         try {
             String sqlString = "UPDATE User SET ";
@@ -126,7 +126,7 @@ public class UsersEJB implements UsersEJBLocal {
     }
 
     public boolean delete(String id) {
-        LOGGER.debug("Deleting an user");
+        LOGGER.info("Deleting an user");
 
         Query query = em.createQuery("DELETE FROM User c WHERE c.id = '" + id + "'");
         try {
@@ -139,19 +139,18 @@ public class UsersEJB implements UsersEJBLocal {
         return true;
     }
 
-    protected String hash(String passwordToHash, byte[] salt){
+    protected String hash(String passwordToHash, byte[] salt) {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(salt);
             byte[] bytes = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++){
+            for (int i = 0; i < bytes.length; i++) {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             generatedPassword = sb.toString();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return generatedPassword;

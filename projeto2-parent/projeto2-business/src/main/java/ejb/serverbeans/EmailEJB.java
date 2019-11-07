@@ -23,61 +23,86 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import data.Item;
 import data.User;
 
 @Stateless
 @Startup
-public class EmailEJB{
+public class EmailEJB {
 
     @EJB
     UsersEJBLocal userEJB;
+
+    @EJB
+    ItemsEJBLocal itemEJB;
+
+    private static Logger LOGGER = LoggerFactory.getLogger(ItemsEJB.class);
 
     public EmailEJB() {
 
     }
 
-    @Schedule(second="0", minute = "*/5", hour = "*", persistent = false)
-    public void sendMail() { 
+    @Schedule(second = "0", minute = "*/5", hour = "*", persistent = false)
+    public void sendMail() {
+        LOGGER.info("Sending Mail Function");
+
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", "smtp.googlemail.com");
-        properties.put("mail.from", "info.projecto.2.mail@gmail.com"); 
-        properties.setProperty("mail.transport.protocol", "smtp");     
-        properties.setProperty("mail.host", "smtp.gmail.com");  
-        properties.put("mail.smtp.auth", "true");  
-        properties.put("mail.smtp.port", "465");  
-        properties.put("mail.debug", "true");  
-        properties.put("mail.smtp.socketFactory.port", "465");  
-        properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");  
-        properties.put("mail.smtp.socketFactory.fallback", "false"); 
-        List<User> users = userEJB.selectAllUsers(); Address[] addresses = new
-        Address[users.size()]; 
-        int i = 0; 
-        for (User u : users) { 
-            String to = u.getEmail(); 
-            Address toAddress; 
-            try { 
+        properties.put("mail.from", "info.projecto.2.mail@gmail.com");
+        properties.setProperty("mail.transport.protocol", "smtp");
+        properties.setProperty("mail.host", "smtp.gmail.com");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.debug", "true");
+        properties.put("mail.smtp.socketFactory.port", "465");
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.socketFactory.fallback", "false");
+        List<User> users = userEJB.selectAllUsers();
+        Address[] addresses = new Address[users.size()];
+        int i = 0;
+        for (User u : users) {
+
+            String to = u.getEmail();
+            LOGGER.debug("Adding email {} to Adress List", to);
+
+            Address toAddress;
+            try {
                 toAddress = new InternetAddress(to);
-                addresses[i] = toAddress; 
-            } catch (AddressException e) { 
+                addresses[i] = toAddress;
+            } catch (AddressException e) {
+                LOGGER.error(e.getMessage(), e);
                 e.printStackTrace();
             }
-            i++; 
-        } 
-        try { 
-            Session session = Session.getInstance(properties, new
-                    javax.mail.Authenticator() { protected PasswordAuthentication
-                        getPasswordAuthentication() { return new
-                            PasswordAuthentication("info.projecto.2.mail@gmail.com", "ohobbiteumbanana");
-            }});
+            i++;
+        }
+
+        try {
+            Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("info.projecto.2.mail@gmail.com", "ohobbiteumbanana");
+                }
+            });
             MimeMessage message = new MimeMessage(session);
             message.setFrom();
 
-            message.addRecipients(Message.RecipientType.TO, addresses); 
-            message.setSubject("This is the Subject Line!");
-            message.setText("This is actual message");
-            Transport.send(message); 
+            message.addRecipients(Message.RecipientType.TO, addresses);
+            message.setSubject("Most Recent Items");
+
+            String s = "Most recent Items!\n";
+            List<Item> items = itemEJB.searchRecentItems();
+            for (Item j : items)
+                s += "Item: " + j.toString() + "\n";
+
+            message.setText(s);
+
+            LOGGER.debug("Sending emails");
+            Transport.send(message);
         } catch (MessagingException mex) {
-            mex.printStackTrace(); 
-        } 
+            LOGGER.error(mex.getMessage(), mex);
+            mex.printStackTrace();
+        }
     }
 }
