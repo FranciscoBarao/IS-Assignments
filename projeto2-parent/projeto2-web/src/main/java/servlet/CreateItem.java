@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.*;
 import java.nio.file.Paths;
 import javax.sql.rowset.serial.SerialBlob;
+import java.sql.Blob;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -64,22 +65,23 @@ public class CreateItem extends Application {
         super.header(request, response);
         response.setContentType("text/html");
         // Upload file Multi config code
+        Blob image = null;
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
-        InputStream fileContent = filePart.getInputStream();
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        byte[] buffer = new byte[10240];
-        for (int length = 0; (length = fileContent.read(buffer)) > 0;) output.write(buffer, 0, length);
-        byte[] image = output.toByteArray();
-        /*
-        // Write to file
-        byte[] buffer = new byte[fileContent.available()];
-        fileContent.read(buffer);
-        File targetFile = new File(fileName);
-        OutputStream outStream = new FileOutputStream(targetFile);
-        outStream.write(buffer);
-        outStream.close();
-        */
+        if (filePart != null){
+            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+            InputStream fileContent = filePart.getInputStream();
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[10240];
+            for (int length = 0; (length = fileContent.read(buffer)) > 0;) output.write(buffer, 0, length);
+            byte[] image_byte = output.toByteArray();
+            try{
+                image = new SerialBlob(image_byte);
+            }catch (Exception e){
+                e.printStackTrace();
+                itemForm(response, true);
+                return;
+            }
+        }
         HttpSession session = request.getSession(false);
 
         String name = request.getParameter("name");
@@ -94,14 +96,11 @@ public class CreateItem extends Application {
 
         Date date = new Date();
         User user = (User) session.getAttribute("user");
-        try{
-            if (itemEJB.create(name, category, country, price, date, new SerialBlob(image), user))
-                response.sendRedirect(request.getContextPath() + "/home");
-            else
-                itemForm(response, true);
-        }catch (Exception e){
-            e.printStackTrace();
+
+        if (itemEJB.create(name, category, country, price, date, image, user))
+            response.sendRedirect(request.getContextPath() + "/home");
+        else
             itemForm(response, true);
-        }
+        
     }
 }
