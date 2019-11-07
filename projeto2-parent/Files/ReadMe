@@ -13,16 +13,14 @@ mvn clean install wildfly:deploy -Pwildfly-runtime
 
 Tasks:
 
-Not working:
--Email working but sends 2 at a time
--Two users same Email crashes
+Need fixing:
+-Email sends 2 at a time
+-Two users same Email on register -> CRASH
 -Create item with no file selected -> CRASH
-
 
 Not Done:
 -Report + ER
--Shortcuts to all Web
-
 
 Test:
+-Shortcuts to all Web
 -Logging(Done but need to know where to check)
