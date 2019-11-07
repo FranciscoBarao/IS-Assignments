@@ -58,7 +58,8 @@ public class ItemsEJB implements ItemsEJBLocal {
         return true;
     }
 
-    public boolean create(String name, String category, String country, int price, Date date, String filepath, User user) {
+    public boolean create(String name, String category, String country, int price, Date date, String filepath,
+            User user) {
         LOGGER.debug("Creating Item");
 
         Item item = new Item(name, category, country, price, date, filepath, user);
@@ -145,6 +146,26 @@ public class ItemsEJB implements ItemsEJBLocal {
             LOGGER.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public boolean checkUserItem(String itemId, int userId) {
+        LOGGER.debug("Searching Items By User");
+
+        String query = "FROM Item i WHERE user_id=" + userId;
+        Query q = em.createQuery(query, Item.class);
+
+        try {
+            LOGGER.debug("Getting items list result from Database with userId = {}", userId);
+            List<Item> results = q.getResultList();
+            for (Item i : results)
+                if (i.getId() == Integer.parseInt(itemId))
+                    return true;
+        } catch (NumberFormatException ne) {
+            LOGGER.error(ne.getMessage(), ne);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return false;
     }
 
     public boolean update(String id, HashMap<String, String> updateParams) {

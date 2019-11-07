@@ -15,13 +15,11 @@ Tasks:
 
 Not working:
 -Two users same Email crashes
--Systematic email
 -Item photo
 
 
 Not Done:
 -Delete Item needs protection (If item is of sessionUser)
--Hashing password
 -Report + ER
 -Shortcuts to all Web
 
