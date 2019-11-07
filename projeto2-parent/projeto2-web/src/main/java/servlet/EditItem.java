@@ -49,6 +49,7 @@ public class EditItem extends Application {
         out.println("<BR>Category: <INPUT TYPE=TEXT VALUE='" + item.getCategory() + "' required NAME=category>");
         out.println("<BR>Country: <INPUT TYPE=TEXT VALUE='" + item.getCountry() + "' required NAME=country>");
         out.println("<BR>Price: <input type=number VALUE='" + item.getPrice() + "' step=any required name=price>");
+        out.println("<br>File: <input type=\"file\" name=\"file\"/>");
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
 
     }
@@ -68,6 +69,26 @@ public class EditItem extends Application {
         response.setContentType("text/html");
         String itemId = request.getParameter("id");
 
+        // Upload file Multi config code
+        Blob image = null;
+        String fileName = "";
+        Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+        if (filePart != null){
+            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+            InputStream fileContent = filePart.getInputStream();
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[10240];
+            for (int length = 0; (length = fileContent.read(buffer)) > 0;) output.write(buffer, 0, length);
+            byte[] image_byte = output.toByteArray();
+            try{
+                image = new SerialBlob(image_byte);
+            }catch (Exception e){
+                e.printStackTrace();
+                itemForm(response, true);
+                return;
+            }
+        }
+
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("name", request.getParameter("name"));
         params.put("category", request.getParameter("category"));
@@ -78,6 +99,11 @@ public class EditItem extends Application {
             return;
         }
         params.put("price", p);
+
+        if(image != null){
+            params.put("filename", fileName);
+            params.put("photo", fileName);
+        }
 
         if (itemEJB.update(itemId, params))
             response.sendRedirect(request.getContextPath() + "/");
