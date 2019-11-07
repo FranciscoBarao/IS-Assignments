@@ -45,7 +45,8 @@ public class EmailEJB {
 
     }
 
-    @Schedule(second = "0", minute = "*/5", hour = "*", persistent = false)
+    // @Schedule(second = "0", minute = "*/5", hour = "*", persistent = false)
+    @Schedule(second = "0", minute = "0", hour = "*/1", persistent = false)
     public void sendMail() {
         LOGGER.info("Sending Mail Function");
 

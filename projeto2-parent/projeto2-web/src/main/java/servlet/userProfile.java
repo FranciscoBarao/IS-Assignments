@@ -46,11 +46,13 @@ public class userProfile extends Application {
                 out.println("</form>");
             }
         } else {
-            out.println("\nYou have no items");
+            out.println("<BR>You have no items");
         }
+        // Create item button
+        out.println("<BR><a href=/projeto2-web/create/item>Create Item</a> ");
         // Edit user button
         out.println("<BR><a href=/projeto2-web/edit/user>Edit User</a> ");
-        // Delete use button
+        // Delete user button
         out.println("<form method=\"POST\" action=\"/projeto2-web/delete/user\">");
         out.println(
                 "<input class=\"btn btn-link\" type=\"submit\" value=\"delete user\" onclick=\"return confirm('Are you sure?')\"/></form>");

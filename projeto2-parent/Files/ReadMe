@@ -16,11 +16,10 @@ Tasks:
 Not working:
 -Email working but sends 2 at a time
 -Two users same Email crashes
--Item photo
+-Create item with no file selected -> CRASH
 
 
 Not Done:
--Create item with no file selected -> CRASH
 -Report + ER
 -Shortcuts to all Web
 
