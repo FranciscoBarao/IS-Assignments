@@ -30,10 +30,10 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     // Create item
-    public boolean create(String name, String category, String country, int price, Date date, Blob photo, User user) {
+    public boolean create(String name, String category, String country, int price, Date date, Blob photo, String filename, User user) {
         LOGGER.debug("Creating Item");
 
-        Item item = new Item(name, category, country, price, date, photo, user);
+        Item item = new Item(name, category, country, price, date, photo, filename, user);
         try {
             LOGGER.debug("Persisting Item  = {}", item);
             em.persist(item);

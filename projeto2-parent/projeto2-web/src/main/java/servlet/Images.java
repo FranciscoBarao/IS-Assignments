@@ -16,7 +16,6 @@ import ejb.serverbeans.ItemsEJBLocal;
 
 @WebServlet("/images")
 public class Images extends HttpServlet {
-
     @EJB
     ItemsEJBLocal itemEJB;
 
@@ -28,11 +27,11 @@ public class Images extends HttpServlet {
             Blob blob = item.getPhoto();
             int blobLength = (int) blob.length();  
             byte[] content = blob.getBytes(1, blobLength);
-            response.setContentType(getServletContext().getMimeType("teste.jpg"));
+            response.setContentType(getServletContext().getMimeType(item.getFilename()));
             response.setContentLength(content.length);
             response.getOutputStream().write(content);
         }catch (Exception e) {
-            //TODO: handle exception
+            //  Handle later
         }
     }
 

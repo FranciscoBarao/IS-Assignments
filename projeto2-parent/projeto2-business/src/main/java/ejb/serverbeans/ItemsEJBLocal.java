@@ -10,7 +10,7 @@ import data.User;
 @Local
 public interface ItemsEJBLocal {
 
-    public boolean create(String name, String category, String country, int price, Date date, Blob photo, User user);
+    public boolean create(String name, String category, String country, int price, Date date, Blob photo, String filename, User user);
 
     public Item read(String id);
 
