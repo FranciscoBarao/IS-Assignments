@@ -2,6 +2,7 @@ package ejb.serverbeans;
 
 import java.util.*;
 import javax.ejb.Local;
+import java.sql.Blob;
 
 import data.Item;
 import data.User;
@@ -14,7 +15,7 @@ public interface ItemsEJBLocal {
 
     public Item read(String id);
 
-    public boolean create(String name, String category, String country, int price, Date date, String filepath, User user);
+    public boolean create(String name, String category, String country, int price, Date date, Blob photo, User user);
 
     public boolean update(String id, HashMap<String, String> updateParams);
 
