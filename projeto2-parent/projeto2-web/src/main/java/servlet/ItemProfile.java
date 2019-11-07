@@ -39,7 +39,12 @@ public class ItemProfile extends Application {
         out.println("<BR>Country: " + item.getCountry());
         out.println("<BR>Price: " + item.getPrice());
         out.println("<BR>Date: " + item.getDate());
-        out.println("<BR>Photo: <img src=\"/projeto2-web/images?id=" + item.getId() + "\">");
+        out.println("<BR>Photo: <img src=");
+        if(item.getPhoto() == null){
+            out.println(">");
+        }else{
+            out.println("\"/projeto2-web/images?id=" + item.getId() + "\">");
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
