@@ -24,6 +24,7 @@ public class UsersEJB implements UsersEJBLocal {
     public UsersEJB() {
     }
 
+    // Login user
     public User login(String email, String password) {
         LOGGER.info("Logging an User");
 
@@ -46,41 +47,7 @@ public class UsersEJB implements UsersEJBLocal {
         return result;
     }
 
-    public User select(String email) {
-        LOGGER.info("Selecting a User");
-
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE email= '" + email + "'", User.class);
-
-        User result = null;
-        try {
-            LOGGER.debug("Getting user result from database with email = {}", email);
-            result = query.getSingleResult();
-        } catch (NoResultException ne) {
-            LOGGER.error(ne.getMessage(), ne);
-            return null;
-        }
-
-        return result;
-    }
-
-    public List<User> selectAllUsers() {
-        LOGGER.info("Selecting all users");
-
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
-
-        List<User> result = null;
-        try {
-            LOGGER.debug("Getting users list result from database");
-            result = query.getResultList();
-        } catch (NoResultException ne) {
-            LOGGER.error(ne.getMessage(), ne);
-
-            return null;
-        }
-
-        return result;
-    }
-
+    // Create user
     public boolean register(String email, String password, String name, String country) {
         LOGGER.info("Registering an user");
 
@@ -101,7 +68,45 @@ public class UsersEJB implements UsersEJBLocal {
         return false;
     }
 
-    public boolean edit(String email, HashMap<String, String> updateParams) {
+    // Reads user by email
+    public User read(String email) {
+        LOGGER.info("Selecting a User");
+
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE email= '" + email + "'", User.class);
+
+        User result = null;
+        try {
+            LOGGER.debug("Getting user result from database with email = {}", email);
+            result = query.getSingleResult();
+        } catch (NoResultException ne) {
+            LOGGER.error(ne.getMessage(), ne);
+            return null;
+        }
+
+        return result;
+    }
+
+    // Reads all users for sending email
+    public List<User> selectAllUsers() {
+        LOGGER.info("Selecting all users");
+
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+
+        List<User> result = null;
+        try {
+            LOGGER.debug("Getting users list result from database");
+            result = query.getResultList();
+        } catch (NoResultException ne) {
+            LOGGER.error(ne.getMessage(), ne);
+
+            return null;
+        }
+
+        return result;
+    }
+
+    // Updates user
+    public boolean update(String email, HashMap<String, String> updateParams) {
         LOGGER.info("Editing an user");
 
         try {
@@ -125,6 +130,7 @@ public class UsersEJB implements UsersEJBLocal {
         return false;
     }
 
+    // Deletes a user and all its items
     public boolean delete(String id) {
         LOGGER.info("Deleting an user");
 
@@ -139,6 +145,7 @@ public class UsersEJB implements UsersEJBLocal {
         return true;
     }
 
+    // Hashing function for password
     protected String hash(String passwordToHash, byte[] salt) {
         String generatedPassword = null;
         try {

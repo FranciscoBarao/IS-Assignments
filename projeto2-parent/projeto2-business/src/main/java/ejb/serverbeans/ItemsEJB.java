@@ -29,36 +29,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     public ItemsEJB() {
     }
 
-    // Delete an item
-    public boolean delete(String id) {
-        LOGGER.info("Deleting Item");
-        Query query = em.createQuery("DELETE FROM Item c WHERE c.id = " + id);
-        try {
-            LOGGER.debug("Deleting Item from database with id={}", id);
-            query.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            return false;
-        }
-        return true;
-    }
-
-    // Delete all Items of an User
-    public boolean delete_all(String userId) {
-        LOGGER.info("Deleting all Items from userId");
-
-        Query query = em.createQuery("DELETE FROM Item WHERE user_id = " + userId);
-        try {
-            LOGGER.debug("Deleting Items from database with userId = {}", userId);
-
-            query.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            return false;
-        }
-        return true;
-    }
-
+    // Create item
     public boolean create(String name, String category, String country, int price, Date date, Blob photo, User user) {
         LOGGER.debug("Creating Item");
 
@@ -73,6 +44,7 @@ public class ItemsEJB implements ItemsEJBLocal {
         return false;
     }
 
+    // Reads item by id
     public Item read(String id) {
         LOGGER.info("Reading Item");
 
@@ -87,6 +59,7 @@ public class ItemsEJB implements ItemsEJBLocal {
         return result;
     }
 
+    // Reads items with search parameters
     public List<Item> search(String name, String category, int minPrice, int maxPrice, String inCountry,
             String afterDate) {
 
@@ -132,6 +105,7 @@ public class ItemsEJB implements ItemsEJBLocal {
         return null;
     }
 
+    // Reads items of User
     public List<Item> searchByUser(String userId) {
         LOGGER.info("Searching Items By User");
 
@@ -148,6 +122,7 @@ public class ItemsEJB implements ItemsEJBLocal {
         return null;
     }
 
+    // Reads 3 most recent items
     public List<Item> searchRecentItems() {
         LOGGER.info("Searching 3 most recent items");
 
@@ -165,6 +140,7 @@ public class ItemsEJB implements ItemsEJBLocal {
         return null;
     }
 
+    // Checks if item belongs to user
     public boolean checkUserItem(String itemId, int userId) {
         LOGGER.info("Checking ownership of item");
 
@@ -182,34 +158,7 @@ public class ItemsEJB implements ItemsEJBLocal {
         return false;
     }
 
-    public boolean update(String id, HashMap<String, String> updateParams) {
-        LOGGER.info("Updating Item");
-
-        try {
-            String sqlString = "UPDATE Item SET ";
-            Iterator it = updateParams.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                if (pair.getKey().equals("price")) {
-                    sqlString += pair.getKey() + " = " + pair.getValue() + ", ";
-                } else {
-                    sqlString += pair.getKey() + " = '" + pair.getValue() + "', ";
-                }
-                it.remove(); // avoids a ConcurrentModificationException
-            }
-            sqlString = sqlString.substring(0, sqlString.length() - 2);
-            sqlString += " WHERE id  = '" + id + "'";
-
-            LOGGER.debug("Updating Item on database with id = {}", id);
-            em.createQuery(sqlString).executeUpdate();
-
-            return true;
-        } catch (EntityExistsException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-        return false;
-    }
-
+    // Sort list of items
     public List<Item> sort(List<Item> items, String method, boolean isAscending) {
         LOGGER.info("Sorting Item list");
 
@@ -239,5 +188,64 @@ public class ItemsEJB implements ItemsEJBLocal {
             break;
         }
         return items;
+    }
+
+    // Update an item
+    public boolean update(String id, HashMap<String, String> updateParams) {
+        LOGGER.info("Updating Item");
+
+        try {
+            String sqlString = "UPDATE Item SET ";
+            Iterator it = updateParams.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                if (pair.getKey().equals("price")) {
+                    sqlString += pair.getKey() + " = " + pair.getValue() + ", ";
+                } else {
+                    sqlString += pair.getKey() + " = '" + pair.getValue() + "', ";
+                }
+                it.remove(); // avoids a ConcurrentModificationException
+            }
+            sqlString = sqlString.substring(0, sqlString.length() - 2);
+            sqlString += " WHERE id  = '" + id + "'";
+
+            LOGGER.debug("Updating Item on database with id = {}", id);
+            em.createQuery(sqlString).executeUpdate();
+
+            return true;
+        } catch (EntityExistsException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return false;
+    }
+
+    // Delete an item
+    public boolean delete(String id) {
+        LOGGER.info("Deleting Item");
+        Query query = em.createQuery("DELETE FROM Item c WHERE c.id = " + id);
+        try {
+            LOGGER.debug("Deleting Item from database with id={}", id);
+            query.executeUpdate();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return false;
+        }
+        return true;
+    }
+
+    // Delete all Items of an User
+    public boolean deleteAll(String userId) {
+        LOGGER.info("Deleting all Items from userId");
+
+        Query query = em.createQuery("DELETE FROM Item WHERE user_id = " + userId);
+        try {
+            LOGGER.debug("Deleting Items from database with userId = {}", userId);
+
+            query.executeUpdate();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return false;
+        }
+        return true;
     }
 }

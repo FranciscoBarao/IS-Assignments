@@ -45,6 +45,7 @@ public class EmailEJB {
 
     }
 
+    // Sends email with 3 most recent items to all users every 5 minutes
     // @Schedule(second = "0", minute = "*/5", hour = "*", persistent = false)
     @Schedule(second = "0", minute = "0", hour = "*/1", persistent = false)
     public void sendMail() {

@@ -1,14 +1,10 @@
 package ejb.serverbeans;
 
 import java.util.*;
-
-import javax.ejb.Stateless;
-
 import data.Item;
 
-@Stateless
 public class sortName implements Comparator<Item> {
-    // Ascending
+    // Sorting by name Ascending
     @Override
     public int compare(Item a, Item b) {
         if (a.getName().toUpperCase() == b.getName().toUpperCase())

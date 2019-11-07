@@ -35,7 +35,7 @@ public class DeleteUser extends Application {
             return;
         }
 
-        if (itemEJB.delete_all(userID)) {
+        if (itemEJB.deleteAll(userID)) {
             if (userEJB.delete(userID)) {
                 HttpSession session = request.getSession();
                 session.invalidate();

@@ -67,8 +67,8 @@ public class EditUser extends Application {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
 
-        if (userEJB.edit(user.getEmail(), params)) {
-            user = userEJB.select(request.getParameter("email"));
+        if (userEJB.update(user.getEmail(), params)) {
+            user = userEJB.read(request.getParameter("email"));
             if (user != null) {
                 session.setAttribute("user", user);
             }
