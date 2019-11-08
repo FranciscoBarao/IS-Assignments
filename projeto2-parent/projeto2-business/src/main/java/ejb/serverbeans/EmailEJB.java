@@ -22,6 +22,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.ejb.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import data.Item;
 import data.User;
 
-@Stateless
+@Singleton
 @Startup
 public class EmailEJB {
 
@@ -47,7 +48,7 @@ public class EmailEJB {
 
     // Sends email with 3 most recent items to all users every 5 minutes
     // @Schedule(second = "0", minute = "*/5", hour = "*", persistent = false)
-    @Schedule(second = "0", minute = "0", hour = "*/1", persistent = false)
+    @Schedule(second="0", minute = "*/5", hour = "*", persistent = false)
     public void sendMail() {
         LOGGER.info("Sending Mail Function");
 

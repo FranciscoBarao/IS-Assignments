@@ -9,13 +9,20 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.MultipartConfig;
+import java.io.*;
+import java.nio.file.Paths;
+import javax.sql.rowset.serial.SerialBlob;
+import java.sql.Blob;
 import java.util.HashMap;
+import javax.servlet.http.Part;
 
 import data.Item;
 
 import ejb.serverbeans.ItemsEJBLocal;
 
 @WebServlet("/edit/item")
+@MultipartConfig
 public class EditItem extends Application {
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +50,7 @@ public class EditItem extends Application {
         }
 
         out.println("<BR>Update Item Form");
-        out.println("<BR><form method=post><BR>");
+        out.println("<BR><form method=post enctype='multipart/form-data'><BR>");
         out.println("<input name=itemID type=hidden value=" + itemID + ">");
         out.println("<BR>Name: <Input TYPE=TEXT VALUE='" + item.getName() + "' required NAME=name>");
         out.println("<BR>Category: <INPUT TYPE=TEXT VALUE='" + item.getCategory() + "' required NAME=category>");
@@ -84,12 +91,12 @@ public class EditItem extends Application {
                 image = new SerialBlob(image_byte);
             }catch (Exception e){
                 e.printStackTrace();
-                itemForm(response, true);
+                itemForm(itemId, response, true);
                 return;
             }
         }
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("name", request.getParameter("name"));
         params.put("category", request.getParameter("category"));
         params.put("country", request.getParameter("country"));
@@ -101,8 +108,13 @@ public class EditItem extends Application {
         params.put("price", p);
 
         if(image != null){
-            params.put("filename", fileName);
-            params.put("photo", fileName);
+            try{
+                params.put("filename", fileName);
+                //String photo = new String(image.getBytes(1l, (int) image.length()));
+                params.put("photo", image);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         if (itemEJB.update(itemId, params))

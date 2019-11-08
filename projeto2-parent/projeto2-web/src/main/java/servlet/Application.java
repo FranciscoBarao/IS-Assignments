@@ -18,14 +18,24 @@ public class Application extends HttpServlet {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession(false);
         out.println("<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css\" integrity=\"sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB\" crossorigin=\"anonymous\">");
-        if (session != null) {
-            out.println(
-                    "<a href=/projeto2-web/home>Home</a> | <a href=/projeto2-web/profile/user>Profile</a>  |  <a href=/projeto2-web/logout>Logout</a>");
-            out.println("<hr>");
-        } else {
-            out.println("<a href=/projeto2-web/login>Login</a> |  <a href=/projeto2-web/register>Register</a>");
-            out.println("<hr>");
-        }
+        out.println("<nav role=\"navigation\" class=\"navbar navbar-default navbar-fixed-top\">");
+            out.println("<div class=\"container\">");
+                out.println("<a class=\"navbar-brand\" href=\"#\">MyBay</a>");
+                out.println("<div class=\"navbar-header navbar-right pull-right\">");
+                    out.println("<ul class=\"nav navbar-nav navbar-right\">");
+                        // out.println("<li class=\"active\"><a href=\"#\">Home</a></li>");
+                        if (session != null) {
+                            out.println("<li class=\"nav-item\"><a class=\"nav-link btn btn-primary\" href=/projeto2-web/home>Home</a></li>");
+                            out.println("<li class=\"nav-item\"><a class=\"nav-link btn btn-primary\" href=/projeto2-web/profile/user>Profile</a></li>");
+                            out.println("<li class=\"nav-item\"><a class=\"nav-link btn btn-primary\" href=/projeto2-web/logout>Logout</a></li>");
+                        } else {
+                            out.println("<li class=\"nav-item\"><a class=\"btn btn-primary\" href=/projeto2-web/login>Login</a></li>");
+                            out.println("<li class=\"nav-item\"><a class=\"btn btn-primary\" href=/projeto2-web/register>Register</a></li>");
+                        }
+                    out.println("</ul>");
+                out.println("</div>");
+            out.println("</div>");
+        out.println("</nav>");
     }
 
     protected void checkLogin(HttpServletRequest request, HttpServletResponse response)

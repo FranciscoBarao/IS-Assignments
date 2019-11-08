@@ -191,7 +191,7 @@ public class ItemsEJB implements ItemsEJBLocal {
     }
 
     // Update an item
-    public boolean update(String id, HashMap<String, String> updateParams) {
+    public boolean update(String id, HashMap<String, Object> updateParams) {
         LOGGER.info("Updating Item");
 
         try {

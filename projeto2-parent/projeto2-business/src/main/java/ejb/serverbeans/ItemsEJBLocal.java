@@ -25,7 +25,7 @@ public interface ItemsEJBLocal {
 
     public List<Item> sort(List<Item> items, String method, boolean isAscending);
 
-    public boolean update(String id, HashMap<String, String> updateParams);
+    public boolean update(String id, HashMap<String, Object> updateParams);
 
     public boolean delete(String id);
 
