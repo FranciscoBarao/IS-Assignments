@@ -190,6 +190,19 @@ public class ItemsEJB implements ItemsEJBLocal {
         return items;
     }
 
+    public boolean update_criteria(Item item){
+        LOGGER.debug("Updating Item");
+
+        try {
+            LOGGER.debug("Persisting Item  = {}", item);
+            em.merge(item);
+            return true;
+        } catch (EntityExistsException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return false;
+    }
+
     // Update an item
     public boolean update(String id, HashMap<String, Object> updateParams) {
         LOGGER.info("Updating Item");
