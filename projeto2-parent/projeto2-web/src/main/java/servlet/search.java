@@ -28,28 +28,39 @@ public class search extends Application {
         PrintWriter out = response.getWriter();
 
         if (isEmpty)
-            out.println("<BR>Empty Search");
+            out.println("<div class=\"alert alert-info\" role=\"alert\"> Empty Search </div>");
 
-        if (withErrorMessage)
-            out.println("<BR> Something wrong happened, try again");
+        if (withErrorMessage) {
 
+            out.println("<div class=\"alert alert-danger\" role=\"alert\"> Something wrong happened, Try Again </div>");
+        }
         out.println("<TITLE>Search Items</TITLE>");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
 
-        out.println("<BR>Search");
-        out.println("<BR><form method=post>");
+        out.println("<br>Search</div>");
 
-        out.println("<BR> Name: <INPUT TYPE=TEXT NAME=name>");
-
-        out.println("<BR>Category: <INPUT TYPE=TEXT NAME=category>");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("<form method=post>");
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"name\"> Name</label> <Input type=text class=form-control id=name placeholder=\"Enter Name\" name=name style=\"width: 300px;\"></div>");
+        out.println("<div class =\"form-group\">");
 
         out.println(
-                "<BR>Price Range:  min <INPUT TYPE=NUMBER MIN=0 VALUE=0 REQUIRED NAME=minPriceRange>  max <INPUT TYPE=NUMBER MIN=0 VALUE=0 REQUIREDX     NAME=maxPriceRange>");
+                "<label for=\"category\"> Category</label> <Input type=text class=form-control id=category placeholder=\"Enter Category\" name=category style=\"width: 300px;\"></div>");
 
-        out.println("<BR>In Country: <Input TYPE=CHECKBOX NAME=inCountry>");
+        out.println("<div class =\"form-group\">");
 
-        out.println("<BR>After Date: <Input TYPE=DATE min=2018-01-01 max=2019-12-31 NAME=afterDate>");
+        out.println(
+                "<label for=\"minPriceRange\"> min</label> <Input type=number value=0 required class=form-control id=minPriceRange placeholder=\"Enter Min\" name=minPriceRange style=\"width: 150px;\"><label for=\"maxPriceRange\"> max</label> <Input type=number value=0 required=true class=form-control id=maxPriceRange placeholder=\"Enter Max\" name=maxPriceRange style=\"width: 150px;\"></div>");
 
-        out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
+        out.println("<div class=\"form-check\">");
+        out.println(
+                "<input type=\"checkbox\" class=\"form-check-input\" id=\"inCountry\"><label class=\"form-check-label\" for=\"inCountry\" name=inCountry>inCountry</label></div>");
+
+        out.println("<br>After Date: <Input TYPE=DATE min=2018-01-01 max=2019-12-31 NAME=afterDate>");
+
+        out.println("<br><button type=\"submit\" class=\"btn btn-primary\">Submit</button></form></div>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

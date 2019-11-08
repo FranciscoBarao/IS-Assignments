@@ -20,9 +20,10 @@ public class Home extends Application {
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         out.println("<HEAD><TITLE>Index</TITLE></HEAD><BODY>");
-        out.println("Welcome " + user.getName() + "!");
-
-        out.println("<br> <a class=\"btn-primary\" href=/projeto2-web/search>Search</a> ");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("Welcome " + user.getName() + "</div>");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("<br> <a class=\"btn btn-primary\" href=/projeto2-web/search>Search</a></div> ");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

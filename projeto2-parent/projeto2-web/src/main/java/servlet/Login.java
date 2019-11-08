@@ -28,17 +28,16 @@ public class Login extends Application {
 
         if (withErrorMessage)
             out.println("Login failed. Please try again.<BR>");
-        out.println("<div class=col>");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
         out.println("<form method=post>");
         out.println("<div class =\"form-group\">");
         out.println(
-                "<label for=\"email\"> Email </label> <Input type=email class=form-control id=email placeholder=\"Enter Email\" name=email></div>");
+                "<label for=\"email\"> Email </label> <Input type=email class=form-control id=email placeholder=\"Enter Email\" name=email style=\"width: 300px;\"></div>");
         out.println("<div class =\"form-group\">");
         out.println(
-                "<label for=\"password\"> Password </label> <Input type=password class=form-control placeholder=\"Enter Password\" name=password></div>");
+                "<label for=\"password\"> Password </label> <Input type=password class=form-control placeholder=\"Enter Password\" name=password style=\"width: 300px;\"></div>");
 
-        out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button></form>");
-        out.println("<div class=col></div></div>");
+        out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button></form></div>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
