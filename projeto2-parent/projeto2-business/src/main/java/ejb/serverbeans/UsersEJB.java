@@ -51,6 +51,9 @@ public class UsersEJB implements UsersEJBLocal {
     public boolean register(String email, String password, String name, String country) {
         LOGGER.info("Registering an user");
 
+        if (read(email) != null) // User with that email already exists
+            return false;
+
         LOGGER.debug("Hashing password");
         byte[] salt = new byte[16];
         String pass = hash(password, salt);
@@ -79,8 +82,10 @@ public class UsersEJB implements UsersEJBLocal {
             LOGGER.debug("Getting user result from database with email = {}", email);
             result = query.getSingleResult();
         } catch (NoResultException ne) {
-            LOGGER.error(ne.getMessage(), ne);
+            LOGGER.debug("No user found");
             return null;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
         }
 
         return result;
