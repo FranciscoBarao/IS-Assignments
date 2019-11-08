@@ -32,7 +32,7 @@ import data.User;
 
 @Singleton
 @Startup
-public class EmailEJB {
+public class Email {
 
     @EJB
     UsersEJBLocal userEJB;
@@ -42,7 +42,7 @@ public class EmailEJB {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ItemsEJB.class);
 
-    public EmailEJB() {
+    public Email() {
 
     }
 
