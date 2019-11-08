@@ -30,9 +30,8 @@ import org.slf4j.LoggerFactory;
 import data.Item;
 import data.User;
 
-@Singleton
-@Startup
-public class EmailEJB {
+@Stateless
+public class Email {
 
     @EJB
     UsersEJBLocal userEJB;
@@ -42,13 +41,13 @@ public class EmailEJB {
 
     private static Logger LOGGER = LoggerFactory.getLogger(ItemsEJB.class);
 
-    public EmailEJB() {
+    public Email() {
 
     }
 
     // Sends email with 3 most recent items to all users every 5 minutes
     // @Schedule(second = "0", minute = "*/5", hour = "*", persistent = false)
-    @Schedule(second="0", minute = "*/5", hour = "*", persistent = false)
+    @Schedule(second="0", minute = "*/5", hour = "*", timezone = "CET", persistent = false)
     public void sendMail() {
         LOGGER.info("Sending Mail Function");
 
@@ -59,7 +58,7 @@ public class EmailEJB {
         properties.setProperty("mail.host", "smtp.gmail.com");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.port", "465");
-        properties.put("mail.debug", "true");
+        properties.put("mail.debug", "false");
         properties.put("mail.smtp.socketFactory.port", "465");
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         properties.put("mail.smtp.socketFactory.fallback", "false");

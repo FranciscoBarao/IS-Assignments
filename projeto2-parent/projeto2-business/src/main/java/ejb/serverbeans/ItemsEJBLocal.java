@@ -27,6 +27,8 @@ public interface ItemsEJBLocal {
 
     public boolean update(String id, HashMap<String, Object> updateParams);
 
+    public boolean update_criteria(Item item);
+
     public boolean delete(String id);
 
     public boolean deleteAll(String userId);

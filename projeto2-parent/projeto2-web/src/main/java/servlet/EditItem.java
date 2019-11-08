@@ -96,6 +96,27 @@ public class EditItem extends Application {
             }
         }
 
+        Item item = itemEJB.read(itemId);
+        item.setName(request.getParameter("name"));
+        item.setCategory(request.getParameter("category"));
+        item.setCountry(request.getParameter("country"));
+        if(image != null){
+            try{
+                item.setFilename(fileName);
+                item.setPhoto(image);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        if (itemEJB.update_criteria(item))
+            response.sendRedirect(request.getContextPath() + "/");
+        else
+            itemForm(itemId, response, true);
+
+
+        // Old way of update
+        /*
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("name", request.getParameter("name"));
         params.put("category", request.getParameter("category"));
@@ -121,6 +142,6 @@ public class EditItem extends Application {
             response.sendRedirect(request.getContextPath() + "/");
         else
             itemForm(itemId, response, true);
-
+        */
     }
 }
