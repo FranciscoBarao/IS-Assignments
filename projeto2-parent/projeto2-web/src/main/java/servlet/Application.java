@@ -21,12 +21,10 @@ public class Application extends HttpServlet {
                 "<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css\" integrity=\"sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB\" crossorigin=\"anonymous\">");
         out.println("<nav role=\"navigation\" class=\"navbar navbar-default navbar-fixed-top\">");
         out.println("<div class=\"container\">");
-        out.println("<a class=\"navbar-brand\" href=\"#\">MyBay</a>");
+        out.println("<a class=\"navbar-brand\" href=\"/projeto2-web/home\">MyBay</a>");
 
         // out.println("<li class=\"active\"><a href=\"#\">Home</a></li>");
         if (session != null) {
-            out.println(
-                    "<li class=\"nav\"><a class=\"nav-link btn btn-primary\" href=/projeto2-web/home>Home</a></li>");
             out.println(
                     "<li class=\"nav\"><a class=\"nav-link btn btn-primary\" href=/projeto2-web/profile/user>Profile</a></li>");
             out.println(

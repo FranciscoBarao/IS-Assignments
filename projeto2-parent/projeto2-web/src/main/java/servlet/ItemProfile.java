@@ -31,20 +31,20 @@ public class ItemProfile extends Application {
             out.println("Wrong path. Needs an ID as parameter. Please try again.<BR>");
             return;
         }
-
         Item item = itemEJB.read(itemID);
 
-        out.println("<BR>Name: " + item.getName());
-        out.println("<BR>Category: " + item.getCategory());
-        out.println("<BR>Country: " + item.getCountry());
-        out.println("<BR>Price: " + item.getPrice());
-        out.println("<BR>Date: " + item.getDate());
-        out.println("<BR>Photo: <img src=");
-        if(item.getPhoto() == null){
-            out.println(">");
-        }else{
-            out.println("\"/projeto2-web/images?id=" + item.getId() + "\">");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("<div class=\"card\" style=\"width: 18rem;\">");
+        out.println("<img class=\"card-img-top\" src=");
+        if (item.getPhoto() == null) {
+            out.println("> alt=\"No Image\">");
+        } else {
+            out.println("\"/projeto2-web/images?id=" + item.getId() + "\"  alt=\"Card image cap\">");
         }
+        out.println("<div class=\"card-body\">");
+        out.println("<p class=\"card-text\">Name: " + item.getName() + "<br>Category: " + item.getCategory()
+                + "<br>Country: " + item.getCountry() + "<br>Price: " + item.getPrice() + "<br>Date: " + item.getDate()
+                + "</p></div></div></div>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

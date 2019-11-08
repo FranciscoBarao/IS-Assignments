@@ -26,16 +26,24 @@ public class Register extends Application {
         out.println("<TITLE>Register</TITLE>");
 
         if (withErrorMessage)
-            out.println("Register failed. Please try again.<BR>");
+            out.println("<div class=\"alert alert-danger\" role=\"alert\"> Something wrong happened, Try Again </div>");
 
-        out.println("<BR>Register Form");
-        out.println("<BR><form method=post>");
-        out.println("<BR>Email: <Input TYPE=EMAIL NAME=email>");
-        out.println("<BR>Password: <INPUT TYPE=PASSWORD NAME=password>");
-        out.println("<BR>Name: <INPUT TYPE=TEXT NAME=name>");
-        out.println("<BR>Country: <INPUT TYPE=TEXT NAME=country>");
-        out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("<form method=post>");
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"email\"> Email </label> <Input type=email class=form-control id=email placeholder=\"Enter Email\" name=email style=\"width: 300px;\"></div>");
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"password\"> Password </label> <Input type=password class=form-control placeholder=\"Enter Password\" name=password style=\"width: 300px;\"></div>");
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"name\"> Name </label> <Input type=text class=form-control placeholder=\"Enter Name\" name=name style=\"width: 300px;\"></div>");
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"country\"> Country </label> <Input type=text class=form-control placeholder=\"Enter Country\" name=country style=\"width: 300px;\"></div>");
 
+        out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button></form></div>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

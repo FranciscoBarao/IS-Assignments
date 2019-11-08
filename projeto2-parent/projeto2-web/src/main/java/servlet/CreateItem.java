@@ -38,18 +38,32 @@ public class CreateItem extends Application {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<TITLE>Create Item</TITLE>");
-
         if (withErrorMessage)
-            out.println("Create failed. Please try again.<BR>");
+            out.println("<div class=\"alert alert-danger\" role=\"alert\"> Something wrong happened, Try Again </div>");
 
-        out.println("<BR>Create Item Form");
-        out.println("<BR><form method=post enctype='multipart/form-data'><BR>");
-        out.println("<BR>Name: <Input TYPE=TEXT required NAME=name>");
-        out.println("<BR>Category: <INPUT TYPE=TEXT required NAME=category>");
-        out.println("<BR>Country: <INPUT TYPE=TEXT required NAME=country>");
-        out.println("<BR>Price: <input type=number step=any required name=price>");
-        out.println("<br>File: <input type=\"file\" name=\"file\"/>");
-        out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("<form method=post enctype='multipart/form-data'>");
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"name\"> Name </label> <Input type=text class=form-control id=name name=name placeholder=\"Enter Name\"  required style=\"width: 300px;\"></div>");
+
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"category\"> Category </label> <Input type=text class=form-control placeholder=\"Enter Category\" name=category required style=\"width: 300px;\"></div>");
+
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"country\"> Country </label> <Input type=text class=form-control placeholder=\"Enter Country\" name=country required  style=\"width: 300px;\"></div>");
+
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"price\"> Price </label> <Input type=number class=form-control placeholder=\"Enter Price\" name=price  required style=\"width: 300px;\"></div>");
+
+        out.println("<br>File: <input type=\"file\" name=\"file\"/><br>");
+
+        out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button>");
+        out.println("<a href=\"/projeto2-web/profile/user\" class=\"btn btn-primary\">Back</a>");
+        out.println("</form></div>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -68,16 +82,17 @@ public class CreateItem extends Application {
         Blob image = null;
         String fileName = "";
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-        if (filePart != null){
+        if (filePart != null) {
             fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
             InputStream fileContent = filePart.getInputStream();
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             byte[] buffer = new byte[10240];
-            for (int length = 0; (length = fileContent.read(buffer)) > 0;) output.write(buffer, 0, length);
+            for (int length = 0; (length = fileContent.read(buffer)) > 0;)
+                output.write(buffer, 0, length);
             byte[] image_byte = output.toByteArray();
-            try{
+            try {
                 image = new SerialBlob(image_byte);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 itemForm(response, true);
                 return;
@@ -89,7 +104,7 @@ public class CreateItem extends Application {
         String category = request.getParameter("category");
         String country = request.getParameter("country");
         String p = request.getParameter("price");
-        if (p.contains(".")) {
+        if (p.contains(".") || Integer.parseInt(p) < 0) {
             itemForm(response, true);
             return;
         }
@@ -99,9 +114,9 @@ public class CreateItem extends Application {
         User user = (User) session.getAttribute("user");
 
         if (itemEJB.create(name, category, country, price, date, image, fileName, user))
-            response.sendRedirect(request.getContextPath() + "/home");
+            response.sendRedirect(request.getContextPath() + "/profile");
         else
             itemForm(response, true);
-        
+
     }
 }

@@ -27,7 +27,8 @@ public class Login extends Application {
         out.println("<TITLE>Login</TITLE>");
 
         if (withErrorMessage)
-            out.println("Login failed. Please try again.<BR>");
+            out.println("<div class=\"alert alert-danger\" role=\"alert\"> Something wrong happened, Try Again </div>");
+
         out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
         out.println("<form method=post>");
         out.println("<div class =\"form-group\">");

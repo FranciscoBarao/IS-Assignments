@@ -27,21 +27,32 @@ public class EditUser extends Application {
         PrintWriter out = response.getWriter();
         out.println("<TITLE>Edit User</TITLE>");
 
-        if (withErrorMessage)
-            out.println("Update failed. Please try again.<BR>");
-
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
 
-        out.println("<BR>User Form");
-        out.println("<BR><form method=post>");
-        out.println("<BR>Email: <Input TYPE=EMAIL VALUE='" + user.getEmail() + "' required NAME=email>");
-        out.println("<BR>Password: <INPUT TYPE=PASSWORD VALUE='" + user.getPassword() + "' required NAME=password>");
-        out.println("<BR>Name: <Input TYPE=TEXT VALUE='" + user.getName() + "' required NAME=name>");
-        out.println("<BR>Country: <Input TYPE=TEXT VALUE='" + user.getCountry() + "' required NAME=country>");
+        if (withErrorMessage)
+            out.println("<div class=\"alert alert-danger\" role=\"alert\"> Something wrong happened, Try Again </div>");
 
-        out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("<form method=post>");
+        out.println("<div class =\"form-group\">");
+        out.println(
+                "<label for=\"email\"> Email </label> <Input type=email class=form-control id=email name=email value=\""
+                        + user.getEmail() + "\" required style=\"width: 300px;\"></div>");
 
+        out.println("<div class =\"form-group\">");
+        out.println("<label for=\"password\"> Password </label> <Input type=password class=form-control value=\""
+                + user.getPassword() + "\" name=password   required style=\"width: 300px;\"></div>");
+        out.println("<div class =\"form-group\">");
+        out.println("<label for=\"name\"> Name </label> <Input type=text class=form-control value=\"" + user.getName()
+                + "\" name=name  required style=\"width: 300px;\"></div>");
+        out.println("<div class =\"form-group\">");
+        out.println("<label for=\"country\"> Country </label> <Input type=text class=form-control value=\""
+                + user.getCountry() + "\" name=country  required style=\"width: 300px;\"></div>");
+
+        out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button>");
+        out.println("<a href=\"/projeto2-web/profile/user\" class=\"btn btn-primary\">Back</a>");
+        out.println("</form></div>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

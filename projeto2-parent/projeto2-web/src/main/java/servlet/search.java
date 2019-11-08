@@ -30,10 +30,9 @@ public class search extends Application {
         if (isEmpty)
             out.println("<div class=\"alert alert-info\" role=\"alert\"> Empty Search </div>");
 
-        if (withErrorMessage) {
-
+        if (withErrorMessage)
             out.println("<div class=\"alert alert-danger\" role=\"alert\"> Something wrong happened, Try Again </div>");
-        }
+
         out.println("<TITLE>Search Items</TITLE>");
         out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
 

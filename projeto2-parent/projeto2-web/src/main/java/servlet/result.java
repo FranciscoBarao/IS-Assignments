@@ -27,15 +27,19 @@ public class result extends Application {
         PrintWriter out = response.getWriter();
         out.println("<TITLE>Results</TITLE>");
 
-        out.println("<BR>Sorting method");
-        out.println("<BR><form method=post>");
-
+        out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
+        out.println("<form method=post>");
+        out.println("<div class =\"form-inline\">");
+        out.println("<label class=\"my-1 mr-2\" for=\"sortingMethod\"> Sorting Method</label>");
+        out.println("<select class=\"custom-select my-1 mr-sm-2\" id=sortingMethod name=sortingMethod>");
         out.println(
-                "<BR> <select name=sortingMethod> <option value=nameSort>Name</option> <option value=priceSort>Price</option> <option value=dateSort>Date</option> </select>");
+                "<option selected>Choose</option><option value=\"nameSort\">Name</option><option value=\"priceSort\">Price</option><option value=\"dateSort\">Date</option></select></div>");
 
-        out.println("<BR>Descending: <Input TYPE=CHECKBOX NAME=order>");
+        out.println("<div class=\"form-check\">");
+        out.println(
+                "<input type=\"checkbox\" class=\"form-check-input\" id=\"order\"><label class=\"form-check-label\" for=\"order\" name=order>Descending</label></div>");
 
-        out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
+        out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button></form></div>");
 
         out.println("<BR> Results");
         HttpSession session = request.getSession(false);
