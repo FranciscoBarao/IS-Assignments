@@ -35,11 +35,9 @@ public class ItemProfile extends Application {
 
         out.println("<div class=\"d-flex justify-content-center align-items-center container\">");
         out.println("<div class=\"card\" style=\"width: 18rem;\">");
-        out.println("<img class=\"card-img-top\" src=");
-        if (item.getPhoto() == null) {
-            out.println("> alt=\"No Image\">");
-        } else {
-            out.println("\"/projeto2-web/images?id=" + item.getId() + "\"  alt=\"Card image cap\">");
+        if (!item.getFilename().isEmpty()) {
+            out.println("<img class=\"card-img-top\" src=\"/projeto2-web/images?id=" + item.getId() + "\"  alt=\""
+                    + item.getFilename() + "\">");
         }
         out.println("<div class=\"card-body\">");
         out.println("<p class=\"card-text\">Name: " + item.getName() + "<br>Category: " + item.getCategory()

@@ -38,15 +38,14 @@ public class DeleteUser extends Application {
         if (userEJB.delete(userID)) {
             HttpSession session = request.getSession();
             session.invalidate();
-            response.sendRedirect(request.getContextPath() + "/projecto2-web/");
+            response.sendRedirect(request.getContextPath() + "/");
         }
         out.println("Couldn't delete User. Please try again.<BR>");
-        out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath() + "/projecto2-web/home");
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

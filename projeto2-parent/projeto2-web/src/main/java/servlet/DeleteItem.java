@@ -34,12 +34,10 @@ public class DeleteItem extends Application {
             out.println("You can't access that item. Please try with another id.<BR>");
             return;
         } else {
-            if (itemEJB.delete(itemID)) {
-                response.sendRedirect(request.getContextPath() + "/projecto2-web/profile/user");
-            } else {
-                out.println("Delete failed. Please try again.<BR>");
-                out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
-            }
+            if (itemEJB.delete(itemID))
+                response.sendRedirect(request.getContextPath() + "/profile/user");
+            else
+                out.println("Delete failed. Please try again.");
         }
     }
 
@@ -47,22 +45,22 @@ public class DeleteItem extends Application {
             throws ServletException, IOException {
         super.header(request, response);
         super.checkLogin(request, response);
-        String itemId = request.getParameter("id");
-
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-
-        if (itemEJB.checkUserItem(itemId, user.getId()))
-            itemDelete(itemId, request, response, false);
-
-        itemDelete(itemId, request, response, true);
+        response.sendRedirect(request.getContextPath() + "/profile/user");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         super.header(request, response);
         super.checkLogin(request, response);
-        String itemID = request.getParameter("id");
-        itemDelete(itemID, request, response, false);
+
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
+
+        String itemId = request.getParameter("id");
+
+        if (itemEJB.checkUserItem(itemId, user.getId()))
+            itemDelete(itemId, request, response, false);
+        else
+            itemDelete(itemId, request, response, true);
     }
 }

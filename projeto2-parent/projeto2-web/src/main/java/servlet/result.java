@@ -37,9 +37,10 @@ public class result extends Application {
 
         out.println("<div class=\"form-check\">");
         out.println(
-                "<input type=\"checkbox\" class=\"form-check-input\" id=\"order\"><label class=\"form-check-label\" for=\"order\" name=order>Descending</label></div>");
+                "<input type=\"checkbox\" class=\"form-check-input\" name=order><label class=\"form-check-label\" for=\"order\" name=order>Descending</label></div>");
 
-        out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button></form></div>");
+        out.println("<div><button type=\"submit\" class=\"btn btn-primary\">Submit</button></form>");
+        out.println("<a class=\"btn btn-primary\" href=/projeto2-web/search>Back</a></div></div>");
 
         out.println("<BR> Results");
         HttpSession session = request.getSession(false);
@@ -67,7 +68,6 @@ public class result extends Application {
         List<Item> items = (List<Item>) session.getAttribute("items");
 
         String sortingMethod = request.getParameter("sortingMethod");
-
         String order = request.getParameter("order");
         boolean o = true;
         if (order != null && !order.equals(""))

@@ -55,7 +55,7 @@ public class search extends Application {
 
         out.println("<div class=\"form-check\">");
         out.println(
-                "<input type=\"checkbox\" class=\"form-check-input\" id=\"inCountry\"><label class=\"form-check-label\" for=\"inCountry\" name=inCountry>inCountry</label></div>");
+                "<input type=\"checkbox\" class=\"form-check-input\" id=\"inCountry\"><label class=\"form-check-label\" for=\"inCountry\" name=inCountry>In Country</label></div>");
 
         out.println("<br>After Date: <Input TYPE=DATE min=2018-01-01 max=2019-12-31 NAME=afterDate>");
 

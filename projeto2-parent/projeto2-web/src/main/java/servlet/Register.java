@@ -32,16 +32,16 @@ public class Register extends Application {
         out.println("<form method=post>");
         out.println("<div class =\"form-group\">");
         out.println(
-                "<label for=\"email\"> Email </label> <Input type=email class=form-control id=email placeholder=\"Enter Email\" name=email style=\"width: 300px;\"></div>");
+                "<label for=\"email\"> Email </label> <Input type=email class=form-control required placeholder=\"Enter Email\" name=email style=\"width: 300px;\"></div>");
         out.println("<div class =\"form-group\">");
         out.println(
-                "<label for=\"password\"> Password </label> <Input type=password class=form-control placeholder=\"Enter Password\" name=password style=\"width: 300px;\"></div>");
+                "<label for=\"password\"> Password </label> <Input type=password class=form-control required placeholder=\"Enter Password\" name=password style=\"width: 300px;\"></div>");
         out.println("<div class =\"form-group\">");
         out.println(
-                "<label for=\"name\"> Name </label> <Input type=text class=form-control placeholder=\"Enter Name\" name=name style=\"width: 300px;\"></div>");
+                "<label for=\"name\"> Name </label> <Input type=text class=form-control required placeholder=\"Enter Name\" name=name style=\"width: 300px;\"></div>");
         out.println("<div class =\"form-group\">");
         out.println(
-                "<label for=\"country\"> Country </label> <Input type=text class=form-control placeholder=\"Enter Country\" name=country style=\"width: 300px;\"></div>");
+                "<label for=\"country\"> Country </label> <Input type=text class=form-control required placeholder=\"Enter Country\" name=country style=\"width: 300px;\"></div>");
 
         out.println("<button type=\"submit\" class=\"btn btn-primary\">Submit</button></form></div>");
     }

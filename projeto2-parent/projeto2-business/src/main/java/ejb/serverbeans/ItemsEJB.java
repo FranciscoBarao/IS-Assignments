@@ -143,9 +143,10 @@ public class ItemsEJB implements ItemsEJBLocal {
 
     // Checks if item belongs to user
     public boolean checkUserItem(String itemId, int userId) {
+
         LOGGER.info("Checking ownership of item");
 
-        String query = "FROM Item i WHERE user_id=" + userId + " AND itemId=" + itemId;
+        String query = "FROM Item i WHERE user_id=" + userId + " AND id=" + itemId;
         Query q = em.createQuery(query, Item.class);
 
         try {
@@ -191,7 +192,7 @@ public class ItemsEJB implements ItemsEJBLocal {
         return items;
     }
 
-    public boolean update_criteria(Item item){
+    public boolean update_criteria(Item item) {
         LOGGER.debug("Updating Item");
 
         try {

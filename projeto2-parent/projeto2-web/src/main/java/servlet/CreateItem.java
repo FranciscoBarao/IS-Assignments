@@ -114,7 +114,7 @@ public class CreateItem extends Application {
         User user = (User) session.getAttribute("user");
 
         if (itemEJB.create(name, category, country, price, date, image, fileName, user))
-            response.sendRedirect(request.getContextPath() + "/profile");
+            response.sendRedirect(request.getContextPath() + "/profile/user");
         else
             itemForm(response, true);
 
