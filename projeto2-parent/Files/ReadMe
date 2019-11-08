@@ -13,16 +13,9 @@ mvn clean install wildfly:deploy -Pwildfly-runtime
 
 Tasks:
 
-Need fixing:
--Email sends 2 at a time
--Edit photo on edit item
 
+Need fixing:
+-Email sends 2 at a times
 
 Not Done:
--Report + ER
 -Handle exception on image.java -> Logger
-
-Test:
--Update user Email to another existing and unchanged to see if protection works
--Shortcuts to all Web
--Logging(Done but need to know where to check)
