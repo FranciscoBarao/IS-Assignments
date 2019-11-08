@@ -23,9 +23,10 @@ public class Item implements Serializable {
     private int price;
     @Column(name = "date", nullable = false)
     private Date date;
-
     @Column(name = "photo", nullable = true)
     private Blob photo;
+    @Column(name = "filename", nullable = true)
+    private String filename;
 
     @ManyToOne
     private User user;
@@ -34,13 +35,14 @@ public class Item implements Serializable {
         super();
     }
 
-    public Item(String name, String category, String country, int price, Date date, Blob photo, User user) {
+    public Item(String name, String category, String country, int price, Date date, Blob photo, String filename, User user) {
         this.name = name;
         this.category = category;
         this.country = country;
         this.price = price;
         this.date = date;
         this.photo = photo;
+        this.filename = filename;
         this.user = user;
 
     }
@@ -97,8 +99,16 @@ public class Item implements Serializable {
         return this.photo;
     }
 
-    public void setFilepath(Blob photo) {
+    public void setPhoto(Blob photo) {
         this.photo = photo;
+    }
+
+    public String getFilename() {
+        return this.filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public User getUser() {

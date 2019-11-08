@@ -27,35 +27,43 @@ public class userProfile extends Application {
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         out.println("<HEAD><TITLE>Profile</TITLE></HEAD><BODY>");
+        out.println("<div class = \"\">");
         // User information
-        out.println("<BR> Name: " + user.getName());
-        out.println("<BR> Email: " + user.getEmail());
-        out.println("<BR> Country: " + user.getCountry());
+        out.println("<div class=\"card\">");
+            out.println("<div class=\"card-header\"> Profile </div>");
+            out.println("<div class=\"card-body\">"); 
+                out.println("<BR> Name: " + user.getName());
+                out.println("<BR> Email: " + user.getEmail());
+                out.println("<BR> Country: " + user.getCountry());
 
-        out.println("<BR> Item List");
-        if (!items.isEmpty()) {
-            for (Item i : items) {
-                out.println("<br>");
-                out.println(i.getName());
-                out.println("<a href = /projeto2-web/profile/item?id=" + i.getId() + "> View </a>");
-                out.println("<a href = /projeto2-web/edit/item?id=" + i.getId() + "> edit </a>");
-                out.println("<form method=\"POST\" action=\"/projeto2-web/delete/item\">");
-                out.println("<input name=id type=hidden value=" + i.getId() + ">");
-                out.println(
-                        "<input class=\"btn btn-link\" type=\"submit\" value=\"delete\" onclick=\"return confirm('Are you sure?')\"/>");
-                out.println("</form>");
-            }
-        } else {
-            out.println("<BR>You have no items");
-        }
-        // Create item button
-        out.println("<BR><a href=/projeto2-web/create/item>Create Item</a> ");
-        // Edit user button
-        out.println("<BR><a href=/projeto2-web/edit/user>Edit User</a> ");
-        // Delete user button
-        out.println("<form method=\"POST\" action=\"/projeto2-web/delete/user\">");
-        out.println(
-                "<input class=\"btn btn-link\" type=\"submit\" value=\"delete user\" onclick=\"return confirm('Are you sure?')\"/></form>");
+                out.println("<BR> Item List");
+                if (!items.isEmpty()) {
+                    for (Item i : items) {
+                        out.println("<div class = \"container\">");
+                            out.println("<p>" + i.getName() + "</p>");
+                            out.println("<a class=\"btn btn-primary btn-sm\" href = /projeto2-web/profile/item?id=" + i.getId() + "> View </a>");
+                            out.println("<a class=\"btn btn-primary btn-sm\" href = /projeto2-web/edit/item?id=" + i.getId() + "> edit </a>");
+                            out.println("<form class=\"form-horizontal\" method=\"POST\" action=\"/projeto2-web/delete/item\">");
+                                out.println("<input name=id type=hidden value=" + i.getId() + ">");
+                                out.println("<input class=\"btn btn-outline-danger btn-sm\" type=\"submit\" value=\"delete\" onclick=\"return confirm('Are you sure?')\"/>");
+                            out.println("</form>");
+                        out.println("</div>");
+                    }
+                } else {
+                    out.println("<BR>You have no items");
+                }
+                out.println("<div class = \"row\">");
+                    // Create item button
+                    out.println("<BR><a class=\"btn btn-primary\" href=/projeto2-web/create/item>Create Item</a> ");
+                    // Edit user button
+                    out.println("<BR><a class=\"btn btn-primary\" href=/projeto2-web/edit/user>Edit User</a> ");
+                    // Delete user button
+                    out.println("<form method=\"POST\" action=\"/projeto2-web/delete/user\">");
+                        out.println("<input class=\"btn btn-outline-danger\" type=\"submit\" value=\"delete user\" onclick=\"return confirm('Are you sure?')\"/></form>");
+                out.println("</div>");
+                out.println("</div>");
+            out.println("</div>");
+        out.println("</div>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

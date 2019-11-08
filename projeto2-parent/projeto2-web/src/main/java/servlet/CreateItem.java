@@ -66,9 +66,10 @@ public class CreateItem extends Application {
         response.setContentType("text/html");
         // Upload file Multi config code
         Blob image = null;
+        String fileName = "";
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
         if (filePart != null){
-            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
             InputStream fileContent = filePart.getInputStream();
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             byte[] buffer = new byte[10240];
@@ -97,7 +98,7 @@ public class CreateItem extends Application {
         Date date = new Date();
         User user = (User) session.getAttribute("user");
 
-        if (itemEJB.create(name, category, country, price, date, image, user))
+        if (itemEJB.create(name, category, country, price, date, image, fileName, user))
             response.sendRedirect(request.getContextPath() + "/home");
         else
             itemForm(response, true);

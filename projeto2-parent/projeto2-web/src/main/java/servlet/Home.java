@@ -22,7 +22,7 @@ public class Home extends Application {
         out.println("<HEAD><TITLE>Index</TITLE></HEAD><BODY>");
         out.println("Welcome " + user.getName() + "!");
 
-        out.println("<BR> <a href=/projeto2-web/search>Search</a> ");
+        out.println("<br> <a class=\"btn-primary\" href=/projeto2-web/search>Search</a> ");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

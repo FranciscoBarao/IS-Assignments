@@ -10,7 +10,7 @@ import data.User;
 @Local
 public interface ItemsEJBLocal {
 
-    public boolean create(String name, String category, String country, int price, Date date, Blob photo, User user);
+    public boolean create(String name, String category, String country, int price, Date date, Blob photo, String filename, User user);
 
     public Item read(String id);
 
@@ -25,7 +25,7 @@ public interface ItemsEJBLocal {
 
     public List<Item> sort(List<Item> items, String method, boolean isAscending);
 
-    public boolean update(String id, HashMap<String, String> updateParams);
+    public boolean update(String id, HashMap<String, Object> updateParams);
 
     public boolean delete(String id);
 

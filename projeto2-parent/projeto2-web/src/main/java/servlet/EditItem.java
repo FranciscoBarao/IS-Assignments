@@ -9,13 +9,20 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.MultipartConfig;
+import java.io.*;
+import java.nio.file.Paths;
+import javax.sql.rowset.serial.SerialBlob;
+import java.sql.Blob;
 import java.util.HashMap;
+import javax.servlet.http.Part;
 
 import data.Item;
 
 import ejb.serverbeans.ItemsEJBLocal;
 
 @WebServlet("/edit/item")
+@MultipartConfig
 public class EditItem extends Application {
     private static final long serialVersionUID = 1L;
 
@@ -43,12 +50,13 @@ public class EditItem extends Application {
         }
 
         out.println("<BR>Update Item Form");
-        out.println("<BR><form method=post><BR>");
+        out.println("<BR><form method=post enctype='multipart/form-data'><BR>");
         out.println("<input name=itemID type=hidden value=" + itemID + ">");
         out.println("<BR>Name: <Input TYPE=TEXT VALUE='" + item.getName() + "' required NAME=name>");
         out.println("<BR>Category: <INPUT TYPE=TEXT VALUE='" + item.getCategory() + "' required NAME=category>");
         out.println("<BR>Country: <INPUT TYPE=TEXT VALUE='" + item.getCountry() + "' required NAME=country>");
         out.println("<BR>Price: <input type=number VALUE='" + item.getPrice() + "' step=any required name=price>");
+        out.println("<br>File: <input type=\"file\" name=\"file\"/>");
         out.println("<BR><INPUT TYPE=SUBMIT VALUE=Submit></form>");
 
     }
@@ -68,7 +76,27 @@ public class EditItem extends Application {
         response.setContentType("text/html");
         String itemId = request.getParameter("id");
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        // Upload file Multi config code
+        Blob image = null;
+        String fileName = "";
+        Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+        if (filePart != null){
+            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+            InputStream fileContent = filePart.getInputStream();
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[10240];
+            for (int length = 0; (length = fileContent.read(buffer)) > 0;) output.write(buffer, 0, length);
+            byte[] image_byte = output.toByteArray();
+            try{
+                image = new SerialBlob(image_byte);
+            }catch (Exception e){
+                e.printStackTrace();
+                itemForm(itemId, response, true);
+                return;
+            }
+        }
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("name", request.getParameter("name"));
         params.put("category", request.getParameter("category"));
         params.put("country", request.getParameter("country"));
@@ -78,6 +106,16 @@ public class EditItem extends Application {
             return;
         }
         params.put("price", p);
+
+        if(image != null){
+            try{
+                params.put("filename", fileName);
+                //String photo = new String(image.getBytes(1l, (int) image.length()));
+                params.put("photo", image);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 
         if (itemEJB.update(itemId, params))
             response.sendRedirect(request.getContextPath() + "/");
