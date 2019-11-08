@@ -65,6 +65,8 @@ public class EmailEJB {
         List<User> users = userEJB.selectAllUsers();
         Address[] addresses = new Address[users.size()];
         int i = 0;
+        if (users.isEmpty())
+            return;
         for (User u : users) {
 
             String to = u.getEmail();

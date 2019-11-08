@@ -1,6 +1,7 @@
 
 package ejb.serverbeans;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,6 +19,9 @@ import data.User;
 public class UsersEJB implements UsersEJBLocal {
     @PersistenceContext(name = "Players")
     EntityManager em;
+
+    @EJB
+    ItemsEJBLocal itemEJB;
 
     private static Logger LOGGER = LoggerFactory.getLogger(UsersEJB.class);
 
@@ -114,6 +118,9 @@ public class UsersEJB implements UsersEJBLocal {
     public boolean update(String email, HashMap<String, String> updateParams) {
         LOGGER.info("Editing an user");
 
+        if (email.equals(updateParams.get("email")) && read(updateParams.get("email")) == null)
+            return false;
+
         try {
             String sqlString = "UPDATE User SET ";
             Iterator it = updateParams.entrySet().iterator();
@@ -138,6 +145,9 @@ public class UsersEJB implements UsersEJBLocal {
     // Deletes a user and all its items
     public boolean delete(String id) {
         LOGGER.info("Deleting an user");
+
+        if (!itemEJB.deleteAll(id))
+            return false;
 
         Query query = em.createQuery("DELETE FROM User c WHERE c.id = '" + id + "'");
         try {

@@ -35,18 +35,13 @@ public class DeleteUser extends Application {
             return;
         }
 
-        if (itemEJB.deleteAll(userID)) {
-            if (userEJB.delete(userID)) {
-                HttpSession session = request.getSession();
-                session.invalidate();
-                response.sendRedirect(request.getContextPath() + "/projecto2-web/");
-            }
-            out.println("Couldn't delete User. Please try again.<BR>");
-            out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
-        } else {
-            out.println("Couldn't delete all your items. Please try again.<BR>");
-            out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
+        if (userEJB.delete(userID)) {
+            HttpSession session = request.getSession();
+            session.invalidate();
+            response.sendRedirect(request.getContextPath() + "/projecto2-web/");
         }
+        out.println("Couldn't delete User. Please try again.<BR>");
+        out.println("<BR><a href = '/projeto2-web/profile/user'> Return to profile </a>");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
