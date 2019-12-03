@@ -1,16 +1,18 @@
+package com.assign_3;
 
+//import util.properties packages
 import java.util.Properties;
-import org.apache.kafka.clients.producer.Producer;
+
+//import KafkaProducer packages
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+//import ProducerRecord packages
 import org.apache.kafka.clients.producer.ProducerRecord;
 
-public class Producer {
+//Create java class named “SimpleProducer”
+public class SimpleProducer {
 
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            System.out.println("Enter topic name");
-            return;
-        }
 
         // Assign topicName to string variable
         String topicName = args[0].toString();
@@ -37,15 +39,16 @@ public class Producer {
         // producer for buffering.
         props.put("buffer.memory", 33554432);
 
-        props.put("key.serializer", "org.apache.kafka.common.serializa-tion.StringSerializer");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        props.put("value.serializer", "org.apache.kafka.common.serializa-tion.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.LongSerializer");
 
-        Producer<String, String> producer = new KafkaProducer<String, String>(props);
+        Producer<String, Long> producer = new KafkaProducer<>(props);
 
-        for (int i = 0; i < 10; i++)
-            producer.send(new ProducerRecord<String, String>(topicName, Integer.toString(i), Integer.toString(i)));
-        System.out.println("Message sent successfully");
+        for (int i = 0; i < 1000; i++)
+            producer.send(new ProducerRecord<String, Long>(topicName, Integer.toString(i), (long) i));
+
+        System.out.println("Message sent successfully to topic " + topicName);
         producer.close();
     }
 }
