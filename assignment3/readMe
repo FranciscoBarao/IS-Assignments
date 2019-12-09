@@ -1,23 +1,26 @@
     Go to usr/local/kafka
     
-    zookeper:
+zookeper:
     bin/zookeeper-server-start.sh config/zookeeper.properties
     
-    server:
+server:
     bin/kafka-server-start.sh config/server.properties
     
-    topic:
+topic:
     bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test
     
-    topic 2.0:
+topic 2.0:
     bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
     
-    Check topics:
+Check topics:
     bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe
 
-    consumer:
+consumer:
     bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic resultstopic
 
 
-    MVN execute:
+Maven execute:
     mvn exec:java -Dexec.mainClass=com.assign_3.filename
+
+stuff for pedro:
+- sudo systemctl status kafka.service

@@ -1,17 +1,17 @@
 package com.assign_3;
 
 import java.util.Properties;
-import org.apache.kafka.clients.producer.Producer;
+
+//import KafkaProducer packages
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+
+// mvn exec:java -Dexec.mainClass=com.assign_3.SimpleProducer
 
 public class DBInfoProducer {
 
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            System.out.println("Enter topic name");
-            return;
-        }
 
         // Assign topicName to string variable
         String topicName = "DBInfo";
