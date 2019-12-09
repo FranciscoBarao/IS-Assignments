@@ -1,21 +1,20 @@
 package com.assign_3;
 
-//import util.properties packages
 import java.util.Properties;
-
-//import KafkaProducer packages
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
-//import ProducerRecord packages
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
-//Create java class named “SimpleProducer”
-public class SimpleProducer {
+public class DBInfoProducer {
 
     public static void main(String[] args) throws Exception {
+        if (args.length == 0) {
+            System.out.println("Enter topic name");
+            return;
+        }
 
         // Assign topicName to string variable
-        String topicName = args[0].toString();
+        String topicName = "DBInfo";
 
         // create instance for properties to access producer configs
         Properties props = new Properties();
@@ -39,9 +38,9 @@ public class SimpleProducer {
         // producer for buffering.
         props.put("buffer.memory", 33554432);
 
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("key.serializer", "org.apache.kafka.common.serializa-tion.StringSerializer");
 
-        props.put("value.serializer", "org.apache.kafka.common.serialization.LongSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serializa-tion.StringSerializer");
 
         Producer<String, Long> producer = new KafkaProducer<>(props);
 

@@ -10,10 +10,10 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 
-public class test101 {
+public class DBInfoConsumer {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        String topicName = args[0].toString();
+        String topicName = "DBInfo";
         String outtopicname = "resultstopic";
 
         java.util.Properties props = new Properties();
@@ -23,6 +23,7 @@ public class test101 {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Long().getClass());
 
         StreamsBuilder builder = new StreamsBuilder();
+
         KStream<String, Long> lines = builder.stream(topicName);
 
         KTable<String, Long> outlines = lines.groupByKey().count();
