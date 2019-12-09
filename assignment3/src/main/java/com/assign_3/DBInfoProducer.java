@@ -38,10 +38,9 @@ public class DBInfoProducer {
         // producer for buffering.
         props.put("buffer.memory", 33554432);
 
-        props.put("key.serializer", "org.apache.kafka.common.serializa-tion.StringSerializer");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        props.put("value.serializer", "org.apache.kafka.common.serializa-tion.StringSerializer");
-
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         Producer<String, Long> producer = new KafkaProducer<>(props);
 
         for (int i = 0; i < 1000; i++)
