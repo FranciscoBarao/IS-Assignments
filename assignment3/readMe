@@ -8,3 +8,7 @@
 
     consumer
     bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic resultstopic
+
+
+stuff for pedro:
+- sudo systemctl status kafka.service
