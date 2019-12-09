@@ -2,53 +2,56 @@ package com.assign_3;
 
 //import util.properties packages
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 
 //import KafkaProducer packages
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 //import ProducerRecord packages
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.kstream.KStream;
+
+// mvn exec:java -Dexec.mainClass=com.assign_3.SimpleProducer
 
 //Create java class named “SimpleProducer”
 public class SimpleProducer {
 
     public static void main(String[] args) throws Exception {
-
-        // Assign topicName to string variable
-        String topicName = args[0].toString();
-
-        // create instance for properties to access producer configs
         Properties props = new Properties();
-
-        // Assign localhost id
-        props.put("bootstrap.servers", "localhost:9092");
-
-        // Set acknowledgements for producer requests.
-        props.put("acks", "all");
-
-        // If the request fails, the producer can automatically retry,
-        props.put("retries", 0);
-
-        // Specify buffer size in config
-        props.put("batch.size", 16384);
-
-        // Reduce the no of requests less than 0
-        props.put("linger.ms", 1);
-
-        // The buffer.memory controls the total amount of memory available to the
-        // producer for buffering.
-        props.put("buffer.memory", 33554432);
-
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-
-        props.put("value.serializer", "org.apache.kafka.common.serialization.LongSerializer");
-
-        Producer<String, Long> producer = new KafkaProducer<>(props);
-
-        for (int i = 0; i < 1000; i++)
-            producer.send(new ProducerRecord<String, Long>(topicName, Integer.toString(i), (long) i));
-
-        System.out.println("Message sent successfully to topic " + topicName);
-        producer.close();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+ 
+        final StreamsBuilder builder = new StreamsBuilder();
+ 
+        builder.stream("streams-plaintext-input").to("streams-pipe-output");
+ 
+        final Topology topology = builder.build();
+ 
+        final KafkaStreams streams = new KafkaStreams(topology, props);
+        final CountDownLatch latch = new CountDownLatch(1);
+ 
+        // attach shutdown handler to catch control-c
+        Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
+            @Override
+            public void run() {
+                streams.close();
+                latch.countDown();
+            }
+        });
+ 
+        try {
+            streams.start();
+            latch.await();
+        } catch (Throwable e) {
+            System.exit(1);
+        }
+        System.exit(0);
     }
 }
