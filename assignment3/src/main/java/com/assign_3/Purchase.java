@@ -17,7 +17,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-public class Customer {
+public class Purchase {
     /*
      * Thread for producer Talk to prof about parsing info from DB and to Send to
      * other kafka streams
@@ -51,10 +51,10 @@ public class Customer {
         DBInfoProducer t1 = new DBInfoProducer();
         t1.start();
 
-        CopyOnWriteArrayList<String> c = new CopyOnWriteArrayList<>();
+        CopyOnWriteArrayList<String> i = new CopyOnWriteArrayList<>();
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(time);
-            c.clear();
+            i.clear();
             for (ConsumerRecord<String, String> record : records) {
                 // String to Json to Hashmap
                 HashMap<String, Object> result = new ObjectMapper().readValue(record.value(), HashMap.class);
@@ -65,33 +65,31 @@ public class Customer {
                 // System.out.println("\nGIMME -> " + country.get("name"));
 
                 String s = (String) object.get("name");
-                c.add(s);
+                i.add(s);
             }
-            t1.setCountries(c);
+            t1.setItems(i);
         }
     }
 
 }
 
 class DBInfoProducer extends Thread {
-    private CopyOnWriteArrayList<String> countries;
     private CopyOnWriteArrayList<String> items;
 
     DBInfoProducer() {
-        this.countries = new CopyOnWriteArrayList<>();
         this.items = new CopyOnWriteArrayList<>();
     }
 
-    public void setCountries(CopyOnWriteArrayList<String> countries) {
-        System.out.println("\nSetCountries");
-        this.countries = countries;
+    public void setItems(CopyOnWriteArrayList<String> items) {
+        System.out.println("\nSetItems");
+        this.items = items;
     }
 
     public void run() {
         System.out.println("Producer thread running");
 
         // Assign topicName to string variable
-        String topic = "Sales";
+        String topic = "Purchases";
 
         // create instance for properties to access producer configs
         Properties props = new Properties();
@@ -111,20 +109,17 @@ class DBInfoProducer extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (countries.size() > 0)
+            if (items.size() > 0)
                 populateSales(props, topic);
         }
     }
 
     void populateSales(Properties props, String topic) {
-        System.out.println("\nPopulateSales");
+        System.out.println("\nPopulatePurchases");
         Random random = new Random();
         // Get random Item
         // String i = items.get(random.nextInt(items.size()));
         String i = "item";
-        // Get random Country
-        System.out.println("\nCountries size: " + countries.size());
-        String c = countries.get(random.nextInt(countries.size()));
         // Get random Price
         int max = 20, min = 1;
         int p = random.nextInt(max - min + 1) + min;
@@ -133,7 +128,7 @@ class DBInfoProducer extends Thread {
 
         Producer<String, String> producer = new KafkaProducer<>(props);
 
-        producer.send(new ProducerRecord<String, String>(topic, "Sale", i + " " + p + " " + u + " " + c));
+        producer.send(new ProducerRecord<String, String>(topic, "Purchase", i + " " + p + " " + u));
 
         System.out.println("Message sent successfully to topic " + topic);
         producer.close();
