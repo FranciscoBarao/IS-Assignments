@@ -11,14 +11,14 @@ public class SimpleProducer {
      * Thread for producer Talk to prof about parsing info from DB and to Send to
      * other kafka streams
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         System.out.println("Producer thread running");
 
         // Assign topicName to string variable
-        String topic = "Sales";
+        final String topic = "test";
 
         // create instance for properties to access producer configs
-        Properties props = new Properties();
+        final Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         props.put("acks", "all");
         props.put("retries", 0);
@@ -29,18 +29,18 @@ public class SimpleProducer {
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.LongSerializer");
 
-        Random random = new Random();
+        final Random random = new Random();
         // Get random Item
         // String i = items.get(random.nextInt(items.size()));
         // Get random Country
         // String c = countries.get(random.nextInt(countries.size()));
         // Get random Price
-        int max = 20, min = 1;
+        final int max = 20, min = 1;
         // int p = random.nextInt(max - min + 1) + min;
         // Get random Units
-        int u = random.nextInt(max - min + 1) + min;
+        final int u = random.nextInt(max - min + 1) + min;
 
-        Producer<String, Long> producer = new KafkaProducer<>(props);
+        final Producer<String, Long> producer = new KafkaProducer<>(props);
 
         producer.send(new ProducerRecord<String, Long>(topic, "-->", (long) u));
 
