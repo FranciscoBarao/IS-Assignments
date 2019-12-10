@@ -25,3 +25,12 @@ Database queries
     cd /opt/kafka
     bin/connect-standalone.sh config/connect-standalone.properties config/project-jdbc-source-countries.properties
     bin/connect-standalone.sh config/connect-standalone.properties config/project-jdbc-source-items.properties
+
+
+
+Create Table
+create table data(
+id INT NOT NULL AUTO_INCREMENT,
+type VARCHAR(40) NOT NULL,
+name VARCHAR(40) NOT NULL,
+PRIMARY KEY ( id ));

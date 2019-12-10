@@ -52,9 +52,12 @@ public class Customer {
         t1.start();
 
         CopyOnWriteArrayList<String> c = new CopyOnWriteArrayList<>();
+        CopyOnWriteArrayList<String> i = new CopyOnWriteArrayList<>();
+
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(time);
             c.clear();
+            i.clear();
             for (ConsumerRecord<String, String> record : records) {
                 // String to Json to Hashmap
                 HashMap<String, Object> result = new ObjectMapper().readValue(record.value(), HashMap.class);
@@ -64,13 +67,17 @@ public class Customer {
                 // System.out.println("\nHERE -> " + result.get("payload"));
                 // System.out.println("\nGIMME -> " + country.get("name"));
 
-                String s = (String) object.get("name");
-                c.add(s);
+                String s = (String) object.get("type");
+                if (s.equals("Country")) {
+                    c.add((String) object.get("id"));
+                } else {
+                    i.add((String) object.get("id"));
+                }
+
             }
-            t1.setCountries(c);
+            t1.setArrays(i, c);
         }
     }
-
 }
 
 class DBInfoProducer extends Thread {
@@ -82,8 +89,8 @@ class DBInfoProducer extends Thread {
         this.items = new CopyOnWriteArrayList<>();
     }
 
-    public void setCountries(CopyOnWriteArrayList<String> countries) {
-        System.out.println("\nSetCountries");
+    public void setArrays(CopyOnWriteArrayList<String> items, CopyOnWriteArrayList<String> countries) {
+        this.items = items;
         this.countries = countries;
     }
 
@@ -120,8 +127,7 @@ class DBInfoProducer extends Thread {
         System.out.println("\nPopulateSales");
         Random random = new Random();
         // Get random Item
-        // String i = items.get(random.nextInt(items.size()));
-        String i = "item";
+        String i = items.get(random.nextInt(items.size()));
         // Get random Country
         System.out.println("\nCountries size: " + countries.size());
         String c = countries.get(random.nextInt(countries.size()));
