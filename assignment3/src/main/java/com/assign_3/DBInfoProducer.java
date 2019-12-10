@@ -40,7 +40,7 @@ public class DBInfoProducer {
 
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.LongSerializer");
         Producer<String, Long> producer = new KafkaProducer<>(props);
 
         for (int i = 0; i < 1000; i++)

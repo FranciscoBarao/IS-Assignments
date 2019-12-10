@@ -9,6 +9,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Produced;
 
 public class DBInfoConsumer {
 
@@ -23,12 +24,12 @@ public class DBInfoConsumer {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Long().getClass());
 
         StreamsBuilder builder = new StreamsBuilder();
-
         KStream<String, Long> lines = builder.stream(topicName);
 
         KTable<String, Long> outlines = lines.groupByKey().count();
-        outlines.toStream().to(outtopicname);
 
+        outlines.mapValues((k, v) -> k + " => " + v).toStream().to(outtopicname, Produced.with(Serdes.String(), Serdes.String()));
+        
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
 
