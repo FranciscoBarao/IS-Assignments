@@ -1,47 +1,42 @@
 package com.assign_3;
 
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.Topology;
-
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
+import java.time.Duration;
+import java.util.Arrays;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public class DBInfoConsumer {
-
     public static void main(String[] args) throws Exception {
+        // Kafka consumer configuration settings
+        String topicName = "DBInfo";
         Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
-        final StreamsBuilder builder = new StreamsBuilder();
+        props.put("bootstrap.servers", "localhost:9092");
+        props.put("group.id", "test");
+        props.put("enable.auto.commit", "true");
+        props.put("auto.commit.interval.ms", "1000");
+        props.put("session.timeout.ms", "30000");
+        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.LongDeserializer");
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
 
-        builder.stream("DBInfo").to("output");
+        // Kafka Consumer subscribes list of topics here.
+        consumer.subscribe(Arrays.asList(topicName));
 
-        final Topology topology = builder.build();
+        // print the topic name
+        System.out.println("Subscribed to topic " + topicName);
+        int i = 0;
 
-        final KafkaStreams streams = new KafkaStreams(topology, props);
-        final CountDownLatch latch = new CountDownLatch(1);
+        Duration time = Duration.ofSeconds(100);
 
-        // attach shutdown handler to catch control-c
-        Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
-            @Override
-            public void run() {
-                streams.close();
-                latch.countDown();
-            }
-        });
+        while (true) {
+            ConsumerRecords<String, String> records = consumer.poll(time);
+            for (ConsumerRecord<String, String> record : records)
 
-        try {
-            streams.start();
-            latch.await();
-        } catch (Throwable e) {
-            System.exit(1);
+                // print the offset,key and value for the consumer records.
+                System.out.printf("offset = %d, key = %s, value = %s\n", record.offset(), record.key(), record.value());
         }
-        System.exit(0);
     }
 }
