@@ -9,6 +9,14 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.Grouped;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.KeyValueMapper;
+import org.apache.kafka.streams.kstream.ValueMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -29,7 +37,7 @@ public class KafkaStream {
         props.put("auto.commit.interval.ms", "1000");
         props.put("session.timeout.ms", "30000");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer", "org.apache.kafka.common.serialization.LongDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
 
@@ -40,10 +48,17 @@ public class KafkaStream {
 
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(time);
-            for (ConsumerRecord<String, String> record : records)
-
-                // print the offset,key and value for the consumer records.
-                System.out.printf("offset = %d, key = %s, value = %s\n", record.offset(), record.key(), record.value());
+            for (ConsumerRecord<String, String> record : records) {
+                if (record.key().equalsIgnoreCase("Sale")) {
+                    // Print value
+                    System.out.printf("value = %s\n", record.value());
+                    String parts[] = record.value().split(" ");
+                    System.out.println("\nParts");
+                    for (String s : parts) {
+                        System.out.println(s);
+                    }
+                }
+            }
         }
     }
 
@@ -67,7 +82,7 @@ class ResultsProducer extends Thread {
         props.put("buffer.memory", 33554432);
         // This might change..
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.LongSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
     }
 }
