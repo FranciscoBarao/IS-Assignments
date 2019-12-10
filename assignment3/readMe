@@ -1,26 +1,27 @@
-    Go to usr/local/kafka
-    
-zookeper:
-    bin/zookeeper-server-start.sh config/zookeeper.properties
-    
 server:
-    bin/kafka-server-start.sh config/server.properties
-    
+    sudo /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties    
+
 topic:
-    bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test
-    
-topic 2.0:
-    bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
+    /opt/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic topicname
     
 Check topics:
-    bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe
+    /opt/kafka/bin/kafka-topics.sh --list --zookeeper localhost:2181
 
 consumer:
-    bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic resultstopic
+    /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topicname 
 
+check status
+    sudo systemctl status kafka.service
+    sudo systemctl status zookeeper.service
+
+Start zookeeper
+    sudo systemctl start zookeeper.service
 
 Maven execute:
     mvn exec:java -Dexec.mainClass=com.assign_3.filename
 
-stuff for pedro:
-- sudo systemctl status kafka.service
+
+Database queries
+    cd /opt/kafka
+    bin/connect-standalone.sh config/connect-standalone.properties config/project-jdbc-source-countries.properties
+    bin/connect-standalone.sh config/connect-standalone.properties config/project-jdbc-source-items.properties
