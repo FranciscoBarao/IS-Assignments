@@ -14,20 +14,21 @@ import org.apache.kafka.streams.kstream.KTable;
 public class Stream {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        String topicName = "args[0].toString()";
-        String outtopicname = "resultstopic";
+        String topicName = "pre-test";
+        String outtopicname = "test";
 
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "exercises-application");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Long().getClass());
             
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, Long> lines = builder.stream(topicName);
+        KStream<String, String> lines = builder.stream(topicName);
 
-        KTable<String, Long> outlines = lines.
-            groupByKey().count();
+        KTable<String, String> outlines = lines.mapValues(v->transform(v)).
+        groupByKey((GRouped.with(Serdes.String(),Serdes.Double()).reduce((v1,v2) ->
+        v1+v2));
         outlines.toStream().to(outtopicname);
         
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
@@ -35,5 +36,9 @@ public class Stream {
         
         System.out.println("Reading stream from topic " + topicName);
         
-        }
     }
+
+    public static String transform(String x){
+
+    }
+}
