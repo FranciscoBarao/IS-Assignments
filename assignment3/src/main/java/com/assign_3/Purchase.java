@@ -64,8 +64,10 @@ public class Purchase {
                 // System.out.println("\nHERE -> " + result.get("payload"));
                 // System.out.println("\nGIMME -> " + country.get("name"));
 
-                String s = (String) object.get("name");
-                i.add(s);
+                String s = (String) object.get("type");
+                if (s.equals("Item"))
+                    i.add((String) object.get("id"));
+
             }
             t1.setItems(i);
         }
@@ -118,8 +120,7 @@ class DBInfoProducer extends Thread {
         System.out.println("\nPopulatePurchases");
         Random random = new Random();
         // Get random Item
-        // String i = items.get(random.nextInt(items.size()));
-        String i = "item";
+        String i = items.get(random.nextInt(items.size()));
         // Get random Price
         int max = 20, min = 1;
         int p = random.nextInt(max - min + 1) + min;

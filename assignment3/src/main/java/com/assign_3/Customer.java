@@ -64,14 +64,18 @@ public class Customer {
                 // Convert Payload to Hashmap
                 HashMap<String, Object> object = (HashMap<String, Object>) result.get("payload");
 
-                // System.out.println("\nHERE -> " + result.get("payload"));
+                System.out.println("\nHERE -> " + result.get("payload"));
                 // System.out.println("\nGIMME -> " + country.get("name"));
 
+                System.out.println("\nName: " + object.get("name") + " | Id: " + object.get("id") + " | Type: "
+                        + object.get("type"));
                 String s = (String) object.get("type");
+                String s2 = object.get("id").toString();
+
                 if (s.equals("Country")) {
-                    c.add((String) object.get("id"));
+                    c.add(s2);
                 } else {
-                    i.add((String) object.get("id"));
+                    i.add(s2);
                 }
 
             }
