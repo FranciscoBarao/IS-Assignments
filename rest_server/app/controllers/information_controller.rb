@@ -18,7 +18,7 @@ class InformationController < ApplicationController
     @information = Information.new(information_params)
 
     if @information.save
-      render :show, status: :created, location: @information
+      render json: :ok
     else
       render json: @information.errors, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class InformationController < ApplicationController
   # PATCH/PUT /information/1.json
   def update
     if @information.update(information_params)
-      render :show, status: :ok, location: @information
+      render json: :ok
     else
       render json: @information.errors, status: :unprocessable_entity
     end
