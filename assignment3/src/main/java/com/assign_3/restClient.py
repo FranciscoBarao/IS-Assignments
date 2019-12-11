@@ -1,6 +1,6 @@
 
-
-
+import json
+import requests
 
 def main():
     print "Admin Console"
@@ -22,34 +22,34 @@ def main():
     print "16 --> Get Total profit last hour"
     print "17 --> Get Country with Highest Sale per item"
 
-    while(True)
+    while(True):
         try:
-            user_input = int(input("Enter a number: "))
-            if(user_input > 0 and user_input < 17) break
+            user_input = int(raw_input("Enter a number: "))
+            if(user_input > 0 and user_input < 17): break
             print("Try Again")
         except ValueError:
             print("Try Again")
     
 
-    url = "localhost:3000/"
+    url = "http://127.0.0.1:3000"
 
     if(user_input == 1):
         print "Input Country Name"
-        name_input = input("Name: ")
-        myResponse = requests.post(url+'/add/country', {'data_type':'country','name': name_input})
-        if(myResponse.ok) print "Country created with success"
+        name_input = raw_input("Name: ")
+        myResponse = requests.post(url+'/information', {'data_type':'country','name': name_input})
+        if(myResponse.ok): print "Country created with success"
     elif(user_input == 2):
         print "Input Item Name"
-        name_input = input("Name: ")
+        name_input = raw_input("Name: ")
         myResponse = requests.post(url+'/information', {'data_type':'item','name': name_input})
-        if(myResponse.ok) print "Item created with success"
+        if(myResponse.ok): print "Item created with success"
 
     elif(user_input == 3):
         myResponse = requests.get(url + '/list/country')
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
-                print key + " : " + jData
+                print key  
 
         else:
             myResponse.raise_for_status()
@@ -59,23 +59,23 @@ def main():
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
-                print key + " : " + jData
+                print key 
 
         else:
             myResponse.raise_for_status()
-            
+
     elif(user_input == 5):
         print "Input Item Name"
-        name_input = input("Name: ")
+        name_input = raw_input("Name: ")
         myResponse = requests.get(url + '/revenue', {'name': name_input})
 
     elif(user_input == 6):
         print "Input Item Name"
-        name_input = input("Name: ")
+        name_input = raw_input("Name: ")
         myResponse = requests.get(url + '/expense', {'name': name_input})
     elif(user_input == 7):
         print "Input Item Name"
-        name_input = input("Name: ")
+        name_input = raw_input("Name: ")
         myResponse = requests.get(url + '/profit', {'name': name_input})
     elif(user_input == 8):
         myResponse = requests.get(url + '/total/revenue')
@@ -84,11 +84,19 @@ def main():
     elif(user_input == 10):
             myResponse = requests.get(url + '/total/profit')
     elif(user_input == 11):
+        print " "
     elif(user_input == 12):
+        print " "
     elif(user_input == 13):
+        print " "
     elif(user_input == 14):
+        print " "
     elif(user_input == 15):
+        print " "
     elif(user_input == 16):
+        print " "
     elif(user_input == 17):
+        print " "
 
 
+main()
