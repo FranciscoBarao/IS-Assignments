@@ -28,8 +28,8 @@ public class KafkaStream {
     public static void main(String[] args) throws Exception {
 
         // Kafka consumer configuration settings
-        String topic = "Sales";
-        String topic2 = "Purchases";
+        String topicSales = "Sales";
+        String topicPurchases = "Purchases";
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         props.put("group.id", "test");
@@ -39,51 +39,38 @@ public class KafkaStream {
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
+        StreamsBuilder builder = new StreamsBuilder();
 
-        // Kafka Consumer subscribes list of topics here.
-        consumer.subscribe(Arrays.asList(topic));
+        // sales , id, 10 10 Spain
+        KStream<String, String> salesStream = builder.stream(topicSales);
+        KStream<String, String> purchasesStream = builder.stream(topicPurchases);
 
-        Duration time = Duration.ofSeconds(100);
+        KTable<String, Double> revenueTable = salesStream.mapValues(v -> transform(v))
+                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
 
-        while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(time);
-            for (ConsumerRecord<String, String> record : records) {
-                if (record.key().equalsIgnoreCase("Sale")) {
-                    // Print value
-                    System.out.printf("value = %s\n", record.value());
-                    String parts[] = record.value().split(" ");
-                    System.out.println("\nParts");
-                    for (String s : parts) {
-                        System.out.println(s);
-                    }
-                }
-            }
-        }
+        KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
+                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
+
+        KTable<String, Double> profitTable = revenueTable.join(expensesTable, (valueRevennue, valueExpenses) -> {
+            return (valueRevennue - valueExpenses);
+        });
+
+        // Total profit needs a groupBy(k,v -> null) para agrupar tudo e depois fazer
+        // tipo .count()
+
+        //
+
+        // Calcular medias -> aggregate - fazer soma e contar quantos ja ocorreram ...
+        // ("total, counter")
+        // agreggate passa id, value,"total,count"
 
     }
 
-}
+    private static Double transform(String s) {
+        String parts[] = s.split(" ");
+        Double i = Double.parseDouble(parts[0]);
+        Double j = Double.parseDouble(parts[1]);
 
-class ResultsProducer extends Thread {
-
-    public void run() {
-        System.out.println("Producer thread running");
-
-        // Assign topicName to string variable
-        String topic = "Sales";
-
-        // create instance for properties to access producer configs
-        Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
-        props.put("acks", "all");
-        props.put("retries", 0);
-        props.put("batch.size", 16384);
-        props.put("linger.ms", 1);
-        props.put("buffer.memory", 33554432);
-        // This might change..
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-
+        return i * j;
     }
 }

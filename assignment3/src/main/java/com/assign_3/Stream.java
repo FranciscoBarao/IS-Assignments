@@ -1,4 +1,4 @@
-package is.kafkastreamsblog;
+package com.assign_3;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -9,7 +9,6 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
-
 
 public class Stream {
 
@@ -31,6 +30,13 @@ public class Stream {
         v1+v2));
         outlines.toStream().to(outtopicname);
         
+
+/*
+        KTable<String, Long> outlines = lines.
+    groupByKey().
+    reduce((oldval, newval) -> oldval + newval);
+outlines.mapValues((k, v) -> k + " => " + v).toStream().to(outtopicname, Produced.with(Serdes.String(), Serdes.String()));
+*/
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
         
@@ -38,7 +44,7 @@ public class Stream {
         
     }
 
-    public static String transform(String x){
+    public static String transform(String x) {
 
     }
 }

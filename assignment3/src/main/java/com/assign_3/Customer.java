@@ -143,7 +143,7 @@ class DBInfoProducer extends Thread {
 
         Producer<String, String> producer = new KafkaProducer<>(props);
 
-        producer.send(new ProducerRecord<String, String>(topic, "Sale", i + " " + p + " " + u + " " + c));
+        producer.send(new ProducerRecord<String, String>(topic, i, p + " " + u + " " + c));
 
         System.out.println("Message sent successfully to topic " + topic);
         producer.close();
