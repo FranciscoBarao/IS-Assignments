@@ -4,7 +4,7 @@ class InformationController < ApplicationController
   # GET /information
   # GET /information.json
   def index
-    @information = Information.all
+    @information = Information.where(data_type: params[:type])
   end
 
   # GET /information/1
