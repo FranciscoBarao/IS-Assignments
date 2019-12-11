@@ -12,7 +12,7 @@ class ResultsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create result" do
     assert_difference('Result.count') do
-      post results_url, params: { result: { expense: @result.expense, information_id: @result.information_id, proft: @result.proft, revenue: @result.revenue, type: @result.type } }, as: :json
+      post results_url, params: { result: { data_type: @result.data_type, information_id: @result.information_id, value: @result.value } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +24,7 @@ class ResultsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update result" do
-    patch result_url(@result), params: { result: { expense: @result.expense, information_id: @result.information_id, proft: @result.proft, revenue: @result.revenue, type: @result.type } }, as: :json
+    patch result_url(@result), params: { result: { data_type: @result.data_type, information_id: @result.information_id, value: @result.value } }, as: :json
     assert_response 200
   end
 

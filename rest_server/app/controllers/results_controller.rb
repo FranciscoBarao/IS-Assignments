@@ -2,38 +2,40 @@ class ResultsController < ApplicationController
   before_action :set_result, only: [:show, :update, :destroy]
 
   # GET /results
+  # GET /results.json
   def index
     @results = Result.all
-
-    render json: @results
   end
 
   # GET /results/1
+  # GET /results/1.json
   def show
-    render json: @result
   end
 
   # POST /results
+  # POST /results.json
   def create
     @result = Result.new(result_params)
 
     if @result.save
-      render json: @result, status: :created, location: @result
+      render :show, status: :created, location: @result
     else
       render json: @result.errors, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /results/1
+  # PATCH/PUT /results/1.json
   def update
     if @result.update(result_params)
-      render json: @result
+      render :show, status: :ok, location: @result
     else
       render json: @result.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /results/1
+  # DELETE /results/1.json
   def destroy
     @result.destroy
   end
@@ -44,8 +46,8 @@ class ResultsController < ApplicationController
       @result = Result.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
+    # Never trust parameters from the scary internet, only allow the white list through.
     def result_params
-      params.require(:result).permit(:type, :revenue, :expense, :proft, :information_id)
+      params.require(:result).permit(:data_type, :value, :information_id)
     end
 end
