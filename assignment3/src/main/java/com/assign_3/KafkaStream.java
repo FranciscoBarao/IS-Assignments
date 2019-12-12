@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Grouped;
@@ -27,15 +28,15 @@ public class KafkaStream {
         StreamsBuilder builder = new StreamsBuilder();
 
         KStream<String, String> salesStream = builder.stream(topicSales);
-        salesStream.foreach((k, v) -> {
-            System.out.println("K: " + k + " v: " + v);
-        });
-
         // id , 10 10 Spain
         KStream<String, String> purchasesStream = builder.stream(topicPurchases);
 
         KTable<String, Double> revenueTable = salesStream.mapValues(v -> transform(v))
-                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
+                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> {
+                    return v1 + v2;
+                });
+        revenueTable.toStream().map((k, v) -> new KeyValue<>(k, "" + v)).to(outputTopic,
+                Produced.with(Serdes.String(), Serdes.String()));
 
         KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
@@ -48,8 +49,6 @@ public class KafkaStream {
         KTable<String, Double> totalRevenue = s.reduce((v1, v2) -> {
             return (v1 + v2);
         });
-
-        revenueTable.toStream().to(outputTopic, Produced.with(Serdes.String(), Serdes.Double()));
 
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
