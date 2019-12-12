@@ -74,11 +74,10 @@ public class Purchase {
                 System.out.println("\nName: " + object.get("name") + " | Id: " + object.get("id") + " | Type: "
                         + object.get("data_type"));
 
-                String s = (String) object.get("type");
-                String s2 = object.get("id").toString();
+                String s = object.get("data_type").toString();
 
-                if (s.equals("Item"))
-                    i.add(s2);
+                if (s.equals("item"))
+                    i.add(object.get("id").toString());
 
             }
             t1.setArray(i);

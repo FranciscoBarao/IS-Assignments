@@ -63,8 +63,7 @@ public class Customer {
 
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(time);
-            c.clear();
-            i.clear();
+
             for (ConsumerRecord<String, String> record : records) {
                 // String to Json to Hashmap
                 HashMap<String, Object> result = new ObjectMapper().readValue(record.value(), HashMap.class);
@@ -76,13 +75,13 @@ public class Customer {
 
                 System.out.println("\nName: " + object.get("name") + " | Id: " + object.get("id") + " | Type: "
                         + object.get("data_type"));
-                String s = (String) object.get("data_type");
-                String s2 = object.get("id").toString();
 
-                if (s.equals("Country"))
-                    c.add(s2);
-                else
-                    i.add(s2);
+                String s = object.get("data_type").toString();
+
+                if (s.equals("country")) {
+                    c.add(object.get("name").toString());
+                } else
+                    i.add(object.get("id").toString());
 
             }
             t1.setArrays(i, c);
@@ -141,6 +140,7 @@ class DBInfoProducer extends Thread {
         // Get random Country
         System.out.println("\nCountries size: " + countries.size());
         String c = countries.get(random.nextInt(countries.size()));
+        System.out.println(c);
         // Get random Price
         int max = 20, min = 1;
         int p = random.nextInt(max - min + 1) + min;
