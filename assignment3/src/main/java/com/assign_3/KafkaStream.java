@@ -14,6 +14,7 @@ import org.apache.kafka.streams.kstream.Initializer;
 import org.apache.kafka.streams.kstream.KGroupedStream;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.SessionWindowedKStream;
 import org.apache.kafka.streams.kstream.SessionWindows;
@@ -42,7 +43,8 @@ public class KafkaStream {
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> {
                     return v1 + v2;
                 });
-        revenueTable.toStream().map((k, v) -> new KeyValue<>(k, "" + v)).to(outputTopic,
+
+        revenueTable.toStream().map((k, v) -> new KeyValue<String, String>("", tDatabase("revenue", k, v))).to("itemTopic",
                 Produced.with(Serdes.String(), Serdes.String()));
 
         KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
@@ -81,6 +83,23 @@ public class KafkaStream {
             System.out.println("Total Window something: " + k + " " + v);
         });
 
+        // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
+        // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
+
+        /*
+         * KTable<String, Double> medianExpenseItem = purchasesStream.mapValues(v ->
+         * transform(v)) .groupByKey(Grouped.with(Serdes.String(),
+         * Serdes.Double())).reduce((v1, v2) -> v1 + v2);
+         * 
+         * KTable<String, Double> medianRevenueItem = revenueTable.toStream()
+         * 
+         * KTable<String, Double> medianRevenue = revenueGroupStream.aggregate(() -> 0L,
+         * (value, total, count) -> total + value, Materialized.as("count")
+         * .withValueSerde(Serdes.Double()));
+         */
+
+        // ("total, counter")
+        // agreggate passa id, value,"total,count"
 
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
@@ -131,5 +150,9 @@ public class KafkaStream {
             value1 = v1;
             value2 = v2;
         }
+
+    public String tDatabase(String type, String id, Double value) {
+        return "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"data_type\"},{\"type\":\"double\",\"optional\":false,\"field\":\"value\"},{\"type\":\"int\",\"optional\":false,\"field\":\"item_id\"}],\"optional\":false,\"name\":\"total data\"},\"payload\":{\"data_type\":\""
+                + type + "\", \"value\":\"" + value + "\",\"item_id\":\"" + id + "\"}}";
     }
 }

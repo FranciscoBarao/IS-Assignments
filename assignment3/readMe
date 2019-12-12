@@ -24,13 +24,23 @@ Maven execute:
 Database queries
     cd /opt/kafka
     bin/connect-standalone.sh config/connect-standalone.properties config/project-jdbc-source-countries.properties
+    bin/connect-standalone.sh config/connect-standalone.properties config/project-jdbc-source-countries.properties config/project-jdbc-sink.properties 
 
 Delete topic
 ./kafka-topics.sh --zookeeper localhost:2181 --delete --topic DBInfo
 
-Create Table
-create table data(
-id INT NOT NULL AUTO_INCREMENT,
-type VARCHAR(40) NOT NULL,
-name VARCHAR(40) NOT NULL,
-PRIMARY KEY ( id ));
+
+Project sink properties
+    name=jdbc-sink
+    tasks.max=1
+    connector.class=io.confluent.connect.jdbc.JdbcSinkConnector
+    connection.url=jdbc:mysql://localhost:3306/project3
+    connection.user=user
+    connection.password=pass
+    dialect.name=MySqlDatabaseDialect
+    topics=itemTopic
+    auto.create=true
+    key.converter=org.apache.kafka.connect.storage.StringConverter
+    value.converter=org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable=true
+    value.converter.schemas.enable=true
