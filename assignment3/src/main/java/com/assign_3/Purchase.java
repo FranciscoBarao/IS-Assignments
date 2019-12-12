@@ -18,23 +18,14 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public class Purchase {
-    /*
-     * Thread for producer Talk to prof about parsing info from DB and to Send to
-     * other kafka streams
-     * 
-     * 
-     * 
-     * transform -> splits shit mapValues(v->transform(v))
-     * groupByKey((GRouped.with(Serdes.String(),Serdes.Double()).reduce((v1,v2) ->
-     * v1+v2)
-     */
+
     public static void main(String[] args) throws Exception {
         // Kafka consumer configuration settings
         String topicName = "DBInfo";
         Properties props = new Properties();
 
         props.put("bootstrap.servers", "localhost:9092");
-        props.put("group.id", "test");
+        props.put("group.id", "purchase");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
         props.put("session.timeout.ms", "30000");

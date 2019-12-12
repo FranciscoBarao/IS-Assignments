@@ -34,7 +34,7 @@ public class Customer {
         Properties props = new Properties();
 
         props.put("bootstrap.servers", "localhost:9092");
-        props.put("group.id", "test");
+        props.put("group.id", "customer");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
         props.put("session.timeout.ms", "30000");
@@ -63,7 +63,8 @@ public class Customer {
 
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(time);
-
+            i.clear();
+            c.clear();
             for (ConsumerRecord<String, String> record : records) {
                 // String to Json to Hashmap
                 HashMap<String, Object> result = new ObjectMapper().readValue(record.value(), HashMap.class);
