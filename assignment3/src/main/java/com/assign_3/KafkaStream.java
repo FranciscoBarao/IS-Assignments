@@ -11,6 +11,7 @@ import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KGroupedStream;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 
 public class KafkaStream {
@@ -35,7 +36,8 @@ public class KafkaStream {
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> {
                     return v1 + v2;
                 });
-        revenueTable.toStream().map((k, v) -> new KeyValue<>(k, "" + v)).to(outputTopic,
+
+        revenueTable.toStream().map((k, v) -> new KeyValue<>("", test("revenue", k, v))).to("itemTopic",
                 Produced.with(Serdes.String(), Serdes.String()));
 
         KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
@@ -45,10 +47,25 @@ public class KafkaStream {
             return (valueRevennue - valueExpenses);
         });
 
-        KGroupedStream<String, Double> s = revenueTable.toStream().groupBy((v1, v2) -> null);
-        KTable<String, Double> totalRevenue = s.reduce((v1, v2) -> {
+        KGroupedStream<String, Double> revenueGroupStream = revenueTable.toStream().groupBy((v1, v2) -> null);
+        KTable<String, Double> totalRevenue = revenueGroupStream.reduce((v1, v2) -> {
             return (v1 + v2);
         });
+
+        /*
+         * KTable<String, Double> medianExpenseItem = purchasesStream.mapValues(v ->
+         * transform(v)) .groupByKey(Grouped.with(Serdes.String(),
+         * Serdes.Double())).reduce((v1, v2) -> v1 + v2);
+         * 
+         * KTable<String, Double> medianRevenueItem = revenueTable.toStream()
+         * 
+         * KTable<String, Double> medianRevenue = revenueGroupStream.aggregate(() -> 0L,
+         * (value, total, count) -> total + value, Materialized.as("count")
+         * .withValueSerde(Serdes.Double()));
+         */
+
+        // ("total, counter")
+        // agreggate passa id, value,"total,count"
 
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
@@ -80,5 +97,10 @@ public class KafkaStream {
         Double j = Double.parseDouble(parts[1]);
 
         return i * j;
+    }
+
+    private static String test(String type, String id, Double value) {
+        return "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"data_type\"},{\"type\":\"double\",\"optional\":false,\"field\":\"value\"},{\"type\":\"int\",\"optional\":false,\"field\":\"item_id\"}],\"optional\":false,\"name\":\"total data\"},\"payload\":{\"type\":\""
+                + type + "\", \"value\":\"" + value + "\",\"item_id\":\"" + id + "\"}}";
     }
 }
