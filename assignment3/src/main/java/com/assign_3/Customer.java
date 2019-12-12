@@ -42,6 +42,13 @@ public class Customer {
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(props);
 
+        Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
+            @Override
+            public void run() {
+                consumer.close();
+            }
+        });
+
         // Kafka Consumer subscribes list of topics here.
         consumer.subscribe(Arrays.asList(topicName));
         // print the topic name
