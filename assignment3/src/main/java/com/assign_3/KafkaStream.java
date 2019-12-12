@@ -47,10 +47,12 @@ public class KafkaStream {
             return (valueRevennue - valueExpenses);
         });
 
-        KGroupedStream<String, Double> revenueGroupStream = revenueTable.toStream().groupBy((v1, v2) -> null);
-        KTable<String, Double> totalRevenue = revenueGroupStream.reduce((v1, v2) -> {
+        KGroupedStream<String, Double> s = revenueTable.toStream().groupBy((k, v) -> "");
+        KTable<String, Double> totalRevenue = s.reduce((v1, v2) -> {
             return (v1 + v2);
         });
+        // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
+        // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
         /*
          * KTable<String, Double> medianExpenseItem = purchasesStream.mapValues(v ->
