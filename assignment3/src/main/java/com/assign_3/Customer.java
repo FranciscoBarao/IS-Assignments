@@ -68,15 +68,14 @@ public class Customer {
                 // System.out.println("\nGIMME -> " + country.get("name"));
 
                 System.out.println("\nName: " + object.get("name") + " | Id: " + object.get("id") + " | Type: "
-                        + object.get("type"));
-                String s = (String) object.get("type");
+                        + object.get("data_type"));
+                String s = (String) object.get("data_type");
                 String s2 = object.get("id").toString();
 
-                if (s.equals("Country")) {
+                if (s.equals("Country"))
                     c.add(s2);
-                } else {
+                else
                     i.add(s2);
-                }
 
             }
             t1.setArrays(i, c);
@@ -122,7 +121,7 @@ class DBInfoProducer extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (countries.size() > 0)
+            if (countries.size() > 0 && items.size() > 0)
                 populateSales(props, topic);
         }
     }

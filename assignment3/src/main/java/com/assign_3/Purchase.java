@@ -48,7 +48,7 @@ public class Purchase {
         System.out.println("Subscribed to topic " + topicName);
         Duration time = Duration.ofSeconds(100);
 
-        DBInfoProducer t1 = new DBInfoProducer();
+        DBInfoProducer2 t1 = new DBInfoProducer2();
         t1.start();
 
         CopyOnWriteArrayList<String> i = new CopyOnWriteArrayList<>();
@@ -64,25 +64,30 @@ public class Purchase {
                 // System.out.println("\nHERE -> " + result.get("payload"));
                 // System.out.println("\nGIMME -> " + country.get("name"));
 
+                System.out.println("\nName: " + object.get("name") + " | Id: " + object.get("id") + " | Type: "
+                        + object.get("data_type"));
+
                 String s = (String) object.get("type");
+                String s2 = object.get("id").toString();
+
                 if (s.equals("Item"))
-                    i.add((String) object.get("id"));
+                    i.add(s2);
 
             }
-            t1.setItems(i);
+            t1.setArray(i);
         }
     }
 
 }
 
-class DBInfoProducer extends Thread {
+class DBInfoProducer2 extends Thread {
     private CopyOnWriteArrayList<String> items;
 
-    DBInfoProducer() {
+    DBInfoProducer2() {
         this.items = new CopyOnWriteArrayList<>();
     }
 
-    public void setItems(CopyOnWriteArrayList<String> items) {
+    public void setArray(CopyOnWriteArrayList<String> items) {
         System.out.println("\nSetItems");
         this.items = items;
     }

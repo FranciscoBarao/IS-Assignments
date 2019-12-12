@@ -13,6 +13,8 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Grouped;
+import org.apache.kafka.streams.kstream.KGroupedStream;
+import org.apache.kafka.streams.kstream.KGroupedTable;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.KeyValueMapper;
@@ -41,7 +43,7 @@ public class KafkaStream {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        // sales , id, 10 10 Spain
+        // id , 10 10 Spain
         KStream<String, String> salesStream = builder.stream(topicSales);
         KStream<String, String> purchasesStream = builder.stream(topicPurchases);
 
@@ -55,10 +57,21 @@ public class KafkaStream {
             return (valueRevennue - valueExpenses);
         });
 
-        // Total profit needs a groupBy(k,v -> null) para agrupar tudo e depois fazer
-        // tipo .count()
+        KGroupedStream<String, Double> s = revenueTable.toStream().groupBy((v1, v2) -> null);
+        KTable<String, Double> totalRevenue = s.reduce((v1, v2) -> {
+            return (v1 + v2);
+        });
+        System.out.println("\n Total revenue: " + totalRevenue);
 
-        //
+        // Total profit needs a groupBy(k,v -> null)
+        /*
+         * // second step: compute average for each 2-tuple final KTable<String,Double>
+         * average = countAndSum.mapValues( new ValueMapper<Tuple2<Long, Long>,
+         * Double>() {
+         * 
+         * @Override public Double apply(Tuple2<Long, Long> value) { return value.value2
+         * / (double) value.value1; } });
+         */
 
         // Calcular medias -> aggregate - fazer soma e contar quantos ja ocorreram ...
         // ("total, counter")
