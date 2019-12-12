@@ -22,13 +22,7 @@ public class KafkaStream {
         // Kafka consumer configuration settings
         String topicSales = "Sales";
         String topicPurchases = "Purchases";
-        String outputTopic = "resultsTopic";
-
-        java.util.Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        String outputTopic = "output";
 
         StreamsBuilder builder = new StreamsBuilder();
 
@@ -54,7 +48,14 @@ public class KafkaStream {
         KTable<String, Double> totalRevenue = s.reduce((v1, v2) -> {
             return (v1 + v2);
         });
-        revenueTable.mapValues(v -> v).toStream().to(outputTopic, Produced.with(Serdes.String(), Serdes.Double()));
+
+        revenueTable.toStream().to(outputTopic, Produced.with(Serdes.String(), Serdes.Double()));
+
+        java.util.Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
