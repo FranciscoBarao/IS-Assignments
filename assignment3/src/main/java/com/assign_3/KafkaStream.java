@@ -23,13 +23,7 @@ public class KafkaStream {
         // Kafka consumer configuration settings
         String topicSales = "Sales";
         String topicPurchases = "Purchases";
-        String outputTopic = "Results";
-
-        java.util.Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        String outputTopic = "output";
 
         StreamsBuilder builder = new StreamsBuilder();
 
@@ -38,7 +32,11 @@ public class KafkaStream {
         KStream<String, String> purchasesStream = builder.stream(topicPurchases);
 
         KTable<String, Double> revenueTable = salesStream.mapValues(v -> transform(v))
-                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> {return v1 + v2;});
+                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> {
+                    return v1 + v2;
+                });
+        revenueTable.toStream().map((k, v) -> new KeyValue<>(k, "" + v)).to(outputTopic,
+                Produced.with(Serdes.String(), Serdes.String()));
 
         KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
@@ -51,7 +49,16 @@ public class KafkaStream {
         KTable<String, Double> totalRevenue = s.reduce((v1, v2) -> {
             return (v1 + v2);
         });
+<<<<<<< HEAD
         //totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" + v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
+=======
+
+        java.util.Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+>>>>>>> f111fc7d7c9ef2040316d5d5f55452fb2562872a
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
