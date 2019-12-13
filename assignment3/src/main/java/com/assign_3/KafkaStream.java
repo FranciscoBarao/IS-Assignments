@@ -11,9 +11,11 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Aggregator;
 import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.Initializer;
+import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KGroupedStream;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.SessionWindowedKStream;
 import org.apache.kafka.streams.kstream.SessionWindows;
@@ -35,10 +37,11 @@ public class KafkaStream {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<String, String> salesStream = builder.stream(topicSales);
         // id , 10 10 Spain
+        KStream<String, String> salesStream = builder.stream(topicSales);
         KStream<String, String> purchasesStream = builder.stream(topicPurchases);
 
+        // Table with each item grouped by key
         KTable<String, Double> revenueTable = salesStream.mapValues(v -> transform(v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> {
                     return v1 + v2;
@@ -54,15 +57,28 @@ public class KafkaStream {
             return (valueRevennue - valueExpenses);
         });
 
+        // Total revenue/profit/expense
         KGroupedStream<String, Double> revenue_group = revenueTable.toStream().groupBy((k, v) -> "");
         KTable<String, Double> totalRevenue = revenue_group.reduce((v1, v2) -> {
             return (v1 + v2);
+        });
+        totalRevenue.toStream().foreach((k, v) -> {
+            System.out.println("Total revenue: " + k + " " + v);
         });
 
         KGroupedStream<String, Double> expense_group = expensesTable.toStream().groupBy((k, v) -> "");
         KTable<String, Double> totalExpense = expense_group.reduce((v1, v2) -> {
             return (v1 + v2);
         });
+        totalExpense.toStream().foreach((k, v) -> {
+            System.out.println("Total expense: " + k + " " + v);
+        });
+
+        KGroupedStream<String, Double> profit_group = profitTable.toStream().groupBy((k, v) -> "");
+        KTable<String, Double> totalProfit = profit_group.reduce((v1, v2) -> {
+            return (v1 + v2);
+        });
+
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
@@ -78,28 +94,12 @@ public class KafkaStream {
         KTable<Windowed<String>, Double> totalWindowExp = expense_window.reduce((v1, v2) -> {
             return (v1 + v2);
         });
-        totalRevenue.toStream().foreach((k, v) -> {
-            System.out.println("Total something: " + k + " " + v);
-        });
-
         totalWindowRev.toStream().foreach((k, v) -> {
-            System.out.println("Total Window something: " + k + " " + v);
+            // System.out.println("Total Window something: " + k + " " + v);
         });
 
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
-
-        /*
-         * KTable<String, Double> medianExpenseItem = purchasesStream.mapValues(v ->
-         * transform(v)) .groupByKey(Grouped.with(Serdes.String(),
-         * Serdes.Double())).reduce((v1, v2) -> v1 + v2);
-         * 
-         * KTable<String, Double> medianRevenueItem = revenueTable.toStream()
-         * 
-         * KTable<String, Double> medianRevenue = revenueGroupStream.aggregate(() -> 0L,
-         * (value, total, count) -> total + value, Materialized.as("count")
-         * .withValueSerde(Serdes.Double()));
-         */
 
         // ("total, counter")
         // agreggate passa id, value,"total,count"
@@ -113,22 +113,27 @@ public class KafkaStream {
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.start();
         // Total profit needs a groupBy(k,v -> null)
-        /*
-         * final KTable<String,Tuple2<Long,Long>> countAndSum = revenue_group
-         * .aggregate( new Initializer<Tuple2<Long, Long>>() {
-         * 
-         * @Override public Tuple2<Long, Long> apply() { return new Tuple2<>(0L, 0L); }
-         * }, new Aggregator<String, String, Tuple2<Long, Long>>() {
-         * 
-         * @Override public Tuple2<Long, Long> apply(final String key, final Long value,
-         * final Tuple2<Long, Long> aggregate) { ++aggregate.value1; aggregate.value2 +=
-         * value; return aggregate; } } );
-         */
 
         // Calcular medias -> aggregate - fazer soma e contar quantos ja ocorreram ...
         // ("total, counter")
         // agreggate passa id, value,"total,count"
 
+        KTable<String, String> medianPerItem = purchasesStream.mapValues(v -> transform(v))
+                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double()))
+                .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
+                    String parts[] = aggVal.split(",");
+                    Double val = Double.parseDouble(parts[0]) + newVal;
+                    int count = Integer.parseInt(parts[1]) + 1;
+                    return (val + "," + count);
+                });
+
+        KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
+                .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
+                    String parts[] = aggVal.split(",");
+                    Double val = Double.parseDouble(parts[0]) + newVal;
+                    int count = Integer.parseInt(parts[1]) + 1;
+                    return (val + "," + count);
+                });
     }
 
     private static Double transform(String s) {
@@ -140,7 +145,7 @@ public class KafkaStream {
     }
 
     public static String tDatabase(String type, String id, Double value) {
-        return "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"data_type\"},{\"type\":\"double\",\"optional\":false,\"field\":\"value\"},{\"type\":\"int\",\"optional\":false,\"field\":\"item_id\"}],\"optional\":false,\"name\":\"total data\"},\"payload\":{\"data_type\":\""
+        return "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"data_type\"},{\"type\":\"double\",\"optional\":false,\"field\":\"value\"},{\"type\":\"integer\",\"optional\":false,\"field\":\"item_id\"}],\"optional\":false,\"name\":\"total data\"},\"payload\":{\"data_type\":\""
                 + type + "\", \"value\":\"" + value + "\",\"item_id\":\"" + id + "\"}}";
     }
 
