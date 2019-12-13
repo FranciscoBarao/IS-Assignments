@@ -5,12 +5,14 @@ import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KGroupedStream;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.TimeWindowedKStream;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.kstream.Windowed;
@@ -130,9 +132,7 @@ public class KafkaStream {
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
-        // revenueTable.toStream().map((k, v) -> new KeyValue<String, String>("",
-        // tDatabase("revenue", k, v)))
-        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
+        revenueTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("revenue", k, v))).to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Properties for streams
         java.util.Properties props = new Properties();
