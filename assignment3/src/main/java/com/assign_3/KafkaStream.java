@@ -101,14 +101,19 @@ public class KafkaStream {
                     return (val + "," + count);
                 });
 
-        // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
-        // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
+        KTable<String, Double> highestProfit = profitTable.toStream().groupBy((k, v) -> "").reduce((v1, v2) -> {
+            return (Math.max(v1, v2));
+        });
 
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
-         //revenueTable.toStream().map((k, v) -> new KeyValue<String, String>("", tDatabase("revenue", k, v)))
-        //        .to("results", Produced.with(Serdes.String(), Serdes.String()));
+        // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
+        // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
+
+        // revenueTable.toStream().map((k, v) -> new KeyValue<String, String>("",
+        // tDatabase("revenue", k, v)))
+        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Properties for streams
         java.util.Properties props = new Properties();
