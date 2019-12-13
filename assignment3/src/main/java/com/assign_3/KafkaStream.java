@@ -2,6 +2,7 @@ package com.assign_3;
 
 import java.time.Duration;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -17,10 +18,12 @@ import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.SessionWindowedKStream;
 import org.apache.kafka.streams.kstream.SessionWindows;
+import org.apache.kafka.streams.kstream.TimeWindowedKStream;
+import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.kstream.Windowed;
 
 public class KafkaStream {
-    static final long TIME_GAP = Duration.ofMinutes(2).toMillis();
+    static final Duration TIME_GAP = Duration.ofMinutes(5);
 
     /*
      * Thread for producer Talk to prof about parsing info from DB and to Send to
@@ -44,14 +47,26 @@ public class KafkaStream {
                     return v1 + v2;
                 });
 
-        revenueTable.toStream().map((k, v) -> new KeyValue<String, String>("", tDatabase("revenue", k, v)))
-                .to("itemTopic", Produced.with(Serdes.String(), Serdes.String()));
+        revenueTable.toStream().foreach((k, v) -> {
+            System.out.println("revenue something: " + k + " " + v);
+        });
+
+        //revenueTable.toStream().map((k, v) -> new KeyValue<String, String>("", tDatabase("revenue", k, v)))
+        //        .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
 
+        expensesTable.toStream().foreach((k, v) -> {
+            System.out.println("expenses something: " + k + " " + v);
+        });
+
         KTable<String, Double> profitTable = revenueTable.join(expensesTable, (valueRevennue, valueExpenses) -> {
             return (valueRevennue - valueExpenses);
+        });
+
+        profitTable.toStream().foreach((k, v) -> {
+            System.out.println("profit something: " + k + " " + v);
         });
 
         KGroupedStream<String, Double> revenue_group = revenueTable.toStream().groupBy((k, v) -> "");
@@ -67,24 +82,25 @@ public class KafkaStream {
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
         // Grouped by time
-        SessionWindowedKStream<String, Double> revenue_window = revenueTable.toStream().groupBy((k, v) -> "")
-                .windowedBy(SessionWindows.with(TIME_GAP));
+        TimeWindowedKStream<String, Double> revenue_window = revenueTable.toStream().groupBy((k, v) -> "")
+                .windowedBy(TimeWindows.of(TIME_GAP));
         KTable<Windowed<String>, Double> totalWindowRev = revenue_window.reduce((v1, v2) -> {
             return (v1 + v2);
         });
 
-        SessionWindowedKStream<String, Double> expense_window = expensesTable.toStream().groupBy((k, v) -> "")
-                .windowedBy(SessionWindows.with(TIME_GAP));
+        TimeWindowedKStream<String, Double> expense_window = expensesTable.toStream().groupBy((k, v) -> "")
+                .windowedBy(TimeWindows.of(TIME_GAP));
         KTable<Windowed<String>, Double> totalWindowExp = expense_window.reduce((v1, v2) -> {
             return (v1 + v2);
         });
-        totalRevenue.toStream().foreach((k, v) -> {
+
+        /* totalRevenue.toStream().foreach((k, v) -> {
             System.out.println("Total something: " + k + " " + v);
         });
 
         totalWindowRev.toStream().foreach((k, v) -> {
             System.out.println("Total Window something: " + k + " " + v);
-        });
+        }); */
 
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
