@@ -101,9 +101,16 @@ public class KafkaStream {
                     return (val + "," + count);
                 });
 
-        KTable<String, Double> highestProfit = profitTable.toStream().groupBy((k, v) -> "").reduce((v1, v2) -> {
-            return (Math.max(v1, v2));
-        });
+        KTable<String, String> highestProfit = profitTable.toStream().mapValues((k, v) -> k + "," + v)
+                .groupBy((k, v) -> "").reduce((v1, v2) -> {
+                    String v1parts[] = v1.split(",");
+                    String v2parts[] = v2.split(",");
+
+                    if (Double.parseDouble(v1parts[1]) >= Double.parseDouble(v2parts[1]))
+                        return v1;
+                    else
+                        return v2;
+                });
 
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
