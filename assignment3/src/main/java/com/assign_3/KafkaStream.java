@@ -112,6 +112,18 @@ public class KafkaStream {
                         return v2;
                 });
 
+        KTable<String, String> countryHighestSalesSplitted = salesStream.groupBy((k, v) -> {
+            String parts[] = v.split(" ");
+            return (k + "," + parts[2]);
+        }).reduce((v1, v2) -> {
+            String v1parts[] = v1.split(" ");
+            String v2parts[] = v2.split(" ");
+
+            Double x = Double.parseDouble(v1parts[0]) * Double.parseDouble(v1parts[1])
+                    + Double.parseDouble(v2parts[0]) * Double.parseDouble(v2parts[1]);
+            return ("" + x);
+        });
+
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
