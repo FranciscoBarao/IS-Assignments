@@ -120,13 +120,7 @@ public class KafkaStream {
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
-<<<<<<< HEAD
         revenueTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("revenue", k, v))).to("results", Produced.with(Serdes.String(), Serdes.String()));
-=======
-        // revenueTable.toStream().map((k, v) -> new KeyValue<String, String>("",
-        // tDatabase("revenue", k, v)))
-        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
->>>>>>> afaac05803be512d757d5ebf97353f5878a06d56
 
         // Properties for streams
         java.util.Properties props = new Properties();
