@@ -1,3 +1,3 @@
 class Result < ApplicationRecord
-  belongs_to :information
+  self.table = 'results'
 end

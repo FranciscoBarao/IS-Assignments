@@ -19,13 +19,10 @@ ActiveRecord::Schema.define(version: 2019_12_11_005218) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "data_type"
-    t.float "value"
-    t.bigint "information_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["information_id"], name: "index_results_on_information_id"
+  create_table "results", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.float "information_id", limit: 53, null: false
+    t.string "data_type", limit: 256, null: false
+    t.float "value", limit: 53, null: false
   end
 
 end
