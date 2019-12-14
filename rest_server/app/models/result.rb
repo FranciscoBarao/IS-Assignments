@@ -1,3 +1,3 @@
 class Result < ApplicationRecord
-  self.table = 'results'
+  self.table_name = 'results'
 end

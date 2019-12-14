@@ -1,51 +1,84 @@
 class ResultsController < ApplicationController
-  before_action :set_result, only: [:show, :update, :destroy]
 
-  # GET /results
-  # GET /results.json
-  def index
-    @results = Result.all
-  end
-
-  # GET /results/1
-  # GET /results/1.json
-  def show
-  end
-
-  # POST /results
-  # POST /results.json
-  def create
-    @result = Result.new(result_params)
-
-    if @result.save
-      render :show, status: :created, location: @result
-    else
-      render json: @result.errors, status: :unprocessable_entity
+  def revenue
+    # @results = Result.where(data_type: 'revenue').order(:id).uniq(&:information_id)
+    name = 'revenue'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
     end
   end
 
-  # PATCH/PUT /results/1
-  # PATCH/PUT /results/1.json
-  def update
-    if @result.update(result_params)
-      render :show, status: :ok, location: @result
-    else
-      render json: @result.errors, status: :unprocessable_entity
+  def expense
+    name = 'expense'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
     end
   end
 
-  # DELETE /results/1
-  # DELETE /results/1.json
-  def destroy
-    @result.destroy
+  def profit
+    name = 'profit'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
+  end
+
+  def total_revenue
+    @result = Result.where(data_type: 'totalRevenue').last
+  end
+
+  def total_expense
+    @result = Result.where(data_type: 'totalExpense').last
+  end
+
+  def total_profit
+    @result = Result.where(data_type: 'totalProfit').last
+  end
+
+  def mean_per_item
+    name = 'medianPerItem'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
+  end
+
+  def mean_per_purchase
+    @result = Result.where(data_type: 'totalMedian').last
+  end
+
+  def total_revenue_window
+    @result = Result.where(data_type: 'totalWindowRevenue').last
+  end
+
+  def total_expense_window
+    @result = Result.where(data_type: 'totalWindowExpense').last
+  end
+
+  def total_profit_window
+    @result = Result.where(data_type: 'totalWindowProfit').last
+  end
+
+  def highest_profit
+    @result = Result.where(data_type: 'highestProfit').last
+  end
+
+  def highest_sales
+    name = 'highestSales'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_result
-      @result = Result.find(params[:id])
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def result_params
       params.permit(:data_type, :value, :information_id)
