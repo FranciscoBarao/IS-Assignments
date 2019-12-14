@@ -141,20 +141,21 @@ public class KafkaStream {
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Total Purchases Mean
-        /*
-         * KTable<String, String> medianTotal = purchasesStream.mapValues(v ->
-         * transform(v)).groupBy((k, v) -> "") .aggregate(() -> "0,0", (id, newVal,
-         * aggVal) -> { System.out.println("Banana"); String parts[] =
-         * aggVal.split(","); Double val = Double.parseDouble(parts[0]) + newVal; int
-         * count = Integer.parseInt(parts[1]) + 1; return (val + "," + count); });
-         * 
-         * medianTotal.toStream().foreach((k, v) -> {
-         * System.out.println("Total Median: " + k + " : " + splitMedian(v)); });
-         * //medianTotal.toStream().map((k, v) -> new KeyValue<>("",
-         * tDatabase("totalMedian", "0", splitMedian(v)))) // .to("results",
-         * Produced.with(Serdes.String(), Serdes.String()));
-         * 
-         */
+
+        KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
+                .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
+                    System.out.println("Banana");
+                    String parts[] = aggVal.split(",");
+                    Double val = Double.parseDouble(parts[0]) + newVal;
+                    int count = Integer.parseInt(parts[1]) + 1;
+                    return (val + "," + count);
+                });
+
+        medianTotal.toStream().foreach((k, v) -> {
+            System.out.println("Total Median: " + k + " : " + splitMedian(v));
+        });
+        medianTotal.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalMedian", "0", splitMedian(v))))
+                .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Highest Profit Item
 

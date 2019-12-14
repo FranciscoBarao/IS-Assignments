@@ -94,21 +94,21 @@ def main():
         myResponse = requests.get(url + '/results/total_revenue')
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
-            for key in jData:
+            for k in jData:
                 print key 
         else:
             myResponse.raise_for_status()
     elif(user_input == 9):
-            myResponse = requests.get(url + '/results/total_expense')
-            if(myResponse.ok):
+        myResponse = requests.get(url + '/results/total_expense')
+        if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
                 print key 
         else:
             myResponse.raise_for_status()
     elif(user_input == 10):
-            myResponse = requests.get(url + '/results/total_profit')
-            if(myResponse.ok):
+        myResponse = requests.get(url + '/results/total_profit')
+        if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
                 print key 
