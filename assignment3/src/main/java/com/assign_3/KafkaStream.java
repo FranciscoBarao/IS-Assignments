@@ -205,7 +205,39 @@ public class KafkaStream {
     }
 
     public static String tDatabase(String type, String id, Double value) {
-        return "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"data_type\"},{\"type\":\"double\",\"optional\":false,\"field\":\"value\"},{\"type\":\"double\",\"optional\":false,\"field\":\"item_id\"}],\"optional\":false,\"name\":\"total data\"},\"payload\":{\"data_type\":\""
-                + type + "\", \"value\":" + value + ",\"information_id\":" + id + "}}";
+        // {"schema":{"type":"struct","fields":[{"type":"string","optional":false,"field":"data_type"},{"type":"double","optional":false,"field":"value"},{"type":"double","optional":false,"field":"information_id"}],"optional":false,"name":"total data"},"payload":{"data_type":"profit", "value":10.0,"information_id":1.0}}
+        /*JSONObject json = new JSONObject();
+        JSONObject schema_json = new JSONObject();
+        JSONObject payload = new JSONObject();
+        JSONObject data_type = new JSONObject();
+        JSONObject value_json = new JSONObject();
+        JSONObject information = new JSONObject();
+        JSONArray array = new JSONArray();
+        data_type.put("type", "string");
+        data_type.put("optional", "false");
+        data_type.put("field", "data_type");
+        value_json.put("type", "double");
+        value_json.put("optional", "false");
+        value_json.put("field", "data_type");
+        information.put("type", "double");
+        information.put("optional", "false");
+        information.put("field", "information_id");
+        array.add(data_type);
+        array.add(value_json);
+        array.add(information);
+        schema_json.put("type", "value");
+        schema_json.put("fields", array);
+        schema_json.put("optional", "false");
+        schema_json.put("name", "total data");
+
+        payload.put("data_type", type);
+        payload.put("information_id", id.toString());
+        payload.put("value", value.toString());
+
+        json.put("schema", schema_json);
+        json.put("payload", payload);
+
+        return json.toString();*/
+        return "teste";
     }
 }
