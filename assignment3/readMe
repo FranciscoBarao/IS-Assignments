@@ -35,12 +35,12 @@ Project sink properties
     tasks.max=1
     connector.class=io.confluent.connect.jdbc.JdbcSinkConnector
     connection.url=jdbc:mysql://localhost:3306/project3
-    connection.user=user
-    connection.password=pass
+    connection.user=root
+    connection.password=password
     dialect.name=MySqlDatabaseDialect
-    topics=itemTopic
+    topics=results
     auto.create=true
     key.converter=org.apache.kafka.connect.storage.StringConverter
     value.converter=org.apache.kafka.connect.json.JsonConverter
-    key.converter.schemas.enable=true
+    key.converter.schemas.enable=false
     value.converter.schemas.enable=true
