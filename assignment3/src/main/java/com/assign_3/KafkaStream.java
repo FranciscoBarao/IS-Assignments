@@ -44,9 +44,8 @@ public class KafkaStream {
         revenueTable.toStream().foreach((k, v) -> {
             System.out.println("Revenue: " + k + " : " + v);
         });
-        // revenueTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("revenue",
-        // k, v))).to("results",
-        // Produced.with(Serdes.String(), Serdes.String()));
+        revenueTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("revenue", k, v))).to("results",
+                Produced.with(Serdes.String(), Serdes.String()));
 
         // Expenses
         KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
@@ -55,18 +54,16 @@ public class KafkaStream {
         expensesTable.toStream().foreach((k, v) -> {
             System.out.println("expenses: " + k + " : " + v);
         });
-        // expensesTable.toStream().map((k, v) -> new KeyValue<>("",
-        // tDatabase("expense", k, v))).to("results",
-        // Produced.with(Serdes.String(), Serdes.String()));
+        expensesTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("expense", k, v))).to("results",
+                Produced.with(Serdes.String(), Serdes.String()));
         // Profit
         KTable<String, String> profitTable = revenueTable.join(expensesTable, (valueRevennue, valueExpenses) -> {
             Double x = valueRevennue - valueExpenses;
             return ("" + x);
         });
 
-        // profitTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("profit",
-        // k, v))).to("results",
-        // Produced.with(Serdes.String(), Serdes.String()));
+        profitTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("profit", k, Double.parseDouble(v))))
+                .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Total revenue
         KGroupedStream<String, Double> revenue_group = revenueTable.toStream().groupBy((k, v) -> "");
@@ -84,22 +81,18 @@ public class KafkaStream {
             return (v1 + v2);
         });
 
-        // totalExpense.toStream().map((k, v) -> new KeyValue<>("",
-        // tDatabase("totalExpense", "0", v))).to("results",
-        // Produced.with(Serdes.String(), Serdes.String()));
-        // Total profit
+        totalExpense.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalExpense", "0", v))).to("results",
+                Produced.with(Serdes.String(), Serdes.String()));
 
+        // Total profit
         KGroupedStream<String, String> profitGroup = profitTable.toStream().groupBy((k, v) -> "");
         KTable<String, String> totalProfit = profitGroup.reduce((v1, v2) -> {
             Double x = Double.parseDouble(v1) + Double.parseDouble(v2);
             return ("" + x);
         });
-        profitTable.toStream().foreach((k, v) -> {
-            System.out.println("Total Profit: " + k + " : " + v);
-        });
-        // totalProfit.toStream().map((k, v) -> new KeyValue<>("",
-        // tDatabase("totalProfit", "0", v))).to("results",
-        // Produced.with(Serdes.String(), Serdes.String()));
+
+        totalProfit.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalProfit", "0", Double.parseDouble(v))))
+                .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Timed window for revenue
         TimeWindowedKStream<String, Double> revenueWindow = revenueTable.toStream().groupBy((k, v) -> "")
