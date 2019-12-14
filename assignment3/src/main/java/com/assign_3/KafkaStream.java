@@ -29,7 +29,6 @@ public class KafkaStream {
         // Kafka consumer configuration settings
         String topicSales = "Sales";
         String topicPurchases = "Purchases";
-        String outputTopic = "output";
 
         StreamsBuilder builder = new StreamsBuilder();
 
@@ -126,13 +125,18 @@ public class KafkaStream {
             return ("" + x);
         });
 
-        // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
-        // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
+        countryHighestSalesSplitted.toStream().foreach((k, v) -> {
+            System.out.println("Highest Sales: " + k + " " + v);
+        });
 
         // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
         // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
-        revenueTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("revenue", k, v))).to("results", Produced.with(Serdes.String(), Serdes.String()));
+        // totalRevenue.toStream().map((k, v) -> new KeyValue<>(k, "" +
+        // v)).to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
+
+        revenueTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("revenue", k, v))).to("results",
+                Produced.with(Serdes.String(), Serdes.String()));
 
         // Properties for streams
         java.util.Properties props = new Properties();
@@ -154,7 +158,7 @@ public class KafkaStream {
     }
 
     public static String tDatabase(String type, String id, Double value) {
-        return "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"data_type\"},{\"type\":\"double\",\"optional\":false,\"field\":\"value\"},{\"type\":\"integer\",\"optional\":false,\"field\":\"item_id\"}],\"optional\":false,\"name\":\"total data\"},\"payload\":{\"data_type\":\""
-                + type + "\", \"value\":\"" + value + "\",\"item_id\":\"" + id + "\"}}";
+        return "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"data_type\"},{\"type\":\"double\",\"optional\":false,\"field\":\"value\"},{\"type\":\"double\",\"optional\":false,\"field\":\"item_id\"}],\"optional\":false,\"name\":\"total data\"},\"payload\":{\"data_type\":\""
+                + type + "\", \"value\":" + value + ",\"information_id\":" + id + "}}";
     }
 }
