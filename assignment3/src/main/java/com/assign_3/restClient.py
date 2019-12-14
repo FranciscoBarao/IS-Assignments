@@ -60,7 +60,6 @@ def main():
             jData = json.loads(myResponse.content)
             for key in jData:
                 print key 
-
         else:
             myResponse.raise_for_status()
 
@@ -69,7 +68,13 @@ def main():
     elif(user_input == 5):
         print "Input Item Name"
         name_input = raw_input("Name: ")
-        myResponse = requests.get(url + '/revenue', {'name': name_input})
+        myResponse = requests.get(url + '/revenue')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)
+            for key in jData:
+                print key 
+        else:
+            myResponse.raise_for_status()
 
     elif(user_input == 6):
         print "Input Item Name"
