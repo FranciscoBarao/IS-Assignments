@@ -20,7 +20,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class KafkaStream {
-    static final Duration TIME_GAP = Duration.ofMinutes(5);
+    static final Duration TIME_GAP = Duration.ofMinutes(2);
 
     /*
      * Thread for producer Talk to prof about parsing info from DB and to Send to
@@ -50,7 +50,7 @@ public class KafkaStream {
                 Produced.with(Serdes.String(), Serdes.String()));
 
         // Expenses
-        /* KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
+        KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
 
         expensesTable.toStream().foreach((k, v) -> {
@@ -128,7 +128,7 @@ public class KafkaStream {
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Purchases Mean per item
-        KTable<String, String> medianPerItem = purchasesStream.mapValues(v -> transform(v))
+        /* KTable<String, String> medianPerItem = purchasesStream.mapValues(v -> transform(v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double()))
                 .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
                     String parts[] = aggVal.split(",");
@@ -141,7 +141,7 @@ public class KafkaStream {
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Total Purchases Mean
-        KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
+        /* KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
                 .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
                     String parts[] = aggVal.split(",");
                     Double val = Double.parseDouble(parts[0]) + newVal;
@@ -154,7 +154,7 @@ public class KafkaStream {
 
         // Highest Profit Item
 
-        KTable<String, String> highestProfit = profitTable.toStream().mapValues((k, v) -> k + "," + v)
+        /* KTable<String, String> highestProfit = profitTable.toStream().mapValues((k, v) -> k + "," + v)
                 .groupBy((k, v) -> "").reduce((v1, v2) -> {
                     String v1parts[] = v1.split(",");
                     for (String s : v1parts)
@@ -170,7 +170,7 @@ public class KafkaStream {
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Country with Highest Sales
-        KTable<String, String> countryHighestSalesSplitted = salesStream.groupBy((k, v) -> {
+        /* KTable<String, String> countryHighestSalesSplitted = salesStream.groupBy((k, v) -> {
             String parts[] = v.split(" ");
             return (k + "," + parts[2]);
         }).reduce((v1, v2) -> {
@@ -184,15 +184,9 @@ public class KafkaStream {
         });
 
         countryHighestSalesSplitted.toStream().foreach((k, v) -> {
-<<<<<<< HEAD
             System.out.println("Highest Sales: " + k + " : " + v);
         }); 
         */
-=======
-            // System.out.println("Highest Sales: " + k + " : " + v);
-        });
-
->>>>>>> 6d02ca1f3784380173c4369c38877fbaa1baf606
         // Properties for streams
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
