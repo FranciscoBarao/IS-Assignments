@@ -26,11 +26,11 @@ class ResultsController < ApplicationController
   end
 
   def mean_per_item
-    @results = Result.where(data_type: 'profit').uniq_by(&:information_id)
+    @results = Result.where(data_type: 'medianPerItem').uniq_by(&:information_id)
   end
 
   def mean_per_purchase
-    @result = Result.where(data_type: 'totalProfit').last
+    @result = Result.where(data_type: 'totalMedian').last
   end
 
   def total_revenue_window
@@ -45,9 +45,13 @@ class ResultsController < ApplicationController
     @result = Result.where(data_type: 'totalWindowProfit').last
   end
 
-  def highest_profit; end
+  def highest_profit
+    @result = Result.where(data_type: 'highestProfit').last
+  end
 
-  def highest_sales; end
+  def highest_sales
+    @result = Result.where(data_type: 'highestSales').uniq_by(&:information_id)
+  end
 
   private
     # Never trust parameters from the scary internet, only allow the white list through.
