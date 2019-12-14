@@ -16,6 +16,8 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.TimeWindowedKStream;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.kstream.Windowed;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class KafkaStream {
     static final Duration TIME_GAP = Duration.ofMinutes(5);
@@ -48,7 +50,7 @@ public class KafkaStream {
                 Produced.with(Serdes.String(), Serdes.String()));
 
         // Expenses
-        KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
+        /* KTable<String, Double> expensesTable = purchasesStream.mapValues(v -> transform(v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.Double())).reduce((v1, v2) -> v1 + v2);
 
         expensesTable.toStream().foreach((k, v) -> {
@@ -184,8 +186,8 @@ public class KafkaStream {
 
         countryHighestSalesSplitted.toStream().foreach((k, v) -> {
             System.out.println("Highest Sales: " + k + " : " + v);
-        });
-
+        }); 
+        */
         // Properties for streams
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
@@ -207,7 +209,7 @@ public class KafkaStream {
 
     public static String tDatabase(String type, String id, Double value) {
         // {"schema":{"type":"struct","fields":[{"type":"string","optional":false,"field":"data_type"},{"type":"double","optional":false,"field":"value"},{"type":"double","optional":false,"field":"information_id"}],"optional":false,"name":"total data"},"payload":{"data_type":"profit", "value":10.0,"information_id":1.0}}
-        /*JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject();
         JSONObject schema_json = new JSONObject();
         JSONObject payload = new JSONObject();
         JSONObject data_type = new JSONObject();
@@ -219,26 +221,24 @@ public class KafkaStream {
         data_type.put("field", "data_type");
         value_json.put("type", "double");
         value_json.put("optional", "false");
-        value_json.put("field", "data_type");
+        value_json.put("field", "value");
         information.put("type", "double");
         information.put("optional", "false");
         information.put("field", "information_id");
         array.add(data_type);
         array.add(value_json);
         array.add(information);
-        schema_json.put("type", "value");
-        schema_json.put("fields", array);
-        schema_json.put("optional", "false");
         schema_json.put("name", "total data");
+        schema_json.put("optional", "false");
+        schema_json.put("fields", array);
+        schema_json.put("type", "struct");
 
         payload.put("data_type", type);
-        payload.put("information_id", id.toString());
-        payload.put("value", value.toString());
+        payload.put("information_id", Double.parseDouble(id));
+        payload.put("value", value);
 
         json.put("schema", schema_json);
         json.put("payload", payload);
-
-        return json.toString();*/
-        return "teste";
+        return json.toString();
     }
 }
