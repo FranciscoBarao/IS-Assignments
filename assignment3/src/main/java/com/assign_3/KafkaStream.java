@@ -73,9 +73,8 @@ public class KafkaStream {
             return (v1 + v2);
         });
 
-        // totalRevenue.toStream().map((k, v) -> new KeyValue<>("",
-        // tDatabase("totalRevenue", "0", v))).to("results",
-        // Produced.with(Serdes.String(), Serdes.String()));
+        totalRevenue.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalRevenue", "0", v))).to("results",
+                Produced.with(Serdes.String(), Serdes.String()));
 
         // Total expense
         KGroupedStream<String, Double> expense_group = expensesTable.toStream().groupBy((k, v) -> "");
@@ -117,12 +116,11 @@ public class KafkaStream {
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Timed window for profit
-
         TimeWindowedKStream<String, String> profitWindow = profitTable.toStream().groupBy((k, v) -> "")
                 .windowedBy(TimeWindows.of(TIME_GAP));
         KTable<Windowed<String>, String> totalWindowProfit = profitWindow.reduce((v1, v2) -> {
             Double x = Double.parseDouble(v1) + Double.parseDouble(v2);
-            return (v1 + v2);
+            return ("" + x);
         });
 
         totalWindowProfit.toStream()
@@ -159,6 +157,8 @@ public class KafkaStream {
         KTable<String, String> highestProfit = profitTable.toStream().mapValues((k, v) -> k + "," + v)
                 .groupBy((k, v) -> "").reduce((v1, v2) -> {
                     String v1parts[] = v1.split(",");
+                    for (String s : v1parts)
+                        System.out.println(s);
                     String v2parts[] = v2.split(",");
 
                     if (Double.parseDouble(v1parts[1]) >= Double.parseDouble(v2parts[1]))
@@ -170,7 +170,6 @@ public class KafkaStream {
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Country with Highest Sales
-
         KTable<String, String> countryHighestSalesSplitted = salesStream.groupBy((k, v) -> {
             String parts[] = v.split(" ");
             return (k + "," + parts[2]);
@@ -185,9 +184,15 @@ public class KafkaStream {
         });
 
         countryHighestSalesSplitted.toStream().foreach((k, v) -> {
+<<<<<<< HEAD
             System.out.println("Highest Sales: " + k + " : " + v);
         }); 
         */
+=======
+            // System.out.println("Highest Sales: " + k + " : " + v);
+        });
+
+>>>>>>> 6d02ca1f3784380173c4369c38877fbaa1baf606
         // Properties for streams
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
