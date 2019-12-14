@@ -173,24 +173,38 @@ public class KafkaStream {
                         tDatabase("highestProfit", v.split(",")[0], Double.parseDouble(v.split(",")[1]))))
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
-        // // Country with Highest Sales
-        // KTable<String, String> countryHighestSalesSplitted = salesStream.groupBy((k,
-        // v) -> {
-        // String parts[] = v.split(" ");
-        // return (k + "," + parts[2]);
-        // }).reduce((v1, v2) -> {
-        // String v1parts[] = v1.split(" ");
+        // Country with Highest Sales
+        KTable<String, String> countryHighestSalesSplitted = salesStream.mapValues((v) -> {
+            String parts[] = v.split(" ");
+            return (Double.parseDouble(parts[0]) * Double.parseDouble(parts[1])) + "," + parts[2];
+        }).groupBy((k,v) -> {
+                String parts[] = v.split(",");
+                return k + "," + parts[1];
+            }).reduce((v1, v2) -> {
+                String v1parts[] = v1.split(",");
 
-        // String v2parts[] = v2.split(" ");
+                String v2parts[] = v2.split(",");
 
-        // Double x = Double.parseDouble(v1parts[0]) * Double.parseDouble(v1parts[1])
-        // + Double.parseDouble(v2parts[0]) * Double.parseDouble(v2parts[1]);
-        // return ("" + x);
-        // });
+                Double x = Double.parseDouble(v1parts[0]) + Double.parseDouble(v2parts[0]);
+                return ("" + x + "," + v1parts[1]);
+            });
 
-        // countryHighestSalesSplitted.toStream().foreach((k, v) -> {
-        // System.out.println("Highest Sales: " + k + " : " + v);
-        // });
+        KTable<String, String> countryHighestSales = countryHighestSalesSplitted.toStream().groupBy((k, v) -> {
+            return k.split(",")[0];
+        }).reduce((v1, v2) -> {
+            String v1parts[] = v1.split(",");
+            String v2parts[] = v2.split(",");
+
+            if (Double.parseDouble(v1parts[0]) >= Double.parseDouble(v2parts[0]))
+                return v1;
+            else
+                return v2;
+        });
+
+        countryHighestSales.toStream()
+                .map((k, v) -> new KeyValue<>("",
+                        tDatabase("highestSales", v.split(",")[0], Double.parseDouble(k))))
+                .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Properties for streams
         java.util.Properties props = new Properties();
