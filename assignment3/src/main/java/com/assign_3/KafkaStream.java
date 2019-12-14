@@ -158,7 +158,7 @@ public class KafkaStream {
         .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Total Purchases Mean
-        KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
+        /* KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
                 .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
                     System.out.println("Banana");
                     String parts[] = aggVal.split(",");
@@ -172,6 +172,8 @@ public class KafkaStream {
         });
         //medianTotal.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalMedian", "0", splitMedian(v))))
         //        .to("results", Produced.with(Serdes.String(), Serdes.String()));
+
+        */
 
         // // Highest Profit Item
 

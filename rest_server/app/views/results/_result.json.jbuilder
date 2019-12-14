@@ -1,1 +1,1 @@
-json.extract! result, :data_type, :value
+json.extract! result, :data_type, :value, :information_id

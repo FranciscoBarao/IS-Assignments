@@ -1,1 +1,1 @@
-json.array! @result, partial: "results/result", as: :result
+json.partial! 'results/result', locals: {result: @result}

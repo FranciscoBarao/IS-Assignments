@@ -1,16 +1,31 @@
 class ResultsController < ApplicationController
-  before_action :set_result
 
   def revenue
-    @results = Result.where(data_type: 'revenue').uniq_by(&:information_id)
+    # @results = Result.where(data_type: 'revenue').order(:id).uniq(&:information_id)
+    name = 'revenue'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
   end
 
   def expense
-    @results = Result.where(data_type: 'expense').uniq_by(&:information_id)
+    name = 'expense'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
   end
 
   def profit
-    @results = Result.where(data_type: 'profit').uniq_by(&:information_id)
+    name = 'profit'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
   end
 
   def total_revenue
@@ -26,7 +41,12 @@ class ResultsController < ApplicationController
   end
 
   def mean_per_item
-    @results = Result.where(data_type: 'medianPerItem').uniq_by(&:information_id)
+    name = 'medianPerItem'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
   end
 
   def mean_per_purchase
@@ -50,7 +70,12 @@ class ResultsController < ApplicationController
   end
 
   def highest_sales
-    @result = Result.where(data_type: 'highestSales').uniq_by(&:information_id)
+    name = 'highestSales'
+    results = Result.where(data_type: name).pluck(:information_id).uniq
+    @results = []
+    results.each do |id|
+      @results << Result.where(data_type: name, information_id: id).order(:id).last
+    end
   end
 
   private
