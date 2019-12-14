@@ -141,10 +141,9 @@ public class KafkaStream {
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Total Purchases Mean
-
-        KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
+        KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v))
+                .groupBy((k, v) -> "", Grouped.with(Serdes.String(), Serdes.Double()))
                 .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
-                    System.out.println("Banana");
                     String parts[] = aggVal.split(",");
                     Double val = Double.parseDouble(parts[0]) + newVal;
                     int count = Integer.parseInt(parts[1]) + 1;
