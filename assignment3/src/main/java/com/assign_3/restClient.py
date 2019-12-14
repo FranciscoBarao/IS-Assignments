@@ -26,9 +26,9 @@ def main():
         try:
             user_input = int(raw_input("Enter a number: "))
             if(user_input > 0 and user_input < 17): break
-            print("Try Again")
+            print "Try Again"
         except ValueError:
-            print("Try Again")
+            print "Try Again"
     
 
     url = "http://127.0.0.1:3000"
@@ -38,19 +38,21 @@ def main():
         name_input = raw_input("Name: ")
         myResponse = requests.post(url+'/information', {'data_type':'country','name': name_input})
         if(myResponse.ok): print "Country created with success"
+        else: print "something went wrong"
+
     elif(user_input == 2):
         print "Input Item Name"
         name_input = raw_input("Name: ")
         myResponse = requests.post(url+'/information', {'data_type':'item','name': name_input})
         if(myResponse.ok): print "Item created with success"
+        else: print "something went wrong"
 
     elif(user_input == 3):
         myResponse = requests.get(url + '/list/country')
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
-                print key  
-
+                print key["name"]
         else:
             myResponse.raise_for_status()
 
@@ -59,7 +61,7 @@ def main():
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
-                print key 
+                print key["name"] 
         else:
             myResponse.raise_for_status()
 
@@ -70,7 +72,8 @@ def main():
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
-                print key 
+                print key["name"]," ",key["value"]  
+
         else:
             myResponse.raise_for_status()
 
@@ -79,7 +82,8 @@ def main():
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
-                print key 
+                print key["name"]," ",key["value"]  
+ 
         else:
             myResponse.raise_for_status()
     elif(user_input == 7):
@@ -87,47 +91,80 @@ def main():
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
             for key in jData:
-                print key 
+                print key["name"]," ",key["value"]  
         else:
             myResponse.raise_for_status()
     elif(user_input == 8):
         myResponse = requests.get(url + '/results/total_revenue')
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
-            for k in jData:
-                print key 
+            print "Total Revenue: ",jData["value"]
+                    
         else:
             myResponse.raise_for_status()
     elif(user_input == 9):
         myResponse = requests.get(url + '/results/total_expense')
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
-            for key in jData:
-                print key 
+            print "Total Expense: ",jData["value"]
         else:
             myResponse.raise_for_status()
     elif(user_input == 10):
         myResponse = requests.get(url + '/results/total_profit')
         if(myResponse.ok):
             jData = json.loads(myResponse.content)
+            print "Total Profit: ",jData["value"]
+        else:
+            myResponse.raise_for_status()
+    elif(user_input == 11):
+        myResponse = requests.get(url + '/results/mean_per_item')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)
             for key in jData:
                 print key 
         else:
             myResponse.raise_for_status()
-    elif(user_input == 11):
-        print " "
     elif(user_input == 12):
-        print " "
+        myResponse = requests.get(url + '/results/mean_per_purchase')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)
+            print "Total Purchase Mean: ",jData["value"]
+        else:
+            myResponse.raise_for_status()
     elif(user_input == 13):
-        print " "
+        myResponse = requests.get(url + '/results/highest_profit')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)
+            print "Highest Profit: ",jData["value"]
+        else:
+            myResponse.raise_for_status()
     elif(user_input == 14):
-        print " "
+        myResponse = requests.get(url + '/results/total_revenue_window')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)
+            print "Total Revenue Window: ",jData["value"]
+        else:
+            myResponse.raise_for_status()
     elif(user_input == 15):
-        print " "
+        myResponse = requests.get(url + '/results/total_expense_window')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)
+            print "Total Expense Window: ",jData["value"] 
+        else:
+            myResponse.raise_for_status()
     elif(user_input == 16):
-        print " "
+        myResponse = requests.get(url + '/results/total_profit_window')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)          
+            print "Total Profit Window: ",jData["value"]
+        else:
+            myResponse.raise_for_status()
     elif(user_input == 17):
-        print " "
+        myResponse = requests.get(url + '/results/highest_sales')
+        if(myResponse.ok):
+            jData = json.loads(myResponse.content)          
+        else:
+            myResponse.raise_for_status()
 
 
 main()
