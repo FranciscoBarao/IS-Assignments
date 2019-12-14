@@ -67,126 +67,150 @@ public class KafkaStream {
         profitTable.toStream().map((k, v) -> new KeyValue<>("", tDatabase("profit", k, Double.parseDouble(v))))
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
-        // Total revenue
-        KGroupedStream<String, Double> revenue_group = revenueTable.toStream().groupBy((k, v) -> "");
-        KTable<String, Double> totalRevenue = revenue_group.reduce((v1, v2) -> {
-            return (v1 + v2);
-        });
+        // // Total revenue
+        // KGroupedStream<String, Double> revenue_group =
+        // revenueTable.toStream().groupBy((k, v) -> "");
+        // KTable<String, Double> totalRevenue = revenue_group.reduce((v1, v2) -> {
+        // return (v1 + v2);
+        // });
 
-        totalRevenue.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalRevenue", "0", v))).to("results",
-                Produced.with(Serdes.String(), Serdes.String()));
+        // totalRevenue.toStream().map((k, v) -> new KeyValue<>("",
+        // tDatabase("totalRevenue", "0", v))).to("results",
+        // Produced.with(Serdes.String(), Serdes.String()));
 
-        // Total expense
-        KGroupedStream<String, Double> expense_group = expensesTable.toStream().groupBy((k, v) -> "");
-        KTable<String, Double> totalExpense = expense_group.reduce((v1, v2) -> {
-            return (v1 + v2);
-        });
+        // // Total expense
+        // KGroupedStream<String, Double> expense_group =
+        // expensesTable.toStream().groupBy((k, v) -> "");
+        // KTable<String, Double> totalExpense = expense_group.reduce((v1, v2) -> {
+        // return (v1 + v2);
+        // });
 
-        totalExpense.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalExpense", "0", v))).to("results",
-                Produced.with(Serdes.String(), Serdes.String()));
+        // totalExpense.toStream().map((k, v) -> new KeyValue<>("",
+        // tDatabase("totalExpense", "0", v))).to("results",
+        // Produced.with(Serdes.String(), Serdes.String()));
 
-        // Total profit
-        KGroupedStream<String, String> profitGroup = profitTable.toStream().groupBy((k, v) -> "");
-        KTable<String, String> totalProfit = profitGroup.reduce((v1, v2) -> {
-            Double x = Double.parseDouble(v1) + Double.parseDouble(v2);
-            return ("" + x);
-        });
+        // // Total profit
+        // KGroupedStream<String, String> profitGroup =
+        // profitTable.toStream().groupBy((k, v) -> "");
+        // KTable<String, String> totalProfit = profitGroup.reduce((v1, v2) -> {
+        // Double x = Double.parseDouble(v1) + Double.parseDouble(v2);
+        // return ("" + x);
+        // });
 
-        totalProfit.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalProfit", "0", Double.parseDouble(v))))
-                .to("results", Produced.with(Serdes.String(), Serdes.String()));
+        // totalProfit.toStream().map((k, v) -> new KeyValue<>("",
+        // tDatabase("totalProfit", "0", Double.parseDouble(v))))
+        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
-        // Timed window for revenue
-        TimeWindowedKStream<String, Double> revenueWindow = revenueTable.toStream().groupBy((k, v) -> "")
-                .windowedBy(TimeWindows.of(TIME_GAP));
-        KTable<Windowed<String>, Double> totalWindowRev = revenueWindow.reduce((v1, v2) -> {
-            return (v1 + v2);
-        });
+        // // Timed window for revenue
+        // TimeWindowedKStream<String, Double> revenueWindow =
+        // revenueTable.toStream().groupBy((k, v) -> "")
+        // .windowedBy(TimeWindows.of(TIME_GAP));
+        // KTable<Windowed<String>, Double> totalWindowRev = revenueWindow.reduce((v1,
+        // v2) -> {
+        // return (v1 + v2);
+        // });
 
-        totalWindowRev.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalWindowRevenue", "0", v)))
-                .to("results", Produced.with(Serdes.String(), Serdes.String()));
+        // totalWindowRev.toStream().map((k, v) -> new KeyValue<>("",
+        // tDatabase("totalWindowRevenue", "0", v)))
+        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
-        // Timed window for expenses
-        TimeWindowedKStream<String, Double> expenseWindow = expensesTable.toStream().groupBy((k, v) -> "")
-                .windowedBy(TimeWindows.of(TIME_GAP));
-        KTable<Windowed<String>, Double> totalWindowExp = expenseWindow.reduce((v1, v2) -> {
-            return (v1 + v2);
-        });
+        // // Timed window for expenses
+        // TimeWindowedKStream<String, Double> expenseWindow =
+        // expensesTable.toStream().groupBy((k, v) -> "")
+        // .windowedBy(TimeWindows.of(TIME_GAP));
+        // KTable<Windowed<String>, Double> totalWindowExp = expenseWindow.reduce((v1,
+        // v2) -> {
+        // return (v1 + v2);
+        // });
 
-        totalWindowExp.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalWindowExpense", "0", v)))
-                .to("results", Produced.with(Serdes.String(), Serdes.String()));
+        // totalWindowExp.toStream().map((k, v) -> new KeyValue<>("",
+        // tDatabase("totalWindowExpense", "0", v)))
+        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
-        // Timed window for profit
-        TimeWindowedKStream<String, String> profitWindow = profitTable.toStream().groupBy((k, v) -> "")
-                .windowedBy(TimeWindows.of(TIME_GAP));
-        KTable<Windowed<String>, String> totalWindowProfit = profitWindow.reduce((v1, v2) -> {
-            Double x = Double.parseDouble(v1) + Double.parseDouble(v2);
-            return ("" + x);
-        });
+        // // Timed window for profit
+        // TimeWindowedKStream<String, String> profitWindow =
+        // profitTable.toStream().groupBy((k, v) -> "")
+        // .windowedBy(TimeWindows.of(TIME_GAP));
+        // KTable<Windowed<String>, String> totalWindowProfit = profitWindow.reduce((v1,
+        // v2) -> {
+        // Double x = Double.parseDouble(v1) + Double.parseDouble(v2);
+        // return ("" + x);
+        // });
 
-        totalWindowProfit.toStream()
-                .map((k, v) -> new KeyValue<>("", tDatabase("totalWindowProfit", "0", Double.parseDouble(v))))
-                .to("results", Produced.with(Serdes.String(), Serdes.String()));
+        // totalWindowProfit.toStream()
+        // .map((k, v) -> new KeyValue<>("", tDatabase("totalWindowProfit", "0",
+        // Double.parseDouble(v))))
+        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Purchases Mean per item
-        /* KTable<String, String> medianPerItem = purchasesStream.mapValues(v -> transform(v))
-                .groupByKey(Grouped.with(Serdes.String(), Serdes.Double()))
-                .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
-                    String parts[] = aggVal.split(",");
-                    Double val = Double.parseDouble(parts[0]) + newVal;
-                    int count = Integer.parseInt(parts[1]) + 1;
-                    return (val + "," + count);
-                });
+        // KTable<String, String> medianPerItem = purchasesStream.mapValues(v ->
+        // transform(v))
+        // .groupByKey(Grouped.with(Serdes.String(), Serdes.Double()))
+        // .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
+        // String parts[] = aggVal.split(",");
+        // Double val = Double.parseDouble(parts[0]) + newVal;
+        // int count = Integer.parseInt(parts[1]) + 1;
+        // return (val + "," + count);
+        // });
 
-        medianPerItem.toStream().map((k, v) -> new KeyValue<>("", tDatabase("medianPerItem", k, Double.parseDouble(v))))
-                .to("results", Produced.with(Serdes.String(), Serdes.String()));
+        // medianPerItem.toStream().map((k, v) -> new KeyValue<>("",
+        // tDatabase("medianPerItem", k, splitMedian(v))))
+        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Total Purchases Mean
-        /* KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
+        KTable<String, String> medianTotal = purchasesStream.mapValues(v -> transform(v)).groupBy((k, v) -> "")
                 .aggregate(() -> "0,0", (id, newVal, aggVal) -> {
+                    System.out.println("Banana");
                     String parts[] = aggVal.split(",");
                     Double val = Double.parseDouble(parts[0]) + newVal;
                     int count = Integer.parseInt(parts[1]) + 1;
                     return (val + "," + count);
                 });
 
-        medianTotal.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalMedian", "0", Double.parseDouble(v))))
-                .to("results", Produced.with(Serdes.String(), Serdes.String()));
-
-        // Highest Profit Item
-
-        /* KTable<String, String> highestProfit = profitTable.toStream().mapValues((k, v) -> k + "," + v)
-                .groupBy((k, v) -> "").reduce((v1, v2) -> {
-                    String v1parts[] = v1.split(",");
-                    for (String s : v1parts)
-                        System.out.println(s);
-                    String v2parts[] = v2.split(",");
-
-                    if (Double.parseDouble(v1parts[1]) >= Double.parseDouble(v2parts[1]))
-                        return v1;
-                    else
-                        return v2;
-                });
-        highestProfit.toStream().map((k, v) -> new KeyValue<>("", tDatabase("highestProfit", k, Double.parseDouble(v))))
-                .to("results", Produced.with(Serdes.String(), Serdes.String()));
-
-        // Country with Highest Sales
-        /* KTable<String, String> countryHighestSalesSplitted = salesStream.groupBy((k, v) -> {
-            String parts[] = v.split(" ");
-            return (k + "," + parts[2]);
-        }).reduce((v1, v2) -> {
-            String v1parts[] = v1.split(" ");
-
-            String v2parts[] = v2.split(" ");
-
-            Double x = Double.parseDouble(v1parts[0]) * Double.parseDouble(v1parts[1])
-                    + Double.parseDouble(v2parts[0]) * Double.parseDouble(v2parts[1]);
-            return ("" + x);
+        medianTotal.toStream().foreach((k, v) -> {
+            System.out.println("Total Median: " + k + " : " + splitMedian(v));
         });
+        medianTotal.toStream().map((k, v) -> new KeyValue<>("", tDatabase("totalMedian", "0", splitMedian(v))))
+                .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
-        countryHighestSalesSplitted.toStream().foreach((k, v) -> {
-            System.out.println("Highest Sales: " + k + " : " + v);
-        }); 
-        */
+        // // Highest Profit Item
+
+        // KTable<String, String> highestProfit = profitTable.toStream().mapValues((k,
+        // v) -> k + "," + v)
+        // .groupBy((k, v) -> "").reduce((v1, v2) -> {
+        // String v1parts[] = v1.split(",");
+        // for (String s : v1parts)
+        // System.out.println(s);
+        // String v2parts[] = v2.split(",");
+
+        // if (Double.parseDouble(v1parts[1]) >= Double.parseDouble(v2parts[1]))
+        // return v1;
+        // else
+        // return v2;
+        // });
+        // highestProfit.toStream().map((k, v) -> new KeyValue<>("",
+        // tDatabase("highestProfit", k, Double.parseDouble(v))))
+        // .to("results", Produced.with(Serdes.String(), Serdes.String()));
+
+        // // Country with Highest Sales
+        // KTable<String, String> countryHighestSalesSplitted = salesStream.groupBy((k,
+        // v) -> {
+        // String parts[] = v.split(" ");
+        // return (k + "," + parts[2]);
+        // }).reduce((v1, v2) -> {
+        // String v1parts[] = v1.split(" ");
+
+        // String v2parts[] = v2.split(" ");
+
+        // Double x = Double.parseDouble(v1parts[0]) * Double.parseDouble(v1parts[1])
+        // + Double.parseDouble(v2parts[0]) * Double.parseDouble(v2parts[1]);
+        // return ("" + x);
+        // });
+
+        // countryHighestSalesSplitted.toStream().foreach((k, v) -> {
+        // System.out.println("Highest Sales: " + k + " : " + v);
+        // });
+
         // Properties for streams
         java.util.Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "app");
@@ -206,8 +230,17 @@ public class KafkaStream {
         return i * j;
     }
 
+    private static Double splitMedian(String s) {
+        String parts[] = s.split(",");
+        Double i = Double.parseDouble(parts[0]);
+        Double j = Double.parseDouble(parts[1]);
+
+        return i / j;
+    }
+
     public static String tDatabase(String type, String id, Double value) {
-        // {"schema":{"type":"struct","fields":[{"type":"string","optional":false,"field":"data_type"},{"type":"double","optional":false,"field":"value"},{"type":"double","optional":false,"field":"information_id"}],"optional":false,"name":"total data"},"payload":{"data_type":"profit", "value":10.0,"information_id":1.0}}
+        // {"schema":{"type":"struct","fields":[{"type":"string","optional":false,"field":"data_type"},{"type":"double","optional":false,"field":"value"},{"type":"double","optional":false,"field":"information_id"}],"optional":false,"name":"total
+        // data"},"payload":{"data_type":"profit", "value":10.0,"information_id":1.0}}
         JSONObject json = new JSONObject();
         JSONObject schema_json = new JSONObject();
         JSONObject payload = new JSONObject();
