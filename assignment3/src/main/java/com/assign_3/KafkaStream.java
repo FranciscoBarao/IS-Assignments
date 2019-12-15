@@ -168,6 +168,9 @@ public class KafkaStream {
                     else
                         return v2;
                 });
+        highestProfit.toStream().foreach((k, v) -> {
+            System.out.println("Highest Profit: " + k + " : " + v);
+        });
         highestProfit.toStream()
                 .map((k, v) -> new KeyValue<>("",
                         tDatabase("highestProfit", v.split(",")[0], Double.parseDouble(v.split(",")[1]))))
@@ -177,17 +180,17 @@ public class KafkaStream {
         KTable<String, String> countryHighestSalesSplitted = salesStream.mapValues((v) -> {
             String parts[] = v.split(" ");
             return (Double.parseDouble(parts[0]) * Double.parseDouble(parts[1])) + "," + parts[2];
-        }).groupBy((k,v) -> {
-                String parts[] = v.split(",");
-                return k + "," + parts[1];
-            }).reduce((v1, v2) -> {
-                String v1parts[] = v1.split(",");
+        }).groupBy((k, v) -> {
+            String parts[] = v.split(",");
+            return k + "," + parts[1];
+        }).reduce((v1, v2) -> {
+            String v1parts[] = v1.split(",");
 
-                String v2parts[] = v2.split(",");
+            String v2parts[] = v2.split(",");
 
-                Double x = Double.parseDouble(v1parts[0]) + Double.parseDouble(v2parts[0]);
-                return ("" + x + "," + v1parts[1]);
-            });
+            Double x = Double.parseDouble(v1parts[0]) + Double.parseDouble(v2parts[0]);
+            return ("" + x + "," + v1parts[1]);
+        });
 
         KTable<String, String> countryHighestSales = countryHighestSalesSplitted.toStream().groupBy((k, v) -> {
             return k.split(",")[0];
@@ -203,7 +206,7 @@ public class KafkaStream {
 
         countryHighestSales.toStream()
                 .map((k, v) -> new KeyValue<>("",
-                        tDatabase("highestSales", v.split(",")[0], Double.parseDouble(k))))
+                        tDatabaseForHS("highestSales", k, Double.parseDouble(v.split(",")[0]), v.split(",")[1])))
                 .to("results", Produced.with(Serdes.String(), Serdes.String()));
 
         // Properties for streams
@@ -242,6 +245,8 @@ public class KafkaStream {
         JSONObject data_type = new JSONObject();
         JSONObject value_json = new JSONObject();
         JSONObject information = new JSONObject();
+        JSONObject country_json = new JSONObject();
+
         JSONArray array = new JSONArray();
         data_type.put("type", "string");
         data_type.put("optional", "false");
@@ -252,9 +257,13 @@ public class KafkaStream {
         information.put("type", "double");
         information.put("optional", "false");
         information.put("field", "information_id");
+        country_json.put("type", "string");
+        country_json.put("optional", "false");
+        country_json.put("field", "country_name");
         array.add(data_type);
         array.add(value_json);
         array.add(information);
+        array.add(country_json);
         schema_json.put("name", "total data");
         schema_json.put("optional", "false");
         schema_json.put("fields", array);
@@ -263,6 +272,49 @@ public class KafkaStream {
         payload.put("data_type", type);
         payload.put("information_id", Double.parseDouble(id));
         payload.put("value", value);
+        payload.put("country_name", "");
+
+        json.put("schema", schema_json);
+        json.put("payload", payload);
+        return json.toString();
+    }
+
+    public static String tDatabaseForHS(String type, String id, Double value, String country) {
+        // {"schema":{"type":"struct","fields":[{"type":"string","optional":false,"field":"data_type"},{"type":"double","optional":false,"field":"value"},{"type":"double","optional":false,"field":"information_id"}],"optional":false,"name":"total
+        // data"},"payload":{"data_type":"profit", "value":10.0,"information_id":1.0}}
+        JSONObject json = new JSONObject();
+        JSONObject schema_json = new JSONObject();
+        JSONObject payload = new JSONObject();
+        JSONObject data_type = new JSONObject();
+        JSONObject value_json = new JSONObject();
+        JSONObject information = new JSONObject();
+        JSONObject country_json = new JSONObject();
+        JSONArray array = new JSONArray();
+        data_type.put("type", "string");
+        data_type.put("optional", "false");
+        data_type.put("field", "data_type");
+        value_json.put("type", "double");
+        value_json.put("optional", "false");
+        value_json.put("field", "value");
+        information.put("type", "double");
+        information.put("optional", "false");
+        information.put("field", "information_id");
+        country_json.put("type", "string");
+        country_json.put("optional", "false");
+        country_json.put("field", "country_name");
+        array.add(data_type);
+        array.add(value_json);
+        array.add(information);
+        array.add(country_json);
+        schema_json.put("name", "total data");
+        schema_json.put("optional", "false");
+        schema_json.put("fields", array);
+        schema_json.put("type", "struct");
+
+        payload.put("data_type", type);
+        payload.put("information_id", Double.parseDouble(id));
+        payload.put("value", value);
+        payload.put("country_name", country);
 
         json.put("schema", schema_json);
         json.put("payload", payload);
